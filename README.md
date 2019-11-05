@@ -1,4 +1,6 @@
-Barefoot Nomad - Making company travel and accomodation easy and convinient.
+[![Coverage Status](https://coveralls.io/repos/github/andela/boondocks-bn-backend/badge.svg?branch=develop)](https://coveralls.io/github/andela/boondocks-bn-backend?branch=develop)
+
+Barefoot Nomad - Making company travel and accomodation easy and convenient.
 =======
 
 ## Vision
