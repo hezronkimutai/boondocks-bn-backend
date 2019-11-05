@@ -9,7 +9,8 @@
     "migrate": "npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migrate:undo:all",
     "watch": "nodemon --exec babel-node ./src/index.js",
-    "build": "babel src -d dist"
+    "build": "babel src -d dist",
+    "lint": "eslint --fix ./"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
