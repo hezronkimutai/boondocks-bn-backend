@@ -20,4 +20,9 @@ Make company global travel and accommodation easy and convenient for the strong 
 
 - Run migrations using `npm run migrate`
 
-- To undo all the migrations run `npm run migrate-undo`
+- To undo all the migrations run `npm run migrate:undo`
+## Deployment
+
+This app will be deployed on heroku, To access this app go to these link:
+    - [Production URL](https://boondocks-bn-backend.herokuapp.com/)
+    - [Staging](https://boondocks-bn-backend-staging.herokuapp.com/)

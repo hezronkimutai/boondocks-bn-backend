@@ -1,14 +1,15 @@
 {
-  "name": "express-authorshaven",
+  "name": "express-barefoot-nomad",
   "version": "1.0.0",
-  "description": "A Social platform for the creative at heart",
+  "description": "Making company travel and accomodation easy and convinient",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec node -r dotenv/config ./src/index.js",
-    "build": "node -r dotenv/config ./src/index.js",
+    "start": "npm run build && node dist/index.js",
     "migrate": "npx sequelize-cli db:migrate",
-    "migrate:undo": "npx sequelize-cli db:migrate:undo:all"
+    "migrate:undo": "npx sequelize-cli db:migrate:undo:all",
+    "watch": "nodemon --exec babel-node ./src/index.js",
+    "build": "babel src -d dist"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
@@ -16,9 +17,9 @@
     "@babel/cli": "^7.6.4",
     "@babel/core": "^7.6.4",
     "@babel/node": "^7.6.3",
+    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.3",
     "@babel/register": "^7.6.2",
-    "@babel/polyfill": "^7.6.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
