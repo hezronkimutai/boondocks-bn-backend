@@ -1,9 +1,12 @@
-FROM node:10
-WORKDIR /usr/src/app
+FROM node:10.16.3
+WORKDIR /app
 COPY package*.json ./
 
-RUN npm install
+RUN if [ "$NODE-ENV"="development" ]; \
+        then npm install;\
+        else npm install --only=production; \ 
+        fi
 
 COPY . .
 EXPOSE 3000
-CMD [ "node", "index.js" ]
+CMD npm dev
