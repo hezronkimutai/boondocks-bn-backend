@@ -94,6 +94,9 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# Ide files
+.idea
+
 # End of https://www.gitignore.io/api/node
 
 # Test output with coveralls
