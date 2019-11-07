@@ -1,3 +1,4 @@
+/* eslint-disable arrow-parens */
 import { readdirSync } from 'fs';
 import { basename as _basename, join } from 'path';
 import Sequelize from 'sequelize';
@@ -17,7 +18,7 @@ if (config.use_env_variable) {
 
 readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
-  .forEach((file) => {
+  .forEach(file => {
     const model = sequelize.import(join(__dirname, file));
     db[model.name] = model;
   });

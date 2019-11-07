@@ -1,18 +1,52 @@
-const router = require("express").Router();
+import express from 'express';
+import users from './users';
 
-router.use("/", require("./users"));
+const router = express.Router();
 
-router.use(function(err, req, res, next) {
-    if (err.name === "ValidationError") {
-        return res.status(422).json({
-            errors: Object.keys(err.errors).reduce(function(errors, key) {
-                errors[key] = err.errors[key].message;
-                return errors;
-            }, {})
-        });
-    }
+/**
+ * @swagger
+ *
+ * /user:
+ *   get:
+ *     summary: Current logged in user
+ *     description: retrieves logged in user
+ *     tags:
+ *       - Users
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.get('/user', users.getUser);
 
-    return next(err);
-});
+/**
+ * @swagger
+ *
+ * /signup:
+ *   post:
+ *     summary: User Signup
+ *     description: Creates a new user account
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.post('/users', users.createUser);
 
-module.exports = router;
+export default router;

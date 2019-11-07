@@ -101,3 +101,5 @@ typings/
 
 # Test output with coveralls
 .nyc_output
+
+trash/

@@ -4,6 +4,7 @@ import express from 'express';
 import { urlencoded, json } from 'body-parser';
 import cors from 'cors';
 import errorhandler from 'errorhandler';
+import router from './routes/index';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -25,7 +26,7 @@ app.get('/', (req, res) => res.status(200).json({
   message: 'Welcome to Barefoot Nomad'
 }));
 
-// app.use(require('./routes'));
+app.use(router);
 app.use((req, res, next) => {
   const err = new Error('Not Found');
   err.status = 404;
