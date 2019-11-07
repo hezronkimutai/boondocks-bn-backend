@@ -4,7 +4,7 @@
   "description": "Making company travel and accomodation easy and convinient",
   "main": "index.js",
   "nyc": {
-    "exclude":[
+    "exclude": [
       "src/migrations",
       "src/database",
       "src/tests"
@@ -16,9 +16,10 @@
     "start": "npm run build && node dist/index.js",
     "migrate": "npx sequelize-cli db:migrate",
     "migrate:undo": "npx sequelize-cli db:migrate:undo:all",
-    "watch": "nodemon --exec babel-node ./src/index.js",
+    "watch": "npm run winston && nodemon --exec babel-node ./src/index.js",
     "build": "babel src -d dist",
-    "lint": "eslint --fix ./"
+    "lint": "eslint --fix ./",
+    "winston": "babel-node ./src/utils/winston.js"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
@@ -43,7 +44,8 @@
     "pg": "^7.12.1",
     "request": "^2.87.0",
     "sequelize": "^5.21.2",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.4",
