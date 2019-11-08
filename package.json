@@ -7,7 +7,8 @@
     "exclude": [
       "src/migrations",
       "src/database",
-      "src/tests"
+      "src/tests",
+      "src/config"
     ]
   },
   "scripts": {
@@ -33,6 +34,7 @@
     "express-jwt": "^5.3.1",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.3.0",
+    "lodash.merge": "^4.6.2",
     "method-override": "^2.3.10",
     "methods": "^1.1.2",
     "mongoose": "^5.2.2",

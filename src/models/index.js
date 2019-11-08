@@ -2,13 +2,12 @@
 import { readdirSync } from 'fs';
 import { basename as _basename, join } from 'path';
 import Sequelize from 'sequelize';
+import configEnv from '../config';
 
 const basename = _basename(__filename);
-const env = process.env.NODE_ENV || 'development';
 // eslint-disable-next-line import/no-dynamic-require
-const config = require(join(__dirname, '/../database/config.js'))[env];
+const config = configEnv.database;
 const db = {};
-
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable]);
