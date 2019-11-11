@@ -5,7 +5,6 @@ import Sequelize from 'sequelize';
 import configEnv from '../config';
 
 const basename = _basename(__filename);
-// eslint-disable-next-line import/no-dynamic-require
 const config = configEnv.database;
 const db = {};
 let sequelize;
