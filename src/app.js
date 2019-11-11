@@ -2,6 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import { urlencoded, json } from 'body-parser';
 import cors from 'cors';
+import passport from 'passport';
 import morganLogger from 'morgan';
 import router from './routes/index';
 import logger from './utils/winston';
@@ -13,10 +14,16 @@ const isDevelopment = config.env;
 
 const app = express();
 
+app.use(passport.initialize());
+
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
+
 app.use(morganLogger('common', {
   stream: fs.createWriteStream('.logs/request.log', { flags: 'a' })
 }));
 app.use(morganLogger('dev'));
+
 const allowedOrigins = [
   // We shall remove this URL for production
   'http://localhost:5000/',
@@ -59,6 +66,7 @@ app.use((err, req, res, next) => {
 });
 
 // Production and testing error handler middleware
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res) => {
   logger.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${
     req.ip

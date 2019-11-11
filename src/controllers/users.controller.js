@@ -1,5 +1,5 @@
-import hash from '../utils/hash';
 import Responses from '../utils/response';
+import hash from '../utils/hash';
 import JWTHelper from '../utils/jwt';
 import db from '../models';
 import UserServices from '../services/User.service';

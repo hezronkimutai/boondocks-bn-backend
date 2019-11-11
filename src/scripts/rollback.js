@@ -10,7 +10,7 @@ const spawnOptions = { cwd: path.join(__dirname, '../..'), stdio: 'inherit' };
   const { url } = config.database;
 
   try {
-    await spawn('./node_modules/.bin/sequelize', ['db:migrate:undo', `--url=${url}`], spawnOptions);
+    await spawn('./node_modules/.bin/sequelize', ['db:migrate:undo:all', `--url=${url}`], spawnOptions);
     logger.info('*************************');
     logger.info('Migration successful');
   } catch (err) {

@@ -18,7 +18,7 @@ describe('Unit tests for Email verification controller', () => {
       await db.user.create(userData.user3);
     });
 
-    it('verify user email successfully unittest', (done) => {
+    it('verify user email successfully unit test', (done) => {
       const buildResponse = () => httpMocks.createResponse({ eventEmitter: EventEmitter });
       const response = buildResponse();
       const request = httpMocks.createRequest({

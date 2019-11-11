@@ -5,6 +5,7 @@ import swaggerDefinition from '../../docs/api-specification';
 import usersRouter from './users.route';
 import rolesRouter from './roles.route';
 import tripsRouter from './trips.route';
+import authRouter from './auth';
 
 const specs = swaggerJsdoc(swaggerDefinition);
 
@@ -19,6 +20,7 @@ router.use('/api/docs', setup(specs, {
 
 router.use(prefix, usersRouter);
 router.use(prefix, rolesRouter);
+router.use(`${prefix}/auth`, authRouter);
 router.use(prefix, tripsRouter);
 
 export default router;

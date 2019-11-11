@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignkey: 'hotelId',
       onDelete: 'CASCADE'
     });
-    Booking.belongsTo(models.hotel, {
+    Booking.belongsTo(models.room, {
       foreignkey: 'roomId',
       onDelete: 'CASCADE'
     });
