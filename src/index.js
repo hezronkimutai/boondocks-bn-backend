@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 import express from 'express';
-import { urlencoded, json } from 'body-parser';
+import { json, urlencoded } from 'body-parser';
 import cors from 'cors';
-import errorhandler from 'errorhandler';
 import router from './routes/index';
-import ErrorHandler from './utils/error';
 import logger from './utils/winston';
+import Responses from './utils/response';
+import ErrorHandler from './utils/error';
 
 const isDevelopment = process.env.NODE_ENV;
 
@@ -18,19 +18,15 @@ app.use(urlencoded({ extended: false }));
 app.use(json());
 
 // used in testing heroku
-app.get('/', (req, res) => res.status(200).json({
-  message: 'Welcome to Barefoot Nomad'
-}));
+app.get('/', (req, res) => Responses.handleSuccess(200, 'Welcome to Barefoot Nomad', res));
 
 // to throw an error to the logger
 app.get('/err', (req, res) => {
-  throw new ErrorHandler('Errror here');
+  throw new ErrorHandler('Error here');
 });
 
 app.use(router);
-app.use((req, res, next) => res.status(404).json({
-  error: 'Not found'
-}));
+app.use((req, res, next) => Responses.handleError(404, 'Not found', res));
 
 // development error handler middleware
 app.use((err, req, res, next) => {
@@ -41,10 +37,7 @@ app.use((err, req, res, next) => {
     req.ip
   } - Stack: ${err.stack}`);
 
-  return res.status(err.statusCode).json({
-    message: err.message,
-    info: 'check logs for more info'
-  });
+  return Responses.handleError(err.statusCode, `${err.message} - check logs for more info`, res);
 });
 
 // Production and testing error handler middleware
@@ -53,9 +46,7 @@ app.use((err, req, res, next) => {
     req.ip
   } - Stack: ${err.stack}`);
 
-  return res.status(err.statusCode).json({
-    message: err.message
-  });
+  return Responses.handleError(err.statusCode, err.message, res);
 });
 
 // finally, let's start our server...
