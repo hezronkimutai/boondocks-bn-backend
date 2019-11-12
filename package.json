@@ -11,7 +11,7 @@
     ]
   },
   "scripts": {
-    "test": "set NODE_ENV=test && nyc mocha src/tests/*.js --require @babel/register",
+    "test": "set NODE_ENV=test && npm run build && nyc mocha ./dist/tests",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "node -r dotenv/config dist/index.js",
     "migrate": "npx sequelize-cli db:migrate",
