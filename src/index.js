@@ -7,8 +7,13 @@ import router from './routes/index';
 import logger from './utils/winston';
 import Responses from './utils/response';
 import ErrorHandler from './utils/error';
+import config from './config';
 
-const isDevelopment = process.env.NODE_ENV;
+const isDevelopment = config.env;
+
+
+const isProduction = config.env === 'production';
+
 
 const app = express();
 
@@ -50,6 +55,6 @@ app.use((err, req, res, next) => {
 });
 
 // finally, let's start our server...
-const server = app.listen(process.env.PORT || 3000, () => {
+const server = app.listen(config.PORT || 3000, () => {
   console.log(`Listening on port ${server.address().port}`);
 });
