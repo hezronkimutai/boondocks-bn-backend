@@ -7,12 +7,8 @@ import configEnv from '../config';
 const basename = _basename(__filename);
 const config = configEnv.database;
 const db = {};
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable]);
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
-}
+
+const sequelize = new Sequelize(config.database);
 
 readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))
