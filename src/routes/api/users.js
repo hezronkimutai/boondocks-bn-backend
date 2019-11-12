@@ -3,7 +3,7 @@ import users from '../../controllers/users';
 import validation from '../../middlewares/validation';
 import checkForEmail from '../../middlewares/user.validation';
 
-const user = express.Router();
+const router = express.Router();
 
 /**
  * @swagger
@@ -53,7 +53,7 @@ const user = express.Router();
  *         description: success
  */
 
-user.post('/auth/signup', validation, checkForEmail, users.createUser);
+router.post('/auth/signup', validation, checkForEmail, users.createUser);
 
 /**
  * @swagger
@@ -98,6 +98,6 @@ user.post('/auth/signup', validation, checkForEmail, users.createUser);
  *       200:
  *         description: success
  */
-user.post('/auth/signin', validation, users.findUser);
+router.post('/auth/signin', validation, users.findUser);
 
-export default user;
+export default router;

@@ -1,6 +1,7 @@
 import Joi from '@hapi/joi';
 import Schemas from '../utils/schemas';
 import Responses from '../utils/response';
+
 /**
  * Validates the signup or signin routes using the defined schemas
  * @param {object} req
