@@ -57,7 +57,6 @@ export default class {
       try {
         const token = await JWTHelper.signToken(user);
         const data = {
-          id: user.id,
           firstName: user.firstName,
           lastName: user.lastName,
           token

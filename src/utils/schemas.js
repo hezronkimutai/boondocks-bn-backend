@@ -12,7 +12,7 @@ const signupSchema = {
 const signinSchema = {
   email: Joi.string().strict().trim().email()
     .required(),
-  password: Joi.string().alphanum().min(8).required(),
+  password: Joi.required(),
 };
 
 export default {
