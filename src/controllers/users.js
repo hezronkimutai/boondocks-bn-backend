@@ -1,37 +1,44 @@
-import Responses from '../utils/response';
 import hash from '../utils/hash';
+import Responses from '../utils/response';
 import JWTHelper from '../utils/jwt';
 import db from '../models';
+import Mailer from '../services/mailer.service';
+import ErrorHandler from '../utils/error';
 
 /**
  * Class for users related operations
  */
 export default class {
   /**
-   * Creates a new user and generate a token
-   * @param {Object} req request object
-   * @param {Object} res response object
-   * @returns {Object} response
+   *
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns {object} responses
    */
-  static async createUser(req, res) {
-    const passwordHash = hash.generateSync(req.body.password);
-
-    const userData = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      password: passwordHash
-    };
-
-    const user = await db.user.create(userData);
-    const token = await JWTHelper.signToken(user);
-    const data = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      token
-    };
-    Responses.handleSuccess(201, 'created', res, data);
+  static async createUser(req, res, next) {
+    try {
+      const passwordHash = hash.generateSync(req.body.password);
+      const hostUrl = `${req.protocol}://${req.get('host')}`;
+      const userData = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: passwordHash
+      };
+      const user = await db.user.create(userData);
+      const token = await JWTHelper.signToken(user);
+      const data = {
+        id: user.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        token
+      };
+      Mailer.sendVerificationEmail(userData.firstName, hostUrl, userData.email, token);
+      return Responses.handleSuccess(201, 'created', res, data);
+    } catch (err) {
+      next(new ErrorHandler('Error at register'));
+    }
   }
 
   /**
@@ -67,6 +74,73 @@ export default class {
       }
     } catch (error) {
       return Responses.handleSuccess(500, 'server error', res);
+    }
+  }
+
+  /**
+   *
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns {object} responses
+   */
+  static async verifyAccount(req, res, next) {
+    try {
+      const { user } = res.locals;
+      if (!user.isVerified) {
+        await db.user.update(
+          {
+            isVerified: true
+          },
+          { where: { email: user.email } }
+        );
+        return Responses.handleSuccess(
+          200,
+          'Email has been verified successfully, please proceed to log in',
+          res
+        );
+      }
+
+      return Responses.handleError(
+        409,
+        'you are already verified, please login to proceed',
+        res
+      );
+    } catch (err) {
+      next(new ErrorHandler('Error at verification'));
+    }
+  }
+
+  /**
+   *function resend email
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns {object} responses
+   */
+  static async resendEmail(req, res, next) {
+    try {
+      const { email } = req.query;
+      const hostUrl = `${req.protocol}://${req.get('host')}`;
+      const user = await db.user.findOne({
+        where: { email }
+      });
+      if (user) {
+        const token = await JWTHelper.signToken(user);
+        await Mailer.sendVerificationEmail(user.firstName, hostUrl, user.email, token);
+        return Responses.handleSuccess(
+          200,
+          'Email has been resent successfully, please check your mail',
+          res
+        );
+      }
+      return Responses.handleError(
+        404,
+        'No account with such email exists, please sign up',
+        res
+      );
+    } catch (err) {
+      next(new ErrorHandler('Error at verification'));
     }
   }
 }
