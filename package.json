@@ -12,7 +12,8 @@
     ]
   },
   "scripts": {
-    "test": "set NODE_ENV=test && npm run build && nyc mocha ./dist/tests",
+    "test": "NODE_ENV=test nyc mocha -r dotenv/config src/tests/*.js --require @babel/register",
+    "pretest": "NODE_ENV=test npm run migrate:undo && NODE_ENV=test  npm run migrate",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "node -r dotenv/config dist/index.js",
     "migrate": "npx sequelize-cli db:migrate",
@@ -25,6 +26,8 @@
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "@hapi/joi": "^15.1.1",
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",

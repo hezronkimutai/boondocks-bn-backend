@@ -6,6 +6,13 @@ install:
 cache:
   directories:
     - node_modules
+services:
+  - postgresql
+addons:
+  postgresql: "9.4"
+before_script:
+  - psql -c "CREATE DATABASE bn_test;" -U postgres
+
 script:
   - npm test
 after_success:
