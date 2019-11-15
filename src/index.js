@@ -15,3 +15,5 @@ process.on('SIGTERM', () => {
     logger.info('Http server closed.');
   });
 });
+
+export default server;

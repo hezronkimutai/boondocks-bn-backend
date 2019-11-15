@@ -1,10 +1,4 @@
-/* eslint-disable import/no-named-as-default */
-import swaggerJsdoc from 'swagger-jsdoc';
-import { serve, setup } from 'swagger-ui-express';
-import swaggerDefinition from '../docs/api-specification';
 import router from './api/index';
-
-const specs = swaggerJsdoc(swaggerDefinition);
 
 router.use((err, req, res, next) => {
   if (err.name === 'ValidationError') {
@@ -18,11 +12,5 @@ router.use((err, req, res, next) => {
 
   return next(err);
 });
-
-router.use('/api/docs', serve);
-router.use('/api/docs', setup(specs, {
-  explorer: false,
-  customeSiteTitle: 'Barefoot Nomad API'
-}));
 
 export default router;

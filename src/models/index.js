@@ -8,7 +8,7 @@ const basename = _basename(__filename);
 const config = configEnv.database;
 const db = {};
 
-const sequelize = new Sequelize(config.database);
+const sequelize = new Sequelize(config.url, { logging: false });
 
 readdirSync(__dirname)
   .filter(file => (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js'))

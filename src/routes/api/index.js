@@ -1,52 +1,20 @@
+import swaggerJsdoc from 'swagger-jsdoc';
 import express from 'express';
+import { serve, setup } from 'swagger-ui-express';
+import swaggerDefinition from '../../docs/api-specification';
 import users from './users';
 
+const specs = swaggerJsdoc(swaggerDefinition);
+
 const router = express.Router();
+const prefix = '/api/v1';
 
-/**
- * @swagger
- *
- * /user:
- *   get:
- *     summary: Current logged in user
- *     description: retrieves logged in user
- *     tags:
- *       - Users
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: success
- */
-router.get('/user', users.getUser);
+router.use('/api/docs', serve);
+router.use('/api/docs', setup(specs, {
+  explorer: false,
+  customeSiteTitle: 'Barefoot Nomad API'
+}));
 
-/**
- * @swagger
- *
- * /signup:
- *   post:
- *     summary: User Signup
- *     description: Creates a new user account
- *     tags:
- *       - Users
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: success
- */
-router.post('/users', users.createUser);
+router.use(prefix, users);
 
 export default router;
