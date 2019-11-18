@@ -49,7 +49,7 @@ app.use((err, req, res, next) => {
     req.ip
   } - Stack: ${err.stack}`);
 
-  return Responses.handleError(err.statusCode, `${err.message} - check logs for more info`, res);
+  return Responses.handleError(err.statusCode || 500, `${err.message} - check logs for more info`, res);
 });
 
 // Production and testing error handler middleware
@@ -58,7 +58,7 @@ app.use((err, req, res) => {
     req.ip
   } - Stack: ${err.stack}`);
 
-  return Responses.handleError(err.statusCode, err.message, res);
+  return Responses.handleError(err.statusCode || 500, err.message, res);
 });
 
 process.on('unhandledRejection', (reason) => {

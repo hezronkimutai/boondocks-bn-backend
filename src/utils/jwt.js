@@ -4,13 +4,13 @@ import config from '../config';
 /**
  * Class tokenizer used to encode and decoded tokens
  */
-export default class tokenizer {
+class tokenizer {
   /**
    *
    * @param {object} user - its an object with users data
    * @returns {string} token
    */
-  static async signToken(user) {
+  async signToken(user) {
     return JWT.sign({
       email: user.email,
       userId: user.id,
@@ -23,7 +23,7 @@ export default class tokenizer {
    * @param {string} token
    * @returns {object} users data decoded from token
    */
-  static async decodeToken(token) {
+  async decodeToken(token) {
     const data = JWT.verify(token, config.secret, (err, decoded) => {
       if (err) return { error: err.message };
       return decoded;
@@ -31,3 +31,5 @@ export default class tokenizer {
     return data;
   }
 }
+
+export default new tokenizer();

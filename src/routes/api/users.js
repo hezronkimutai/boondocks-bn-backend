@@ -2,7 +2,8 @@ import express from 'express';
 import users from '../../controllers/users';
 import checkForEmail from '../../validation/user.validation';
 import validation from '../../validation/validation';
-import userEmailToken from '../../middlewares/userEmailVerification';
+import catchErrors from '../../utils/helper';
+import decodeQueryToken from '../../middlewares/checkToken';
 
 const router = express.Router();
 
@@ -53,12 +54,12 @@ const router = express.Router();
  *       201:
  *         description: created
  */
-router.post('/auth/signup', validation, checkForEmail, users.createUser);
+router.post('/auth/signup', validation, checkForEmail, catchErrors(users.createUser));
 
 /**
  * @swagger
  *
- *auth/verification:
+ * /auth/verification:
  *  get:
  *    tags:
  *      - users
@@ -88,7 +89,7 @@ router.post('/auth/signup', validation, checkForEmail, users.createUser);
  *      '200':
  *        description: succesfull verified
  */
-router.get('/auth/verification', userEmailToken, users.verifyAccount);
+router.get('/auth/verification', decodeQueryToken, catchErrors(users.verifyAccount));
 
 /**
  * @swagger
@@ -133,12 +134,12 @@ router.get('/auth/verification', userEmailToken, users.verifyAccount);
  *       200:
  *         description: success
  */
-router.post('/auth/signin', validation, users.findUser);
+router.post('/auth/signin', validation, catchErrors(users.findUser));
 
 /**
  * @swagger
  *
- *auth/verification:
+ * /auth/reverifyUser:
  *  get:
  *    tags:
  *      - users
@@ -166,6 +167,88 @@ router.post('/auth/signin', validation, users.findUser);
  *      '200':
  *        description: succesfull verified
  */
-router.get('/auth/reverifyUser', users.resendEmail);
+router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
+
+/**
+ * @swagger
+ *
+ * /auth/forgotPassword:
+ *  post:
+ *    tags:
+ *      - users
+ *    summary: User forgot password link
+ *    description: Enables the reset password to get the users email so as to reset
+ *    produces:
+ *      application/json:
+ *        schema:
+ *          type: object
+ *          properties:
+ *            status:
+ *              type: string
+ *            message:
+ *              type: string
+ *    requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *    parameters:
+ *      - in: query
+ *        name: token
+ *        description: token from user email to reset
+ *        type: string
+ *    responses:
+ *      '500':
+ *        description: Error at forgot password
+ *      '404':
+ *        description: email not found
+ *      '200':
+ *        description: succesfull sent reset link
+ */
+router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
+
+/**
+ * @swagger
+ *
+ * /auth/forgotPassword:
+ *  patch:
+ *    tags:
+ *      - users
+ *    summary: User forgot password link
+ *    description: Enables the reset password to get the users email so as to reset
+ *    produces:
+ *      application/json:
+ *        schema:
+ *          type: object
+ *          properties:
+ *            status:
+ *              type: string
+ *            message:
+ *              type: string
+*    parameters:
+ *      - in: query
+ *        name: token
+ *        description: user's token for verification
+ *        type: string
+ *    requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               password:
+ *                 type: string
+ *    responses:
+ *      '500':
+ *        description: Error at forgot password
+ *      '404':
+ *        description: email not found
+ *      '200':
+ *        description: succesfull sent reset link
+ */
+router.patch('/auth/resetPassword', validation, decodeQueryToken, catchErrors(users.resetPassword));
 
 export default router;
