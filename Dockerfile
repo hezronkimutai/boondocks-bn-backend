@@ -1,12 +1,12 @@
 FROM node:10.16.3
-WORKDIR /app
+
+WORKDIR /usr/src/index
+
 COPY package*.json ./
 
-RUN if [ "$NODE-ENV"="development" ]; \
-        then npm install;\
-        else npm install --only=production; \ 
-        fi
+RUN npm i
 
 COPY . .
+
 EXPOSE 3000
-CMD npm dev
+CMD ["npm", "run", "watch"]
