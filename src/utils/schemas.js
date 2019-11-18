@@ -44,9 +44,26 @@ const oneWaySchema = Joi.object().keys({
   }
 });
 
+const twoWaySchema = Joi.object().keys({
+  hotelId: Joi.required(),
+  type: Joi.string().strict().trim().required(),
+  leavingFrom: Joi.string().strict().trim().required(),
+  goingTo: Joi.string().strict().required(),
+  travelDate: Joi.date().required(),
+  returnDate: Joi.date().required(),
+  reason: Joi.string().strict().required(),
+  rooms: Joi.required()
+}).options({
+  abortEarly: false,
+  language: {
+    key: '{{key}} '
+  }
+});
+
 export default {
   '/auth/resetPassword': resetPassword,
   '/auth/signup': signupSchema,
   '/auth/signin': signinSchema,
-  '/trips/oneway': oneWaySchema
+  '/trips/oneway': oneWaySchema,
+  '/trips/return': twoWaySchema
 };

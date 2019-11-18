@@ -103,3 +103,5 @@ typings/
 .nyc_output
 
 trash/
+.DS_Store
+src/migrations/.DS_Store

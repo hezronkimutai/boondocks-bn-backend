@@ -1,28 +1,30 @@
 export default {
   trips: [{
     leavingFrom: 'Kigali',
-    type: 'one way',
     goingTo: 'Nairobi',
     travelDate: '2019-11-18',
     reason: 'visit our agents',
     hotelId: 1,
-    rooms: [1]
-  },
-  {
-    leavingFrom: 'Kigali',
-    type: 'one way',
-    goingTo: 'Nairobi',
-    travelDate: '2019-11-18',
-    hotelId: 1,
+    type: 'return',
     rooms: [1]
   },
   {
     leavingFrom: 'Kigali',
     goingTo: 'Nairobi',
     travelDate: '2019-11-18',
+    returnDate: '2019-11-18',
     reason: 'visit our agents',
     hotelId: 1,
-    userId: 1,
+    type: 'return',
+    rooms: [1]
+  }, {
+    leavingFrom: 'Kigali',
+    goingTo: 'Nairobi',
+    travelDate: '2019-11-18',
+    returnDate: '2019-11-18',
+    reason: 'visit our agents',
+    hotelId: 1,
+    type: 'return',
     rooms: [2]
   }],
   rooms: [{

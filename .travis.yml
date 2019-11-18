@@ -13,7 +13,6 @@ addons:
 before_script:
   - psql -c "CREATE DATABASE bn_test;" -U postgres
   - npm run pretest-travis
-
 script:
   - npm test
 after_success:
