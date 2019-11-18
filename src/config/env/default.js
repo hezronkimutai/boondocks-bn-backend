@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
 const config = {
   PORT: process.env.PORT || 3000,
   secret: process.env.SECRET,
@@ -7,8 +10,8 @@ const config = {
   },
   HASH_SALT_ROUNDS: 10,
   debug: false,
+  SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+  env: process.env.NODE_ENV || 'development'
 };
-// Set the current environment or default to 'development'
-config.env = process.env.NODE_ENV || 'development';
 
 export default config;

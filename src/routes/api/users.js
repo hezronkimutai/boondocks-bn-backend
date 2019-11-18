@@ -2,6 +2,7 @@ import express from 'express';
 import users from '../../controllers/users';
 import validation from '../../middlewares/validation';
 import checkForEmail from '../../middlewares/user.validation';
+import userEmailToken from '../../middlewares/userEmailVerification';
 
 const router = express.Router();
 
@@ -49,11 +50,45 @@ const router = express.Router();
  *                   token:
  *                     type: string
  *     responses:
- *       200:
- *         description: success
+ *       201:
+ *         description: created
  */
-
 router.post('/auth/signup', validation, checkForEmail, users.createUser);
+
+/**
+ * @swagger
+ *
+ *auth/verification:
+ *  get:
+ *    tags:
+ *      - users
+ *    summary: User email verification
+ *    description: verifies users acount using an email
+ *    produces:
+ *      application/json:
+ *        schema:
+ *          type: object
+ *          properties:
+ *            status:
+ *              type: string
+ *            message:
+ *              type: string
+ *    parameters:
+ *      - in: query
+ *        name: token
+ *        description: user's token for verification
+ *        type: string
+ *    responses:
+ *      '500':
+ *        description: Error at verification
+ *      '401':
+ *        description: invalid token
+ *      '409':
+ *        description: trying to verify again
+ *      '200':
+ *        description: succesfull verified
+ */
+router.get('/auth/verification', userEmailToken, users.verifyAccount);
 
 /**
  * @swagger
@@ -99,5 +134,38 @@ router.post('/auth/signup', validation, checkForEmail, users.createUser);
  *         description: success
  */
 router.post('/auth/signin', validation, users.findUser);
+
+/**
+ * @swagger
+ *
+ *auth/verification:
+ *  get:
+ *    tags:
+ *      - users
+ *    summary: User email verification
+ *    description: verifies users acount using an email
+ *    produces:
+ *      application/json:
+ *        schema:
+ *          type: object
+ *          properties:
+ *            status:
+ *              type: string
+ *            message:
+ *              type: string
+ *    parameters:
+ *      - in: query
+ *        name: email
+ *        description: user's email
+ *        type: string
+ *    responses:
+ *      '500':
+ *        description: Error at verification
+ *      '404':
+ *        description: email not found
+ *      '200':
+ *        description: succesfull verified
+ */
+router.get('/auth/reverifyUser', users.resendEmail);
 
 export default router;
