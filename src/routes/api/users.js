@@ -1,7 +1,7 @@
 import express from 'express';
 import users from '../../controllers/users';
-import validation from '../../middlewares/validation';
-import checkForEmail from '../../middlewares/user.validation';
+import checkForEmail from '../../validation/user.validation';
+import validation from '../../validation/validation';
 import userEmailToken from '../../middlewares/userEmailVerification';
 
 const router = express.Router();

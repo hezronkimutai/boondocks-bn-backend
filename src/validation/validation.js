@@ -1,7 +1,6 @@
 import Joi from '@hapi/joi';
-import Schemas from '../utils/schemas';
 import Responses from '../utils/response';
-
+import Schemas from '../utils/schemas';
 /**
  * Validates the signup or signin routes using the defined schemas
  * @param {object} req
@@ -19,9 +18,9 @@ const validation = (req, res, next) => {
 
     return Joi.validate(req.body, schema, (error, data) => {
       if (error) {
-        return Responses.handleError(400, error.details[0].message, res);
+        const err = error.details.map(e => (e.message));
+        return Responses.handleError(400, err, res);
       }
-
       req.body = data;
       next();
     });
