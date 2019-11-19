@@ -5,6 +5,7 @@ import router from './routes/index';
 import logger from './utils/winston';
 import Responses from './utils/response';
 import config from './config';
+import ErrorHandler from './utils/error';
 
 const isDevelopment = config.env;
 
@@ -58,6 +59,15 @@ app.use((err, req, res) => {
   } - Stack: ${err.stack}`);
 
   return Responses.handleError(err.statusCode, err.message, res);
+});
+
+process.on('unhandledRejection', (reason) => {
+  throw new ErrorHandler(reason);
+});
+
+process.on('uncaughtException', (error) => {
+  logger.error(`Uncaught Exception: ${500} - ${error.message}, Stack: ${error.stack}`);
+  process.kill(process.pid, 'SIGTERM');
 });
 
 export default app;
