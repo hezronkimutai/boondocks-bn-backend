@@ -22,4 +22,28 @@ const decodeQueryToken = async (req, res, next) => {
   next();
 };
 
-export default decodeQueryToken;
+/**
+* function - decodes the token from the request
+* @param {} req
+* @param {} res
+* @param {} next
+* @returns {undefined}
+*/
+
+const verifyUser = async (req, res, next) => {
+  let token = req.headers['x-access-token'] || req.headers.authorization;
+  if (token === undefined) {
+    return Responses.handleError(401, 'Token not provided', res);
+  }
+  if (token.startsWith('Bearer ')) {
+    token = token.slice(7, token.length);
+  }
+  const decoded = await JWThelper.decodeToken(token);
+  if (Object.keys(decoded)[0] === 'error') {
+    return Responses.handleError(401, 'Invalid token, please login', res);
+  }
+  const user = decoded;
+  res.locals.user = user;
+  next();
+};
+export { decodeQueryToken, verifyUser };

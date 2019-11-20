@@ -3,12 +3,12 @@ import chaiHttp from 'chai-http';
 import { describe, it } from 'mocha';
 import { EventEmitter } from 'events';
 import httpMocks from 'node-mocks-http';
-import { decodeQueryToken } from '../../../middlewares/checkToken';
+import validations from '../../../validation/validation';
 import truncate from '../../scripts/truncate';
 
 chai.use(chaiHttp);
 
-describe('Unit tests for check token verification middleware', () => {
+describe('Unit tests for checking validations for trips', () => {
   before(async () => {
     await truncate();
   });
@@ -17,21 +17,16 @@ describe('Unit tests for check token verification middleware', () => {
     const buildResponse = () => httpMocks.createResponse({ eventEmitter: EventEmitter });
     const response = buildResponse();
     const request = httpMocks.createRequest({
-      method: '',
-      url: '/api/v1',
-      query: {
-        token: 'noifhenuxrsd47893yt54tuogo'
-      }
+      method: 'POST',
+      url: '/api/v1/trips/oneway',
+      body: {}
     });
     response.on('end', async () => {
       process.on('unhandledRejection', error => assert.fail('expected', 'actual', error.stack));
       // eslint-disable-next-line no-underscore-dangle
-      expect(await response._getJSONData()).to.deep.equal({
-        status: 'error',
-        message: 'invalid token, Please try to regenerate another email'
-      });
+      expect(await response.statusCode).eql(400);
       return done();
     });
-    decodeQueryToken(request, response);
+    validations(request, response, done());
   });
 });

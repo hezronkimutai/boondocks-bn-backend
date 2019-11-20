@@ -3,7 +3,7 @@ import users from '../../controllers/users';
 import checkForEmail from '../../validation/user.validation';
 import validation from '../../validation/validation';
 import catchErrors from '../../utils/helper';
-import decodeQueryToken from '../../middlewares/checkToken';
+import { decodeQueryToken } from '../../middlewares/checkToken';
 
 const router = express.Router();
 
