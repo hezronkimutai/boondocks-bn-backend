@@ -10,7 +10,6 @@ import ErrorHandler from '../utils/error';
  */
 export default class {
   /**
-   *
    * @param {object} req
    * @param {object} res
    * @param {function} next
