@@ -3,6 +3,7 @@ import express from 'express';
 import { serve, setup } from 'swagger-ui-express';
 import swaggerDefinition from '../../docs/api-specification';
 import usersRouter from './users.route';
+import rolesRouter from './roles.route';
 import tripsRouter from './trips.route';
 
 const specs = swaggerJsdoc(swaggerDefinition);
@@ -17,6 +18,7 @@ router.use('/api/docs', setup(specs, {
 }));
 
 router.use(prefix, usersRouter);
+router.use(prefix, rolesRouter);
 router.use(prefix, tripsRouter);
 
 export default router;

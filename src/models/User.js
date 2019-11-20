@@ -4,7 +4,19 @@ export default (sequelize, DataTypes) => {
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
     isVerified: DataTypes.BOOLEAN,
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
+    role: {
+      type: DataTypes.ENUM,
+      allowNull: false,
+      defaultValue: 'requester',
+      values: [
+        'super_administrator',
+        'travel_administrator',
+        'travel_team_member',
+        'manager',
+        'requester'
+      ]
+    }
   }, {});
   User.associate = (models) => {
     User.hasMany(models.booking, {

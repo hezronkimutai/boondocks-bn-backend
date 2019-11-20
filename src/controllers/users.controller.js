@@ -188,6 +188,24 @@ class UserController {
       res
     );
   }
+
+  /**
+   *function resend email
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns {object} responses
+   */
+  async fetchAllUsers(req, res) {
+    try {
+      const allUsers = await db.user.findAll({
+        attributes: { exclude: ['password'] }
+      });
+      return Responses.handleSuccess(200, 'successfully retrieved all users', res, allUsers);
+    } catch (error) {
+      return Responses.handleError(500, 'server error', res);
+    }
+  }
 }
 
 export default new UserController();

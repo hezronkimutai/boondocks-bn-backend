@@ -29,6 +29,18 @@ module.exports = {
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE
+    },
+    role: {
+      type: Sequelize.ENUM,
+      allowNull: false,
+      defaultValue: 'requester',
+      values: [
+        'super_administrator',
+        'travel_administrator',
+        'travel_team_member',
+        'manager',
+        'requester'
+      ]
     }
   }),
   down: queryInterface => queryInterface.dropTable('users')

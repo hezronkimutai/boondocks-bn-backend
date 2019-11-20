@@ -14,7 +14,8 @@ class tokenizer {
     return JWT.sign({
       email: user.email,
       userId: user.id,
-      verified: user.isVerified
+      verified: user.isVerified,
+      role: user.role
     }, config.secret, { expiresIn: '24h' });
   }
 
