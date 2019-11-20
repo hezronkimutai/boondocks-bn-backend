@@ -1,6 +1,8 @@
 import express from 'express';
+import fs from 'fs';
 import { urlencoded, json } from 'body-parser';
 import cors from 'cors';
+import morganLogger from 'morgan';
 import router from './routes/index';
 import logger from './utils/winston';
 import Responses from './utils/response';
@@ -10,6 +12,10 @@ const isDevelopment = config.env;
 
 const app = express();
 
+app.use(morganLogger('common', {
+  stream: fs.createWriteStream('.logs/request.log', { flags: 'a' })
+}));
+app.use(morganLogger('dev'));
 const allowedOrigins = [
   // We shall remove this URL for production
   'http://localhost',
