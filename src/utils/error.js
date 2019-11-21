@@ -2,7 +2,7 @@
  * Class representing errorHandlers.
  * @extends Error
  */
-class ErrorHandler extends Error {
+export default class ErrorHandler extends Error {
   /**
      * Create error handler.
      * @param {string} message - The message to be passed for the error.
@@ -14,5 +14,3 @@ class ErrorHandler extends Error {
     this.message = message;
   }
 }
-
-export default ErrorHandler;

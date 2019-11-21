@@ -24,7 +24,13 @@ const signinSchema = Joi.object().keys({
   }
 });
 
+const resetPassword = Joi.object().keys({
+  password: Joi.string().alphanum().min(8).required()
+    .strict()
+});
+
 export default {
+  '/auth/resetPassword': resetPassword,
   '/auth/signup': signupSchema,
   '/auth/signin': signinSchema
 };

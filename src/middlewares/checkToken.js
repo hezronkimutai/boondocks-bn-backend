@@ -9,11 +9,11 @@ import Responses from '../utils/response';
  * @param {*} next
  * @returns {undefined}
  */
-const userEmailVerification = async (req, res, next) => {
+const decodeQueryToken = async (req, res, next) => {
   const { token } = req.query;
   const decoded = await JWThelper.decodeToken(token);
   if (Object.keys(decoded)[0] === 'error') {
-    return Responses.handleError(401, 'invalid token, regenerate another token using the link in your verification email', res);
+    return Responses.handleError(401, 'invalid token, Please try to regenerate another email', res);
   }
   const user = await db.user.findOne({
     where: { email: decoded.email }
@@ -22,4 +22,4 @@ const userEmailVerification = async (req, res, next) => {
   next();
 };
 
-export default userEmailVerification;
+export default decodeQueryToken;
