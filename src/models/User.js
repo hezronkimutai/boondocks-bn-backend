@@ -6,5 +6,15 @@ export default (sequelize, DataTypes) => {
     isVerified: DataTypes.BOOLEAN,
     password: DataTypes.STRING
   }, {});
+  User.associate = (models) => {
+    User.hasMany(models.booking, {
+      foreignkey: 'userId',
+      onDelete: 'CASCADE'
+    });
+    User.hasMany(models.hotel, {
+      foreignkey: 'userId',
+      onDelete: 'CASCADE'
+    });
+  };
   return User;
 };
