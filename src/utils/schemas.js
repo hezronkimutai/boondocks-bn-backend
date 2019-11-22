@@ -47,7 +47,8 @@ const oneWaySchema = Joi.object().keys({
 const updateUserInfoSchema = Joi.object().keys({
   firstName: Joi.string().strict().trim(),
   lastName: Joi.string().strict().trim(),
-  email: Joi.string().strict().trim().email(),
+  email: Joi.string().strict().trim().email()
+    .required(),
   password: Joi.string().alphanum().min(8).strict(),
   birthDate: Joi.date().iso().min('1950-01-01T00:00:00.000Z').max('2010-12-31T00:00:00.000Z'),
   preferredLanguage: Joi.string().strict().trim(),
@@ -55,8 +56,8 @@ const updateUserInfoSchema = Joi.object().keys({
   residenceAddress: Joi.string().strict().trim(),
   gender: Joi.string().strict().trim(),
   department: Joi.string().strict().trim(),
-  lineManager: Joi.string().strict().trim(),
-  phoneNumber: Joi.string().regex(/^(\(\d{3}\) |\d{3}-)\d{3}-\d{4}$/).default('000-000-0000'),
+  lineManagerId: Joi.number().min(1),
+  phoneNumber: Joi.string().regex(/^[().+\d -]{1,15}$/)
 }).options({
   abortEarly: false,
   language: {

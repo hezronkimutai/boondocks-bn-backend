@@ -94,7 +94,7 @@ router.post('/auth/signup', validation, checkForEmail, catchErrors(users.createU
  *      '409':
  *        description: trying to verify again
  *      '200':
- *        description: succesfully verified
+ *        description: successfully verified
  */
 router.get('/auth/verification', decodeQueryToken, catchErrors(users.verifyAccount));
 
@@ -173,7 +173,7 @@ router.post('/auth/signin', validation, catchErrors(users.findUser));
  *      '404':
  *        description: email not found
  *      '200':
- *        description: succesfully verified
+ *        description: successfully verified
  */
 router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
 
@@ -214,7 +214,7 @@ router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
  *      '404':
  *        description: email not found
  *      '200':
- *        description: succesfully sent reset link
+ *        description: successfully sent reset link
  */
 router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
 
@@ -236,7 +236,7 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
  *              type: string
  *            message:
  *              type: string
-*    parameters:
+ *    parameters:
  *      - in: query
  *        name: token
  *        description: user's token for verification

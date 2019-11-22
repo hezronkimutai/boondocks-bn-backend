@@ -7,28 +7,66 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     firstName: {
-      type: Sequelize.STRING
+      allowNull: false,
+      type: Sequelize.STRING,
     },
     lastName: {
-      type: Sequelize.STRING
-    },
-    email: {
-      type: Sequelize.STRING
+      allowNull: false,
+      type: Sequelize.STRING,
     },
     password: {
-      type: Sequelize.STRING
+      allowNull: false,
+      type: Sequelize.STRING,
+      defaultValue: 'password',
     },
     isVerified: {
+      allowNull: false,
       type: Sequelize.BOOLEAN,
-      defaultValue: false
+      defaultValue: false,
     },
-    createdAt: {
-      allowNull: false,
+    lastLogin: {
+      allowNull: true,
       type: Sequelize.DATE
     },
-    updatedAt: {
+    email: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: Sequelize.STRING,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    birthDate: {
+      allowNull: true,
+      type: Sequelize.DATE,
+    },
+    residenceAddress: {
+      allowNull: true,
+      type: Sequelize.STRING,
+    },
+    lineManagerId: {
+      allowNull: true,
+      type: Sequelize.INTEGER,
+    },
+    preferredLanguage: {
+      allowNull: true,
+      type: Sequelize.STRING,
+    },
+    preferredCurrency: {
+      allowNull: true,
+      type: Sequelize.STRING,
+    },
+    department: {
+      allowNull: true,
+      type: Sequelize.STRING,
+    },
+    gender: {
+      allowNull: true,
+      type: Sequelize.STRING,
+    },
+    phoneNumber: {
+      allowNull: true,
+      type: Sequelize.STRING,
     },
     role: {
       type: Sequelize.ENUM,
@@ -41,6 +79,14 @@ module.exports = {
         'manager',
         'requester'
       ]
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
     }
   }),
   down: queryInterface => queryInterface.dropTable('users')

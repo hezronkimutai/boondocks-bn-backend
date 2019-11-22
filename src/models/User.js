@@ -1,10 +1,65 @@
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    email: DataTypes.STRING,
-    isVerified: DataTypes.BOOLEAN,
-    password: DataTypes.STRING,
+    firstName: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
+    lastName: {
+      allowNull: false,
+      type: DataTypes.STRING,
+      unique: true
+    },
+    email: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
+    isVerified: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    birthDate: {
+      allowNull: true,
+      type: DataTypes.DATE,
+    },
+    residenceAddress: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    lineManagerId: {
+      allowNull: true,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'users',
+        key: 'id',
+      },
+    },
+    preferredLanguage: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    preferredCurrency: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    department: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    gender: {
+      allowNull: true,
+      type: DataTypes.STRING,
+    },
+    password: {
+      allowNull: true,
+      type: DataTypes.STRING,
+      defaultValue: 'password'
+    },
+    lastLogin: {
+      allowNull: true,
+      type: DataTypes.DATE,
+      defaultValue: sequelize.fn('NOW')
+    },
     role: {
       type: DataTypes.ENUM,
       allowNull: false,
@@ -16,16 +71,28 @@ export default (sequelize, DataTypes) => {
         'manager',
         'requester'
       ]
+    },
+    phoneNumber: {
+      allowNull: true,
+      type: DataTypes.STRING
     }
   }, {});
   User.associate = (models) => {
     User.hasMany(models.booking, {
-      foreignkey: 'userId',
+      foreignKey: 'userId',
       onDelete: 'CASCADE'
     });
     User.hasMany(models.hotel, {
-      foreignkey: 'userId',
+      foreignKey: 'userId',
       onDelete: 'CASCADE'
+    });
+    User.hasMany(models.user, {
+      foreignKey: 'lineManagerId',
+      onDelete: 'CASCADE'
+    });
+    User.belongsTo(models.user, {
+      foreignKey: 'lineManagerId',
+      as: 'LineManager',
     });
   };
   return User;
