@@ -1,4 +1,5 @@
-const path = require('path');
+import { resolve } from 'path';
+import config from '../config/index';
 
 const options = {
   swaggerDefinition: {
@@ -39,15 +40,15 @@ const options = {
         description: 'Staging Server'
       },
       {
-        url: `localhost:${process.env.PORT || 3000}/api/v1`,
+        url: `http://localhost:${config.PORT}/api/v1`,
         description: 'Local Host'
       }
     ]
   },
   apis: [
-    path.resolve(__dirname, '../docs/resources/*.yaml'),
-    path.resolve(__dirname, '../routes/api/*.js')
+    resolve(__dirname, '../docs/resources/*.yaml'),
+    resolve(__dirname, '../routes/api/*.js')
   ]
 };
 
-module.exports = options;
+export default options;

@@ -19,7 +19,7 @@ app.use(morganLogger('common', {
 app.use(morganLogger('dev'));
 const allowedOrigins = [
   // We shall remove this URL for production
-  'http://localhost',
+  'http://localhost:5000/',
   // Our front end URL to be added here in phase 2 of SIMS
 ];
 app.use(cors({

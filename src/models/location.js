@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   const Location = sequelize.define('location', {
     name: DataTypes.STRING
   }, {});
-  Location.associate = () => {
+  Location.associate = (/* models */) => {
+    // associations can be defined here
   };
   return Location;
 };
