@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import { EventEmitter } from 'events';
 import httpMocks from 'node-mocks-http';
 import userData from '../../mock-data/resetPasswordData';
-import userController from '../../../controllers/users';
+import userController from '../../../controllers/users.controller';
 import truncate from '../../scripts/truncate';
 import db from '../../../models';
 

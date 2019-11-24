@@ -2,7 +2,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import express from 'express';
 import { serve, setup } from 'swagger-ui-express';
 import swaggerDefinition from '../../docs/api-specification';
-import usersRouter from './users';
+import usersRouter from './users.route';
 import tripsRouter from './trips.route';
 
 const specs = swaggerJsdoc(swaggerDefinition);
