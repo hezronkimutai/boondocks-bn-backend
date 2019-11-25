@@ -1,5 +1,5 @@
 import express from 'express';
-import validation from '../../validation/validation';
+import { validation } from '../../validation/validation';
 import roleAuthorization from '../../middlewares/roleAuthorization';
 import { verifyUser } from '../../middlewares/checkToken';
 import roles from '../../controllers/roles.controller';

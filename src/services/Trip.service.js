@@ -1,5 +1,4 @@
 import db from '../models';
-import { createRequest } from './request.service';
 
 /**
  * Class trip service, creates trips
@@ -10,7 +9,7 @@ class Trip {
    * @param {object} data
    * @returns {object} returns nothing
    */
-  async createSingleTrip(data) {
+  async create(data) {
     const {
       userId,
       hotelId,
@@ -20,7 +19,8 @@ class Trip {
       travelDate,
       returnDate,
       reason,
-      rooms
+      rooms,
+      requestId
     } = data;
 
     rooms.forEach(async (room) => {
@@ -35,7 +35,6 @@ class Trip {
         }
       });
     });
-    const requestId = await createRequest(userId, 'single');
     const trip = await db.trip.create({
       userId,
       hotelId,

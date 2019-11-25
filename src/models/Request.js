@@ -9,8 +9,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignkey: 'userId',
       onDelete: 'CASCADE'
     });
+
     Request.hasMany(models.trip, {
-      foreignkey: 'id',
+      foreignkey: 'requestId',
       onDelete: 'CASCADE'
     });
   };

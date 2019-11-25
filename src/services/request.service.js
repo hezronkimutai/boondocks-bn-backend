@@ -5,7 +5,9 @@ const createRequest = async (userId, type) => {
     {
       userId, type
     },
-    { returning: true }
+    {
+      returning: true,
+    }
   );
   return request.id;
 };
@@ -50,9 +52,20 @@ const getOneRequest = async (userId, id) => {
   return request;
 };
 
+const getRequestById = async (requestId) => {
+  const request = await db.request.findOne({
+    where: {
+      id: requestId
+    }
+  });
+
+  return request;
+};
+
 export {
   createRequest,
   getRequestbyStatus,
   getAllRequest,
-  getOneRequest
+  getOneRequest,
+  getRequestById
 };
