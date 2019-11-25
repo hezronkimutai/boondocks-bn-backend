@@ -1,7 +1,7 @@
 /**
  * Formatted response class
  */
-export default class Responses {
+class Responses {
   /**
    * handleSuccess Function
    * @param {int} statusCode - Status code
@@ -10,7 +10,7 @@ export default class Responses {
    * @param {object | null} data - Data
    * @return {object} - Returned Formatted response object
    */
-  static handleSuccess(statusCode, message, res, data = null) {
+  handleSuccess(statusCode, message, res, data = null) {
     return res.status(statusCode)
       .json(data ? {
         status: 'success',
@@ -29,7 +29,7 @@ export default class Responses {
    * @param {object} res - Response
    * @returns {object} - Returned Formatted response object
    */
-  static handleError(statusCode, message, res) {
+  handleError(statusCode, message, res) {
     return res.status(statusCode)
       .json({
         status: 'error',
@@ -37,3 +37,5 @@ export default class Responses {
       });
   }
 }
+
+export default new Responses();
