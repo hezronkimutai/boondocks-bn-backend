@@ -1,8 +1,7 @@
+import db from '../models';
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
-const mongoose = require('mongoose');
-
-const User = mongoose.model('User');
 
 passport.use(
   new LocalStrategy(
@@ -11,7 +10,7 @@ passport.use(
       passwordField: 'user[password]'
     },
     (email, password, done) => {
-      User.findOne({ email })
+      db.user.findOne({ email })
         .then((user) => {
           if (!user || !user.validPassword(password)) {
             return done(null, false, {

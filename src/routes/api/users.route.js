@@ -1,5 +1,5 @@
 import express from 'express';
-import users from '../../controllers/users';
+import users from '../../controllers/users.controller';
 import checkForEmail from '../../validation/user.validation';
 import validation from '../../validation/validation';
 import catchErrors from '../../utils/helper';

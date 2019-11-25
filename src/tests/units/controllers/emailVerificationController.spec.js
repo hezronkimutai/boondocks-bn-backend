@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import { describe, it } from 'mocha';
 import { EventEmitter } from 'events';
 import httpMocks from 'node-mocks-http';
-import userController from '../../../controllers/users';
+import userController from '../../../controllers/users.controller';
 import userData from '../../mock-data/verification.data';
 import truncate from '../../scripts/truncate';
 import db from '../../../models';
