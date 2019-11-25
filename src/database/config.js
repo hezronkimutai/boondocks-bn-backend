@@ -1,5 +1,5 @@
 // configures the database urls according to the environment
-import config from '../config';
+const config = require('../config');
 
 module.exports = {
   url: config.database.url,

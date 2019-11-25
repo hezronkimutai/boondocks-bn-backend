@@ -1,10 +1,8 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('@babel/register');
-}
 const path = require('path');
 
 module.exports = {
   config: path.resolve('./src/database', 'config.js'),
   'migrations-path': path.resolve('./src/migrations'),
-  'models-path': path.resolve('./src/models')
+  'models-path': path.resolve('./src/models'),
+  'seeders-path': path.resolve('./src/database/seeders'),
 };

@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+const dotenv = require('dotenv');
 
 dotenv.config();
 const config = {
@@ -14,4 +14,4 @@ const config = {
   env: process.env.NODE_ENV || 'development'
 };
 
-export default config;
+module.exports = config;

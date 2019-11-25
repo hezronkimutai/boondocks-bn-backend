@@ -31,9 +31,9 @@ module.exports = {
     reason: {
       type: Sequelize.STRING
     },
-    status: {
-      type: Sequelize.STRING,
-      defaultValue: 'pending'
+    requestId: {
+      allowNull: false,
+      type: Sequelize.INTEGER,
     },
     createdAt: {
       allowNull: false,
