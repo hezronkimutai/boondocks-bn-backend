@@ -60,7 +60,12 @@ const router = express.Router();
  *       201:
  *         description: created
  */
-router.post('/auth/signup', validation, checkForEmail, catchErrors(users.createUser));
+router.post(
+  '/auth/signup',
+  validation,
+  catchErrors(checkForEmail),
+  catchErrors(users.createUser)
+);
 
 /**
  * @swagger
@@ -96,7 +101,11 @@ router.post('/auth/signup', validation, checkForEmail, catchErrors(users.createU
  *      '200':
  *        description: successfully verified
  */
-router.get('/auth/verification', decodeQueryToken, catchErrors(users.verifyAccount));
+router.get(
+  '/auth/verification',
+  catchErrors(decodeQueryToken),
+  catchErrors(users.verifyAccount)
+);
 
 /**
  * @swagger
@@ -142,7 +151,11 @@ router.get('/auth/verification', decodeQueryToken, catchErrors(users.verifyAccou
  *       200:
  *         description: success
  */
-router.post('/auth/signin', validation, catchErrors(users.findUser));
+router.post(
+  '/auth/signin',
+  validation,
+  catchErrors(users.findUser)
+);
 
 /**
  * @swagger
@@ -175,7 +188,10 @@ router.post('/auth/signin', validation, catchErrors(users.findUser));
  *      '200':
  *        description: successfully verified
  */
-router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
+router.get(
+  '/auth/reverifyUser',
+  catchErrors(users.resendEmail)
+);
 
 /**
  * @swagger
@@ -216,7 +232,10 @@ router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
  *      '200':
  *        description: successfully sent reset link
  */
-router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
+router.post(
+  '/auth/forgotPassword',
+  catchErrors(users.forgotPassword)
+);
 
 /**
  * @swagger
@@ -257,7 +276,12 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
  *      '200':
  *        description: successfull sent reset link
  */
-router.patch('/auth/resetPassword', validation, decodeQueryToken, catchErrors(users.resetPassword));
+router.patch(
+  '/auth/resetPassword',
+  validation,
+  catchErrors(decodeQueryToken),
+  catchErrors(users.resetPassword)
+);
 
 /**
  * @swagger
@@ -319,7 +343,12 @@ router.patch('/auth/resetPassword', validation, decodeQueryToken, catchErrors(us
  *      '500':
  *        description: Internal Server error
  * */
-router.patch('/user/update-profile', verifyUser, validation, catchErrors(updateUserInfo));
+router.patch(
+  '/user/update-profile',
+  verifyUser,
+  validation,
+  catchErrors(updateUserInfo)
+);
 
 /**
  * @swagger
@@ -348,6 +377,10 @@ router.patch('/user/update-profile', verifyUser, validation, catchErrors(updateU
  *      '500':
  *        description: Internal Server error
  * */
-router.get('/user/:userId', verifyUser, catchErrors(getUserProfile));
+router.get(
+  '/user/:userId',
+  verifyUser,
+  catchErrors(getUserProfile)
+);
 
 export default router;

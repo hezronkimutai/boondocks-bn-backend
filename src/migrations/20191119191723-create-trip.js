@@ -13,7 +13,13 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     type: {
-      type: Sequelize.STRING
+      type: Sequelize.ENUM,
+      allowNull: false,
+      defaultValue: 'one way',
+      values: [
+        'one way',
+        'return'
+      ]
     },
     leavingFrom: {
       type: Sequelize.STRING

@@ -231,4 +231,90 @@ router.post('/trips/return', verifyUser, validation, checkForRooms, catchErrors(
  */
 router.post('/trips/multi-city', verifyUser, validateMultiCity, checkForMultiCityRooms, catchErrors(trips.createMultiCitiesTrip));
 
+
+/**
+ * @swagger
+ *
+ * /trips/:tripId:
+ *   post:
+ *     summary: Update trip details
+ *     description: This route allows you to update the trip details of an 'open' travel request
+ *     tags:
+ *       - Trip
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               hotelId:
+ *                 type: integer
+ *               type:
+ *                 type: string
+ *               leavingFrom:
+ *                 type: string
+ *               goingTo:
+ *                 type: string
+ *               travelDate:
+ *                 type: string
+ *               returnDate:
+ *                 type: string
+ *               reason:
+ *                 type: string
+ *               rooms:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *     produces:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *               message:
+ *                 type: string
+ *               data:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   leavingFrom:
+ *                     type: string
+ *                   goingTo:
+ *                     type: string
+ *                   travelDate:
+ *                     type: string
+ *                   returnDate:
+ *                     type: string
+ *                   reason:
+ *                     type: string
+ *                   hotelId:
+ *                     type: integer
+ *                   userId:
+ *                     type: integer
+ *                   status:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
+ *                   createAt:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: success
+ *       409:
+ *         description: you can only edit trips whose request status is open
+ *       401:
+ *         description: Invalid token, please login
+ *       403:
+ *         description: you can only edit your own trips
+ */
+
+router.patch(
+  '/trips/:tripId',
+  verifyUser,
+  validation,
+  catchErrors(trips.updateTrip)
+);
+
 export default router;

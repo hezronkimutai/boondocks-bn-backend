@@ -80,7 +80,12 @@ const router = express.Router();
  *      500:
  *        description: exception errors
  */
-router.get('/requests', catchErrors(verifyUser), catchErrors(getRequestByStatus), catchErrors(requests.getAll));
+router.get(
+  '/requests',
+  verifyUser,
+  catchErrors(getRequestByStatus),
+  catchErrors(requests.getAll)
+);
 
 
 /**
@@ -229,6 +234,10 @@ router.get('/requests/manager', verifyUser, checkRole.checkIsManager, catchError
  *      500:
  *        description: error occurred
  */
-router.get('/requests/:id', catchErrors(verifyUser), catchErrors(requests.getOne));
+router.get(
+  '/requests/:id',
+  verifyUser,
+  catchErrors(requests.getOne)
+);
 
 export default router;

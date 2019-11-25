@@ -2,7 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   const Booking = sequelize.define('booking', {
     userId: DataTypes.INTEGER,
     hotelId: DataTypes.INTEGER,
-    roomId: DataTypes.INTEGER
+    roomId: DataTypes.INTEGER,
+    tripId: DataTypes.INTEGER
   }, {});
   Booking.associate = (models) => {
     Booking.belongsTo(models.user, {
@@ -15,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     });
     Booking.belongsTo(models.room, {
       foreignkey: 'roomId',
+      onDelete: 'CASCADE'
+    });
+    Booking.belongsTo(models.trip, {
+      foreignkey: 'tripId',
       onDelete: 'CASCADE'
     });
   };

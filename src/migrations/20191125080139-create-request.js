@@ -7,15 +7,26 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     status: {
-      type: Sequelize.STRING,
-      defaultValue: 'open'
+      type: Sequelize.ENUM,
+      allowNull: false,
+      defaultValue: 'open',
+      values: [
+        'open',
+        'declined',
+        'approved'
+      ]
     },
     userId: {
       type: Sequelize.INTEGER
     },
     type: {
-      type: Sequelize.STRING,
-      defaultValue: 'single'
+      type: Sequelize.ENUM,
+      allowNull: false,
+      defaultValue: 'single',
+      values: [
+        'single',
+        'multi'
+      ]
     },
     createdAt: {
       allowNull: false,
