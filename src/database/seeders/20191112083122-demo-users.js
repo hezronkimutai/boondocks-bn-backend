@@ -13,6 +13,24 @@ module.exports = {
     isVerified: true,
     createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
     updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
+  }, {
+    firstName: 'Requester',
+    lastName: 'User',
+    email: 'requester@user.com',
+    password: passwordHash,
+    role: 'requester',
+    isVerified: true,
+    createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
+    updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
+  }, {
+    firstName: 'Line',
+    lastName: 'Manager',
+    email: 'line@manager.com',
+    password: passwordHash,
+    role: 'manager',
+    isVerified: true,
+    createdAt: Sequelize.literal('CURRENT_TIMESTAMP'),
+    updatedAt: Sequelize.literal('CURRENT_TIMESTAMP'),
   }], {}),
 
   down: queryInterface => queryInterface.bulkDelete('users', null, {})

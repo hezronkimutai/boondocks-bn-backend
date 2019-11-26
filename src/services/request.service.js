@@ -21,6 +21,8 @@ const getRequestbyStatus = async (status, userId) => {
     },
     include: [{
       model: db.trip
+    }, {
+      model: db.comment
     }]
   });
   return requests;
@@ -33,6 +35,8 @@ const getAllRequest = async (userId) => {
     },
     include: [{
       model: db.trip
+    }, {
+      model: db.comment
     }]
   });
 
@@ -47,6 +51,8 @@ const getOneRequest = async (userId, id) => {
     },
     include: [{
       model: db.trip
+    }, {
+      model: db.comment
     }]
   });
 
