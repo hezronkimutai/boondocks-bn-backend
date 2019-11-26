@@ -20,7 +20,7 @@ const userData = {
   user3: {
     firstName: 'bonbon',
     lastName: 'vic',
-    email: 'nyabuyabonvic@gmail.com',
+    email: 'nyabuyabonvic1@gmail.com',
     password: 'bcjdfyhfgiutgast7687643',
     isVerified: true
   }

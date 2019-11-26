@@ -60,10 +60,29 @@ const twoWaySchema = Joi.object().keys({
   }
 });
 
+const roleSchema = Joi.object().keys({
+  email: Joi.string().strict().trim().email()
+    .required(),
+  role: Joi.string().strict().trim().valid(
+    'super_administrator',
+    'travel_administrator',
+    'travel_team_member',
+    'manager',
+    'requester'
+  )
+    .required(),
+}).options({
+  abortEarly: false,
+  language: {
+    key: '{{key}} '
+  }
+});
+
 export default {
   '/auth/resetPassword': resetPassword,
   '/auth/signup': signupSchema,
   '/auth/signin': signinSchema,
   '/trips/oneway': oneWaySchema,
-  '/trips/return': twoWaySchema
+  '/trips/return': twoWaySchema,
+  '/auth/user/role': roleSchema
 };
