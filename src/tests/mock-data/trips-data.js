@@ -26,6 +26,26 @@ export default {
     hotelId: 1,
     type: 'return',
     rooms: [2]
+  },
+  {
+    leavingFrom: 'Kigali',
+    goingTo: 'Nairobi',
+    travelDate: '2019-11-18',
+    returnDate: '2019-11-18',
+    reason: 'visit our agents',
+    hotelId: 1,
+    type: 'return',
+    rooms: [3]
+  },
+  {
+    leavingFrom: 'Kigali',
+    goingTo: 'Nairobi',
+    travelDate: '2019-11-18',
+    reason: 'visit our agents',
+    hotelId: 1,
+    type: 'return',
+    rooms: [1],
+    requestId: 1,
   }],
   rooms: [{
     id: 1,
@@ -35,7 +55,7 @@ export default {
     description: 'The best room ever',
     image: 'room.png',
     cost: 5000,
-    status: 'available'
+    status: 'available',
   },
   {
     id: 2,
@@ -46,6 +66,16 @@ export default {
     image: 'room.png',
     cost: 5000,
     status: 'reserved'
+  },
+  {
+    id: 3,
+    hotelId: 1,
+    name: 'Muhabura',
+    type: 'return',
+    description: 'The best room ever',
+    image: 'room.png',
+    cost: 5000,
+    status: 'available'
   }],
   bookings: [{
     userId: 1,

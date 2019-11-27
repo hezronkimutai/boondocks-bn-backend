@@ -34,7 +34,7 @@ export default class Mailer {
       html,
       mail_settings: {
         sandbox_mode: {
-          enable: config.env === 'test',
+          enable: config.env !== 'production',
         },
       }
     };

@@ -8,15 +8,19 @@ module.exports = (sequelize, DataTypes) => {
     travelDate: DataTypes.DATE,
     returnDate: DataTypes.DATE,
     reason: DataTypes.STRING,
-    status: DataTypes.STRING
+    requestId: DataTypes.INTEGER
   }, {});
   Trip.associate = (models) => {
     Trip.belongsTo(models.user, {
       foreignkey: 'userId',
       onDelete: 'CASCADE'
     });
-    Trip.belongsTo(models.trip, {
+    Trip.belongsTo(models.hotel, {
       foreignkey: 'hotelId',
+      onDelete: 'CASCADE'
+    });
+    Trip.belongsTo(models.request, {
+      foreignkey: 'requestId',
       onDelete: 'CASCADE'
     });
   };

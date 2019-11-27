@@ -20,7 +20,7 @@ describe('/trips/{ oneway | return }', () => {
     await db.user.destroy({ where: {}, force: true });
     await db.room.create(tripsData.rooms[0]);
     await db.room.create(tripsData.rooms[1]);
-    await db.trip.create(tripsData.trips[0]);
+    await db.room.create(tripsData.rooms[2]);
     await db.hotel.create(tripsData.hotels[0]);
     await db.user.create({
       firstName: 'John',
@@ -53,7 +53,7 @@ describe('/trips/{ oneway | return }', () => {
     request(app)
       .post(`${prefix}/trips/return`)
       .set('Authorization', `Bearer ${token}`)
-      .send(tripsData.trips[1])
+      .send(tripsData.trips[3])
       .end((err, res) => {
         res.status.should.be.eql(201);
         const { data } = res.body;

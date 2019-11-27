@@ -1,4 +1,4 @@
-import hash from '../src/utils/hash';
+const hash = require('../../utils/hash');
 
 const passwordHash = hash.generateSync('12345678');
 

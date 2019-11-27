@@ -1,8 +1,8 @@
 /* eslint-disable global-require */
 /* eslint-disable import/no-dynamic-require */
-import merge from 'lodash.merge';
-import dotenv from 'dotenv';
-import config from './env/default';
+const merge = require('lodash.merge');
+const dotenv = require('dotenv');
+const config = require('./env/default');
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -11,7 +11,7 @@ if (process.env.NODE_ENV !== 'production') {
 
   try {
     // The environment file might not exist
-    localConfig = require(`./env/${config.env}`).default;
+    localConfig = require(`./env/${config.env}`);
     localConfig = localConfig || {};
   } catch (err) {
     localConfig = {};
@@ -21,4 +21,4 @@ if (process.env.NODE_ENV !== 'production') {
   merge(config, localConfig);
 }
 
-export default config;
+module.exports = config;
