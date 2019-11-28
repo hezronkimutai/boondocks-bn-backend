@@ -22,7 +22,7 @@ describe('/auth/signup', () => {
       });
   });
 
-  it('should not create a new  user when the email exists in the database', (done) => {
+  it('should not create a new user when the email exists in the database', (done) => {
     request(app)
       .post(`${prefix}/auth/signup`)
       .send(testUsers[0])

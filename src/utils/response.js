@@ -8,7 +8,7 @@ class Responses {
    * @param {string} message - Message
    * @param {object} res - Response
    * @param {object | null} data - Data
-   * @return {object} - Returned Formatted response object
+   * @return {object} - Returned Formatted Success response object
    */
   handleSuccess(statusCode, message, res, data = null) {
     return res.status(statusCode)
@@ -27,7 +27,7 @@ class Responses {
    * @param {int} statusCode - Status code
    * @param {string} message - Message
    * @param {object} res - Response
-   * @returns {object} - Returned Formatted response object
+   * @returns {object} - Returned Formatted Error response object
    */
   handleError(statusCode, message, res) {
     return res.status(statusCode)
