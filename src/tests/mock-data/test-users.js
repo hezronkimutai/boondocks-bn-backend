@@ -20,5 +20,11 @@ export default [
     lastName: 'Doe',
     password: '12345678',
     email: 'john1npbarefoot.com'
-  }
+  },
+  {
+    firstName: 'Jonny',
+    lastName: 'Doey',
+    password: '12345678',
+    email: 'jonny@barefoot.com'
+  },
 ];

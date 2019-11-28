@@ -3,7 +3,12 @@ import users from '../../controllers/users.controller';
 import checkForEmail from '../../validation/user.validation';
 import validation from '../../validation/validation';
 import catchErrors from '../../utils/helper';
-import { decodeQueryToken } from '../../middlewares/checkToken';
+import { decodeQueryToken, verifyUser } from '../../middlewares/checkToken';
+
+const {
+  updateUserInfo,
+  getUserProfile,
+} = users;
 
 const router = express.Router();
 
@@ -64,7 +69,7 @@ router.post('/auth/signup', validation, checkForEmail, catchErrors(users.createU
  *  get:
  *    security: []
  *    tags:
- *      - users
+ *      - Users
  *    summary: User email verification
  *    description: verifies users acount using an email
  *    produces:
@@ -89,7 +94,7 @@ router.post('/auth/signup', validation, checkForEmail, catchErrors(users.createU
  *      '409':
  *        description: trying to verify again
  *      '200':
- *        description: succesfull verified
+ *        description: successfully verified
  */
 router.get('/auth/verification', decodeQueryToken, catchErrors(users.verifyAccount));
 
@@ -145,9 +150,9 @@ router.post('/auth/signin', validation, catchErrors(users.findUser));
  * /auth/reverifyUser:
  *  get:
  *    tags:
- *      - users
+ *      - Users
  *    summary: User email verification
- *    description: verifies users acount using an email
+ *    description: verifies users account using an email
  *    produces:
  *      application/json:
  *        schema:
@@ -168,7 +173,7 @@ router.post('/auth/signin', validation, catchErrors(users.findUser));
  *      '404':
  *        description: email not found
  *      '200':
- *        description: succesfull verified
+ *        description: successfully verified
  */
 router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
 
@@ -178,7 +183,7 @@ router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
  * /auth/forgotPassword:
  *  post:
  *    tags:
- *      - users
+ *      - Users
  *    summary: User forgot password link
  *    description: Enables the reset password to get the users email so as to reset
  *    produces:
@@ -209,7 +214,7 @@ router.get('/auth/reverifyUser', catchErrors(users.resendEmail));
  *      '404':
  *        description: email not found
  *      '200':
- *        description: succesfull sent reset link
+ *        description: successfully sent reset link
  */
 router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
 
@@ -219,7 +224,7 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
  * /auth/resetPassword:
  *  patch:
  *    tags:
- *      - users
+ *      - Users
  *    summary: User update password
  *    description: Enables users to update password
  *    produces:
@@ -231,7 +236,7 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
  *              type: string
  *            message:
  *              type: string
-*    parameters:
+ *    parameters:
  *      - in: query
  *        name: token
  *        description: user's token for verification
@@ -253,5 +258,96 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
  *        description: succesfull sent reset link
  */
 router.patch('/auth/resetPassword', validation, decodeQueryToken, catchErrors(users.resetPassword));
+
+/**
+ * @swagger
+ *
+ * /user/update-profile:
+ *  patch:
+ *    tags:
+ *      - Users
+ *    summary: Users profile settings
+ *    description: User gets a user profile upon successful registration to Barefoot Nomad
+ *      and is able to update/edit
+ *    operationId: CreateUserProfile
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - in: body
+ *        name: user
+ *        schema:
+ *          type: object
+ *          properties:
+ *            firstName:
+ *              type: string
+ *              example: john
+ *            lastName:
+ *              type: string
+ *              example: doe
+ *            password:
+ *              type: string
+ *              example: password
+ *            gender:
+ *              type: string
+ *              example: male
+ *            lineManager:
+ *              type: string
+ *              example: Williams Doe
+ *            preferredCurrency:
+ *              type: string
+ *              example: "$"
+ *            preferredLanguage:
+ *              type: string
+ *              example: English
+ *            department:
+ *              type: string
+ *              example: IT
+ *            birthDate:
+ *              type: string
+ *              example: 14/10/1990
+ *            residenceAddress:
+ *              type: string
+ *              example: 14, Jeremiah Ugwu, Lekki, Lagos
+ *            phoneNumber:
+ *              type: integer
+ *              example: 08012345678
+ *    responses:
+ *      '201':
+ *        description: successful operation
+ *      '404':
+ *        description: Unsuccessful User not found
+ *      '500':
+ *        description: Internal Server error
+ * */
+router.patch('/user/update-profile', verifyUser, validation, catchErrors(updateUserInfo));
+
+/**
+ * @swagger
+ *
+ * /user/:userId:
+ *  get:
+ *    tags:
+ *      - Users
+ *    summary: Users profile settings
+ *    description: Barefoot Nomad User is able to access their Barefoot Nomad profile
+ *    operationId: GetUserProfile
+ *    produces:
+ *      - application/json
+ *    parameters:
+ *      - name: userId
+ *        in: path
+ *        description: ID of user to return a profile
+ *        required: true
+ *        type: integer
+ *        format: int64
+ *    responses:
+ *      '201':
+ *        description: successful operation
+ *      '404':
+ *        description: Unsuccessful User not found
+ *      '500':
+ *        description: Internal Server error
+ * */
+router.get('/user/:userId', verifyUser, catchErrors(getUserProfile));
 
 export default router;

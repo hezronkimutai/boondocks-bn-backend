@@ -1,3 +1,5 @@
+/* eslint-disable no-bitwise */
+/* eslint-disable no-else-return */
 import Responses from '../utils/response';
 import hash from '../utils/hash';
 import JWTHelper from '../utils/jwt';
@@ -12,7 +14,6 @@ class UserController {
   /**
    * @param {object} req
    * @param {object} res
-   * @param {function} next
    * @returns {object} responses
    */
   async createUser(req, res) {
@@ -47,7 +48,6 @@ class UserController {
    * and if the supplied password matches the stored password
    * @param {Object} req The request object
    * @param {Object} res The response object
-   * @param {function} next Allow the next function to continue
    * @returns {Object} A user object with selected fields
    * excluing the password
    */
@@ -73,7 +73,6 @@ class UserController {
    *
    * @param {object} req
    * @param {object} res
-   * @param {function} next
    * @returns {object} responses
    */
   async verifyAccount(req, res) {
@@ -103,7 +102,6 @@ class UserController {
    *function resend email
    * @param {object} req
    * @param {object} res
-   * @param {function} next
    * @returns {object} responses
    */
   async resendEmail(req, res) {
@@ -187,6 +185,61 @@ class UserController {
       'Updated your password successful',
       res
     );
+  }
+
+  /**
+   * @name updateUserInfo
+   * @description Updates user profile to complete registration
+   * @param {object} req The request object
+   * @param {object} res The response object
+   * @returns {object} The API response
+   */
+  async updateUserInfo(req, res) {
+    const userData = { ...req.body };
+    const { user } = res.locals;
+
+    userData.password = hash.generateSync(userData.password);
+    const data = await UserServices.updateUserInfoByEmail({ ...userData }, user.email);
+
+    if (data === 'own_manage') {
+      return Responses.handleError(409, 'You cannot manage your self', res);
+    } else if (data === 'manager_doesnt_exist') {
+      return Responses.handleError(409, 'Manager with the ID provided does not exist.', res);
+    } else if (data === 'invalid_manager') {
+      return Responses.handleError(409, 'Only user with role manager can be Line Managers.', res);
+    }
+    return Responses.handleSuccess(201, 'Updated successfully', res, data);
+  }
+
+  /**
+   * @name getUserProfile
+   * @description gets user profile to complete registration
+   * @param {object} req The request object
+   * @param {object} res The response object
+   * @returns {object} The API response
+   */
+  async getUserProfile(req, res) {
+    let { userId } = req.params;
+
+    userId = Number(userId);
+
+    if (typeof userId === 'number' && userId > 0 && userId >>> 0 === userId) {
+      const userData = await UserServices.getUserById(userId);
+
+      if (userData) {
+        const user = userData.dataValues;
+
+        user.lineManager = user.LineManager ? `${user.LineManager.firstName} ${user.LineManager.lastName}` : 'none';
+
+        delete user.LineManager;
+
+        const { password, lineManagerId, ...data } = user;
+
+        return Responses.handleSuccess(200, 'Profile retrieved!', res, data);
+      }
+      return Responses.handleError(404, 'User not found.', res);
+    }
+    return Responses.handleError(422, 'User ID is not valid.', res);
   }
 
   /**

@@ -18,6 +18,7 @@ class Role {
       return Responses.handleError(404, 'user not found', res);
     }
     const updatedUser = await UserServices.setUserRole(req.body);
+
     const userObject = {
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,

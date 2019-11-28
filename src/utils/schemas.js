@@ -44,6 +44,27 @@ const oneWaySchema = Joi.object().keys({
   }
 });
 
+const updateUserInfoSchema = Joi.object().keys({
+  firstName: Joi.string().strict().trim(),
+  lastName: Joi.string().strict().trim(),
+  email: Joi.string().strict().trim().email()
+    .required(),
+  password: Joi.string().alphanum().min(8).strict(),
+  birthDate: Joi.date().iso().min('1950-01-01T00:00:00.000Z').max('2010-12-31T00:00:00.000Z'),
+  preferredLanguage: Joi.string().strict().trim(),
+  preferredCurrency: Joi.string().strict().trim(),
+  residenceAddress: Joi.string().strict().trim(),
+  gender: Joi.string().strict().trim(),
+  department: Joi.string().strict().trim(),
+  lineManagerId: Joi.number().min(1),
+  phoneNumber: Joi.string().regex(/^[().+\d -]{1,15}$/)
+}).options({
+  abortEarly: false,
+  language: {
+    key: '{{key}} '
+  }
+});
+
 const twoWaySchema = Joi.object().keys({
   hotelId: Joi.required(),
   type: Joi.string().strict().trim().required(),
@@ -83,6 +104,7 @@ export default {
   '/auth/signup': signupSchema,
   '/auth/signin': signinSchema,
   '/trips/oneway': oneWaySchema,
+  '/user/update-profile': updateUserInfoSchema,
   '/trips/return': twoWaySchema,
   '/auth/user/role': roleSchema
 };
