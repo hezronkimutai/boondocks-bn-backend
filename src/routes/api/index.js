@@ -6,6 +6,7 @@ import usersRouter from './users.route';
 import rolesRouter from './roles.route';
 import tripsRouter from './trips.route';
 import authRouter from './auth';
+import requestRouter from './requests.route';
 
 const specs = swaggerJsdoc(swaggerDefinition);
 
@@ -22,5 +23,6 @@ router.use(prefix, usersRouter);
 router.use(prefix, rolesRouter);
 router.use(`${prefix}/auth`, authRouter);
 router.use(prefix, tripsRouter);
+router.use(prefix, requestRouter);
 
 export default router;

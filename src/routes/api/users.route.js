@@ -12,6 +12,7 @@ const router = express.Router();
  *
  * /auth/signup:
  *   post:
+ *     security: []
  *     summary: User Signup
  *     description: Creates a new user account
  *     tags:
@@ -61,6 +62,7 @@ router.post('/auth/signup', validation, checkForEmail, catchErrors(users.createU
  *
  * /auth/verification:
  *  get:
+ *    security: []
  *    tags:
  *      - users
  *    summary: User email verification
@@ -96,6 +98,7 @@ router.get('/auth/verification', decodeQueryToken, catchErrors(users.verifyAccou
  *
  * /auth/signin:
  *   post:
+ *     security: []
  *     summary: User SignIn
  *     description: Logs in an existing User
  *     tags:
@@ -213,12 +216,12 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
 /**
  * @swagger
  *
- * /auth/forgotPassword:
+ * /auth/resetPassword:
  *  patch:
  *    tags:
  *      - users
- *    summary: User forgot password link
- *    description: Enables the reset password to get the users email so as to reset
+ *    summary: User update password
+ *    description: Enables users to update password
  *    produces:
  *      application/json:
  *        schema:

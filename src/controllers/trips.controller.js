@@ -1,5 +1,6 @@
 import Responses from '../utils/response';
-import db from '../models';
+import TripService from '../services/Trip.service';
+
 /**
  * Class for Trips
  */
@@ -21,30 +22,15 @@ class Trips {
       reason,
       rooms
     } = req.body;
-    rooms.forEach(async (room) => {
-      await db.booking.create({
-        hotelId,
-        userId: currentUser.userId,
-        roomId: room
-      });
-
-      await db.room.update({ status: 'reserved' }, {
-        where: {
-          id: room
-        }
-      });
-    });
-
-    const trip = await db.trip.create({
+    const trip = await TripService.createSingleTrip({
+      userId: currentUser.userId,
+      hotelId,
       leavingFrom,
       goingTo,
       travelDate,
       returnDate,
       reason,
-      hotelId,
-      userId: currentUser.userId,
-      status: 'pending',
-      type: 'return'
+      rooms
     });
 
     return Responses.handleSuccess(201, 'created', res, trip);
@@ -60,7 +46,6 @@ class Trips {
     const currentUser = res.locals.user;
     const {
       hotelId,
-      type,
       leavingFrom,
       goingTo,
       travelDate,
@@ -68,26 +53,14 @@ class Trips {
       rooms
     } = req.body;
 
-    const trip = await db.trip.create({
+    const trip = await TripService.createSingleTrip({
       userId: currentUser.userId,
       hotelId,
-      type,
       leavingFrom,
       goingTo,
       travelDate,
       reason,
-    });
-    rooms.forEach(async (room) => {
-      await db.booking.create({
-        hotelId,
-        userId: currentUser.userId,
-        roomId: room
-      });
-      await db.room.update({ status: 'reserved' }, {
-        where: {
-          id: room
-        }
-      });
+      rooms
     });
 
     return Responses.handleSuccess(201, 'created', res, trip);
