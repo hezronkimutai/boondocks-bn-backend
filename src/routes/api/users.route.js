@@ -1,7 +1,7 @@
 import express from 'express';
 import users from '../../controllers/users.controller';
 import checkForEmail from '../../validation/user.validation';
-import validation from '../../validation/validation';
+import { validation } from '../../validation/validation';
 import catchErrors from '../../utils/helper';
 import { decodeQueryToken, verifyUser } from '../../middlewares/checkToken';
 
@@ -225,8 +225,8 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
  *  patch:
  *    tags:
  *      - Users
- *    summary: User update password
- *    description: Enables users to update password
+ *    summary: User forgot password link
+ *    description: Enables the reset password to get the users email so as to reset
  *    produces:
  *      application/json:
  *        schema:

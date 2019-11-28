@@ -16,10 +16,14 @@ const tripfactory = async (data) => {
   await db.room.create(data);
 };
 
+const requestfactory = async (data) => {
+  await db.request.create(data);
+};
+
 export {
   userfactory,
   hotelfactory,
   roomfactory,
-  tripfactory
-
+  tripfactory,
+  requestfactory
 };

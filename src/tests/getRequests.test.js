@@ -43,8 +43,7 @@ describe('/Requests', () => {
       .set('Authorization', `Bearer ${token}`)
       .send(tripsData.trips[0])
       .end((err, res) => {
-        res.status.should.be.eql(201);
-        requestid = res.body.data.requestId;
+        requestid = res.body.data.id;
         done(err);
       });
   });
@@ -59,7 +58,7 @@ describe('/Requests', () => {
         done();
       });
   });
-  it('POST /request - user should be able to get a single request', (done) => {
+  it('POST /requests/:id - user should be able to get a single request', (done) => {
     request(app)
       .get(`${prefix}/requests/${requestid}`)
       .set('Authorization', `Bearer ${token}`)

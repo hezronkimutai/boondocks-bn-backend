@@ -5,6 +5,7 @@ import db from '../models';
 import tripsData from './mock-data/trips-data';
 import Hash from '../utils/hash';
 import tokenizer from '../utils/jwt';
+import { roomfactory, requestfactory } from './scripts/factories';
 
 should();
 use(chaiHttp);
@@ -18,9 +19,13 @@ describe('/trips/{ oneway | return }', () => {
     await db.room.destroy({ where: {}, force: true });
     await db.hotel.destroy({ where: {}, force: true });
     await db.user.destroy({ where: {}, force: true });
-    await db.room.create(tripsData.rooms[0]);
-    await db.room.create(tripsData.rooms[1]);
-    await db.room.create(tripsData.rooms[2]);
+    await db.request.destroy({ where: {}, force: true });
+    await roomfactory(tripsData.rooms[0]);
+    await roomfactory(tripsData.rooms[1]);
+    await roomfactory(tripsData.rooms[2]);
+    await requestfactory(tripsData.requests[0]);
+
+    await db.trip.create(tripsData.trips[3]);
     await db.hotel.create(tripsData.hotels[0]);
     await db.user.create({
       firstName: 'John',
@@ -44,7 +49,7 @@ describe('/trips/{ oneway | return }', () => {
         res.status.should.be.eql(201);
         const { data } = res.body;
         data.should.be.an('object');
-        data.should.have.property('hotelId');
+        data.should.have.property('type').eql('single');
         done();
       });
   });
@@ -53,12 +58,12 @@ describe('/trips/{ oneway | return }', () => {
     request(app)
       .post(`${prefix}/trips/return`)
       .set('Authorization', `Bearer ${token}`)
-      .send(tripsData.trips[3])
+      .send(tripsData.trips[4])
       .end((err, res) => {
         res.status.should.be.eql(201);
         const { data } = res.body;
         data.should.be.an('object');
-        data.should.have.property('hotelId');
+        data.should.have.property('type').eql('single');
         done();
       });
   });
@@ -70,6 +75,45 @@ describe('/trips/{ oneway | return }', () => {
       .send(tripsData.trips[2])
       .end((err, res) => {
         res.status.should.be.eql(409);
+        done();
+      });
+  });
+
+  it('POST /trips/multi-city - should create multi city trips request', (done) => {
+    request(app)
+      .post(`${prefix}/trips/multi-city`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(tripsData.multiCityTrips)
+      .end((err, res) => {
+        res.status.should.be.eql(201);
+        const { data } = res.body;
+        data.should.be.an('object');
+        data.should.have.property('type').eql('multi');
+        done();
+      });
+  });
+
+  it('POST /trips/multi-city - should not create multi city trips request when one trip has missing information', (done) => {
+    request(app)
+      .post(`${prefix}/trips/multi-city`)
+      .set('Authorization', `Bearer ${token}`)
+      .send([tripsData.trips[5]])
+      .end((err, res) => {
+        res.status.should.be.eql(400);
+        done();
+      });
+  });
+
+  it('POST /trips/multi-city - should not create multi city trips request when one trip has booked rooms', (done) => {
+    request(app)
+      .post(`${prefix}/trips/multi-city`)
+      .set('Authorization', `Bearer ${token}`)
+      .send([tripsData.trips[6]])
+      .end((err, res) => {
+        res.status.should.be.eql(409);
+        const { data } = res.body;
+        data.should.be.an('object');
+        data.should.have.property('unAvailableRooms');
         done();
       });
   });

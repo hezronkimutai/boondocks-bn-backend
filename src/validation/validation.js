@@ -28,4 +28,30 @@ const validation = (req, res, next) => {
   return Responses.handleError(405, 'Undefined method', res);
 };
 
-export default validation;
+const validateMultiCity = (req, res, next) => {
+  const methodsSupported = ['post'];
+  const method = req.method.toLowerCase();
+
+  if (methodsSupported.includes(method)) {
+    const trips = req.body;
+    const errors = trips.map((item) => {
+      const path = item.type === 'return' ? '/trips/return' : '/trips/oneway';
+      const schema = Schemas[path];
+      let err;
+      Joi.validate(item, schema, (error) => {
+        if (error) {
+          err = error.details.map(e => (e.message));
+        }
+      });
+      return err;
+    }).filter((item) => item != null);
+    if (errors.length > 0) {
+      return Responses.handleError(400, errors, res);
+    }
+
+    req.body = trips;
+    next();
+  }
+};
+
+export { validation, validateMultiCity };

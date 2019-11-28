@@ -1,8 +1,9 @@
 import express from 'express';
 import trips from '../../controllers/trips.controller';
-import validation from '../../validation/validation';
-import checkForRooms from '../../middlewares/roomsAvailability';
+import { validation, validateMultiCity } from '../../validation/validation';
+import { checkForRooms, checkForMultiCityRooms } from '../../middlewares/roomsAvailability';
 import { verifyUser } from '../../middlewares/checkToken';
+import catchErrors from '../../utils/helper';
 
 const router = express.Router();
 
@@ -70,7 +71,7 @@ const router = express.Router();
  *         description: success
  */
 
-router.post('/trips/oneway', verifyUser, validation, checkForRooms, trips.createOneWayTrip);
+router.post('/trips/oneway', verifyUser, validation, checkForRooms, catchErrors(trips.createTrip));
 
 /**
  * @swagger
@@ -147,6 +148,87 @@ router.post('/trips/oneway', verifyUser, validation, checkForRooms, trips.create
  *       401:
  *         description: unauthorized
  */
-router.post('/trips/return', verifyUser, validation, checkForRooms, trips.createReturnTrip);
+router.post('/trips/return', verifyUser, validation, checkForRooms, catchErrors(trips.createTrip));
+
+/**
+ * @swagger
+ *
+ * /trips/multi-city:
+ *   post:
+ *     summary: Make a multi city request
+ *     description: This creates a return multi city trips and book required accomodation
+ *     tags:
+ *       - Trips
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *               properties:
+ *                 hotelId:
+ *                   type: integer
+ *                 type:
+ *                   type: string
+ *                 leavingFrom:
+ *                   type: string
+ *                 goingTo:
+ *                   type: string
+ *                 travelDate:
+ *                   type: string
+ *                 returnDate:
+ *                   type: string
+ *                 reason:
+ *                   type: string
+ *                 rooms:
+ *                   type: array
+ *                   items:
+ *                     type: integer
+ *     produces:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *               message:
+ *                 type: string
+ *               data:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   leavingFrom:
+ *                     type: string
+ *                   goingTo:
+ *                     type: string
+ *                   travelDate:
+ *                     type: string
+ *                   returnDate:
+ *                     type: string
+ *                   reason:
+ *                     type: string
+ *                   hotelId:
+ *                     type: integer
+ *                   userId:
+ *                     type: integer
+ *                   status:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
+ *                   createAt:
+ *                     type: string
+ *     responses:
+ *       201:
+ *         description: Request created
+ *       409:
+ *         description: Room not available
+ *       401:
+ *         description: unauthorized
+ *       400:
+ *         description: Validation error
+ */
+router.post('/trips/multi-city', verifyUser, validateMultiCity, checkForMultiCityRooms, catchErrors(trips.createMultiCitiesTrip));
 
 export default router;
