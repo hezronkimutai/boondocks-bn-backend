@@ -24,7 +24,10 @@ class Trips {
       reason,
       rooms
     } = req.body;
+
     const requestId = await createRequest(currentUser.userId, 'single');
+
+
     tripService.create({
       hotelId,
       type,

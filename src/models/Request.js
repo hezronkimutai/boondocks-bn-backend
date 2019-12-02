@@ -6,12 +6,16 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Request.associate = (models) => {
     Request.belongsTo(models.user, {
-      foreignkey: 'userId',
+      foreignKey: 'userId',
       onDelete: 'CASCADE'
     });
 
     Request.hasMany(models.trip, {
-      foreignkey: 'requestId',
+      foreignKey: 'requestId',
+      onDelete: 'CASCADE'
+    });
+    Request.hasMany(models.comment, {
+      foreignKey: 'requestId',
       onDelete: 'CASCADE'
     });
   };

@@ -40,6 +40,7 @@ const checkForMultiCityRooms = async (req, res, next) => {
   const { Op } = db.Sequelize;
 
   const trips = req.body;
+
   const rooms = trips.map((item) => item.rooms).flat();
   const unavailableRooms = await db.room.findAndCountAll({
     where: {
@@ -55,7 +56,7 @@ const checkForMultiCityRooms = async (req, res, next) => {
 
   if (unavailableRooms.count > 0) {
     const bookedRooms = unavailableRooms.rows.map(room => room.id);
-    return Responses.handleSuccess('409', 'rooms already booked', res, { unAvailableRooms: bookedRooms });
+    return Responses.handleSuccess(409, 'rooms already booked', res, { unAvailableRooms: bookedRooms });
   }
   next();
 };

@@ -99,6 +99,19 @@ const roleSchema = Joi.object().keys({
   }
 });
 
+const commentSchema = Joi.object()
+  .keys({
+    comment: Joi.string()
+      .strict()
+      .required(),
+  })
+  .options({
+    abortEarly: false,
+    language: {
+      key: '{{key}} '
+    }
+  });
+
 export default {
   '/auth/resetPassword': resetPassword,
   '/auth/signup': signupSchema,
@@ -106,5 +119,6 @@ export default {
   '/trips/oneway': oneWaySchema,
   '/user/update-profile': updateUserInfoSchema,
   '/trips/return': twoWaySchema,
-  '/auth/user/role': roleSchema
+  '/auth/user/role': roleSchema,
+  '/requests/:requestId/comment': commentSchema,
 };
