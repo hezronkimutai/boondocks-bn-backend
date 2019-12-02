@@ -255,7 +255,7 @@ router.post('/auth/forgotPassword', catchErrors(users.forgotPassword));
  *      '404':
  *        description: email not found
  *      '200':
- *        description: succesfull sent reset link
+ *        description: successfull sent reset link
  */
 router.patch('/auth/resetPassword', validation, decodeQueryToken, catchErrors(users.resetPassword));
 
