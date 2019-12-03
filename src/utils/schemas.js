@@ -81,6 +81,26 @@ const twoWaySchema = Joi.object().keys({
   }
 });
 
+const updateTripSchema = Joi.object().keys({
+  hotelId: Joi.number().required(),
+  type: Joi.string().required().strict().trim()
+    .valid(
+      'one way',
+      'return'
+    ),
+  leavingFrom: Joi.string().strict().trim(),
+  goingTo: Joi.string().strict().trim(),
+  travelDate: Joi.date(),
+  returnDate: Joi.date().when('type', { is: 'return', then: Joi.required() }),
+  rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value')).required(),
+  reason: Joi.string().strict()
+}).options({
+  abortEarly: false,
+  language: {
+    key: '{{key}} '
+  }
+});
+
 const roleSchema = Joi.object().keys({
   email: Joi.string().strict().trim().email()
     .required(),
@@ -121,4 +141,5 @@ export default {
   '/trips/return': twoWaySchema,
   '/auth/user/role': roleSchema,
   '/requests/:requestId/comment': commentSchema,
+  '/trips/:tripId': updateTripSchema
 };

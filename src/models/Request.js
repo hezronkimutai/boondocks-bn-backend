@@ -1,8 +1,25 @@
 module.exports = (sequelize, DataTypes) => {
   const Request = sequelize.define('request', {
-    status: DataTypes.STRING,
+    status: {
+      type: DataTypes.ENUM,
+      allowNull: false,
+      defaultValue: 'open',
+      values: [
+        'open',
+        'declined',
+        'approved'
+      ]
+    },
     userId: DataTypes.INTEGER,
-    type: DataTypes.STRING
+    type: {
+      type: DataTypes.ENUM,
+      allowNull: false,
+      defaultValue: 'single',
+      values: [
+        'single',
+        'multi',
+      ]
+    }
   }, {});
   Request.associate = (models) => {
     Request.belongsTo(models.user, {

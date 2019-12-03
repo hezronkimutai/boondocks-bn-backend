@@ -2,7 +2,15 @@ module.exports = (sequelize, DataTypes) => {
   const Trip = sequelize.define('trip', {
     userId: DataTypes.INTEGER,
     hotelId: DataTypes.INTEGER,
-    type: DataTypes.STRING,
+    type: {
+      type: DataTypes.ENUM,
+      allowNull: false,
+      defaultValue: 'one way',
+      values: [
+        'one way',
+        'return',
+      ]
+    },
     leavingFrom: DataTypes.STRING,
     goingTo: DataTypes.STRING,
     travelDate: DataTypes.DATE,
