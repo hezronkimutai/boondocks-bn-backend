@@ -250,7 +250,7 @@ export default {
   '/hotels': hotelSchema,
   '/hotels/:hotelId/rooms': roomSchema,
   '/booking': bookingSchema,
-  '/requests/search': searchRequestsSchema,
+  '/search/requests': searchRequestsSchema,
   '/trips/stats': tripsStatsSchema,
   '/hotels/:hotelId/feedback': feedbackSchema,
   '/hotels/:hotelId/rating': rateSchema,

@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 import db from '../models';
 import ErrorHandler from '../utils/error';
 
@@ -139,19 +140,21 @@ const updateRequestStatus = async (requestId, status) => {
   throw new ErrorHandler('Please set status to "approved" or "declined"', 400);
 };
 
-const getSearchedRequests = async (userId, body) => {
-  let { searchString } = body;
+const getSearchedRequests = async (userId, query) => {
+  let { searchString } = query;
   let travelDate, returnDate;
 
-  if (Object.prototype.hasOwnProperty.call(body, 'travelDate') === false) {
+  if (Object.prototype.hasOwnProperty.call(query, 'travelDate') === false) {
     travelDate = new Date('1970-01-01');
   } else {
-    travelDate = body.travelDate;
+    travelDate = query.travelDate;
+    ({ travelDate } = query);
   }
-  if (Object.prototype.hasOwnProperty.call(body, 'returnDate') === false) {
+  if (Object.prototype.hasOwnProperty.call(query, 'returnDate') === false) {
     returnDate = new Date('9999-12-31');
   } else {
-    returnDate = body.returnDate;
+    returnDate = query.returnDate;
+    ({ returnDate } = query);
   }
 
   searchString = searchString.toLowerCase();
