@@ -8,7 +8,7 @@ should();
 use(chaiHttp);
 
 const prefix = '/api/v1';
-let requesterToken, initialRating, testHotel, unVerifiedUserToken, nonResidentUserToken;
+let requesterToken, hotelResult, testHotel, unVerifiedUserToken, nonResidentUserToken;
 
 describe(('Hotels rating testing'), () => {
   before(async () => {
@@ -20,36 +20,36 @@ describe(('Hotels rating testing'), () => {
   });
 
   it(('it fails to post hotel rating if user has not verified email'), async () => {
-    initialRating = await request(app)
+    hotelResult = await request(app)
       .post(`${prefix}/hotels/${testHotel.id}/rating`)
       .set('Authorization', unVerifiedUserToken)
       .send({
         rating: 3
       });
-    expect(initialRating.status).eql(401);
-    expect(initialRating.body.message).eql('Please verify your account through the confirmation email sent to you on registration');
+    expect(hotelResult.status).eql(401);
+    expect(hotelResult.body.message).eql('Please verify your account through the confirmation email sent to you on registration');
   });
 
   it(('it fails to post hotel rating if user has not had a trip posted under the subject hotel'), async () => {
-    initialRating = await request(app)
+    hotelResult = await request(app)
       .post(`${prefix}/hotels/${testHotel.id}/rating`)
       .set('Authorization', nonResidentUserToken)
       .send({
         rating: 3
       });
-    expect(initialRating.status).eql(401);
-    expect(initialRating.body.message).eql('You can only rate a hotel you have stayed at on a trip');
+    expect(hotelResult.status).eql(401);
+    expect(hotelResult.body.message).eql('You can only rate a hotel you have stayed at on a trip');
   });
 
   it(('it successfully returns a newly entered hotel rating'), async () => {
-    initialRating = await request(app)
+    hotelResult = await request(app)
       .post(`${prefix}/hotels/${testHotel.id}/rating`)
       .set('Authorization', requesterToken)
       .send({
         rating: 3
       });
-    expect(initialRating.status).eql(201);
-    expect(initialRating.body.message).eql('Hotel rated successfully');
+    expect(hotelResult.status).eql(201);
+    expect(hotelResult.body.message).eql('Hotel rated successfully');
   });
 
   it(('it fails to post a duplicate hotel rating'), async () => {
@@ -63,7 +63,7 @@ describe(('Hotels rating testing'), () => {
   });
 
   it(('it fails to allow another user change your rating'), async () => {
-    const ratingId = initialRating.body.data[0].id;
+    const ratingId = hotelResult.body.data[0].id;
     const res = await request(app)
       .patch(`${prefix}/rating/${ratingId}`)
       .set('Authorization', nonResidentUserToken)
@@ -81,7 +81,7 @@ describe(('Hotels rating testing'), () => {
   });
 
   it(('it successfully returns an updated hotel rating'), async () => {
-    const ratingId = initialRating.body.data[0].id;
+    const ratingId = hotelResult.body.data[0].id;
     const res = await request(app)
       .patch(`${prefix}/rating/${ratingId}`)
       .set('Authorization', requesterToken)
@@ -92,7 +92,7 @@ describe(('Hotels rating testing'), () => {
   });
 
   it(('it successfully returns a hotel rating'), async () => {
-    const ratingId = initialRating.body.data[0].id;
+    const ratingId = hotelResult.body.data[0].id;
     const res = await request(app)
       .get(`${prefix}/rating/${ratingId}`)
       .set('Authorization', requesterToken);

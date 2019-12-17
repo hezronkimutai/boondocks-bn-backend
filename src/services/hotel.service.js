@@ -38,6 +38,7 @@ class HotelService {
         'image',
         'description',
         'street',
+        'average_rating',
         'services',
         'createdAt',
         [Sequelize.literal(`(

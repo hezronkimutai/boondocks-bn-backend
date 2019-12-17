@@ -64,4 +64,25 @@ const validateMultiCity = (req, res, next) => {
   }
 };
 
-export { validation, validateMultiCity };
+/**
+ * Validates the signup or signin routes using the defined schemas
+ * @param {object} req
+ * @param {object} res
+ * @param {function} next
+ * @returns {void}
+ */
+const validateSearch = (req, res, next) => {
+  const { path } = req.route;
+  const schema = Schemas[path];
+
+  return Joi.validate(req.query, schema, (error, data) => {
+    if (error) {
+      const err = error.details.map(e => (e.message));
+      return Responses.handleError(400, err, res);
+    }
+    req.body = data;
+    next();
+  });
+};
+
+export { validation, validateMultiCity, validateSearch };

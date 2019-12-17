@@ -86,7 +86,7 @@ class Requests {
    */
   async searchRequests(req, res) {
     const currentUser = res.locals.user;
-    const requests = await getSearchedRequests(currentUser.userId, req.body);
+    const requests = await getSearchedRequests(currentUser.userId, req.query);
     return Responses.handleSuccess(200, 'successfully retrieved search results', res, requests);
   }
 }

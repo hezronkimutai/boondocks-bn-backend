@@ -1,6 +1,6 @@
 import express from 'express';
 import { verifyUser } from '../../middlewares/checkToken';
-import { validation } from '../../validation/validation';
+import { validateSearch } from '../../validation/validation';
 import requests from '../../controllers/request.controller';
 import getRequestByStatus from '../../middlewares/queryRequestByStatus';
 import catchErrors from '../../utils/helper';
@@ -337,7 +337,7 @@ router.patch('/request/:id', verifyUser, authorize(['manager']), catchErrors(che
 /**
  * @swagger
  *
- * /requests/search:
+ * /search/requests:
  *  post:
  *    security:
  *    summary: this gets searched requests from a specific user
@@ -403,10 +403,10 @@ router.patch('/request/:id', verifyUser, authorize(['manager']), catchErrors(che
  *      404:
  *        description: no matching records found
  */
-router.post(
-  '/requests/search',
+router.get(
+  '/search/requests',
   verifyUser,
-  validation,
+  validateSearch,
   catchErrors(requests.searchRequests)
 );
 
