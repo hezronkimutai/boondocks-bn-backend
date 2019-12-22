@@ -4,8 +4,8 @@ leavingDate.setDate(nextDay);
 
 export default {
   trips: [{
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     reason: 'visit our agents',
     hotelId: 1,
@@ -13,8 +13,8 @@ export default {
     rooms: [1]
   },
   {
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     returnDate: '2019-11-20',
     reason: 'visit our agents',
@@ -22,8 +22,8 @@ export default {
     type: 'return',
     rooms: [3]
   }, {
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     returnDate: '2019-11-24',
     reason: 'visit our agents',
@@ -32,8 +32,8 @@ export default {
     rooms: [2]
   },
   {
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     returnDate: '2019-11-29',
     reason: 'visit our agents',
@@ -43,8 +43,8 @@ export default {
     requestId: 1
   },
   {
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     returnDate: '2019-11-21',
     reason: 'visit our agents',
@@ -53,8 +53,8 @@ export default {
     rooms: [4]
   },
   {
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     reason: 'visit our agents',
     hotelId: 1,
@@ -62,8 +62,8 @@ export default {
     rooms: [3]
   },
   {
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     returnDate: '2019-11-20',
     reason: 'visit our agents',
@@ -72,15 +72,15 @@ export default {
     rooms: [2]
   },
   {
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     reason: 'visit our agents',
     type: 'return',
   }],
   multiCityTrips: [{
-    leavingFrom: 'Kigali',
-    goingTo: 'Nairobi',
+    leavingFrom: 1,
+    goingTo: 2,
     travelDate: '2019-11-18',
     returnDate: '2019-11-19',
     reason: 'visit our agents',
@@ -89,7 +89,7 @@ export default {
     rooms: [5]
   }],
   requests: [{
-    userId: 1,
+    userId: 19,
     type: 'multi'
   }],
   rooms: [{
@@ -157,6 +157,7 @@ export default {
     roomId: 1
   }],
   hotels: [{
+    id: 1,
     locationId: 1,
     name: 'Marriot',
     image: 'image.png',

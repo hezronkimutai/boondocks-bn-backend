@@ -47,7 +47,7 @@ describe(('/GET /search/requests'), () => {
     expect(res.status).eql(404);
   });
 
-  it(('it still returns searched records user doesn\'t supply dates in request'), async () => {
+  it(('it still returns searched records when user doesn\'t supply dates in request'), async () => {
     searchString = 'open';
     res = await request(app)
       .get(`${prefix}/search/requests?searchString=${searchString}`)

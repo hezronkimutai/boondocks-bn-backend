@@ -5,23 +5,24 @@ import tokenizer from '../utils/jwt';
 import mostVisitedData from './mock-data/most-visited';
 import app from '../app';
 import db from '../models';
+import { locationfactory, userfactory, hotelfactory, roomfactory } from './scripts/factories';
 
 use(chaiHttp);
 
 describe('Most travel destinations', () => {
   const prefix = '/api/v1';
-  let userToken, hotelId, roomId;
+  let userToken, hotelId, roomId, to, from;
 
   before(async () => {
-    await db.like.destroy({ where: {}, force: true });
     await truncate();
-    await db.user.create(mostVisitedData.users[0]);
-    await db.location.create(mostVisitedData.locations[0]);
+    from = await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    to = await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
+    await userfactory(mostVisitedData.users[0]);
 
-    const currentUser = await db.user.create(mostVisitedData.users[1]);
+    const currentUser = await userfactory(mostVisitedData.users[1]);
 
-    hotelId = (await db.hotel.create(mostVisitedData.hotels[0])).id;
-    roomId = (await db.room.create(mostVisitedData.rooms[0])).id;
+    hotelId = (await hotelfactory(mostVisitedData.hotels[0])).id;
+    roomId = (await roomfactory(mostVisitedData.rooms[0])).id;
     userToken = await tokenizer.signToken(currentUser);
   });
 
@@ -45,8 +46,8 @@ describe('Most travel destinations', () => {
         .post(`${prefix}/trips/oneway`)
         .set('Authorization', `Bearer ${userToken}`)
         .send({
-          leavingFrom: 'Kigali',
-          goingTo: 'Nairobi',
+          leavingFrom: from.id,
+          goingTo: to.id,
           travelDate: '2019-11-18',
           reason: 'visit our agents',
           hotelId,

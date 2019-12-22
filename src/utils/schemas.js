@@ -32,8 +32,8 @@ const resetPassword = Joi.object().keys({
 const oneWaySchema = Joi.object().keys({
   hotelId: Joi.required(),
   type: Joi.string().strict().trim().required(),
-  leavingFrom: Joi.string().strict().trim().required(),
-  goingTo: Joi.string().strict().required(),
+  leavingFrom: Joi.number().strict().required(),
+  goingTo: Joi.number().strict().required(),
   travelDate: Joi.date().required(),
   reason: Joi.string().strict().required(),
   rooms: Joi.required()
@@ -83,8 +83,8 @@ const updateUserInfoSchema = Joi.object().keys({
 const twoWaySchema = Joi.object().keys({
   hotelId: Joi.required(),
   type: Joi.string().strict().trim().required(),
-  leavingFrom: Joi.string().strict().trim().required(),
-  goingTo: Joi.string().strict().required(),
+  leavingFrom: Joi.number().strict().required(),
+  goingTo: Joi.number().strict().required(),
   travelDate: Joi.date().required(),
   returnDate: Joi.date().greater(Joi.ref('travelDate')).required(),
   reason: Joi.string().strict().required(),
@@ -117,8 +117,8 @@ const updateTripSchema = Joi.object().keys({
       'one way',
       'return'
     ),
-  leavingFrom: Joi.string().strict().trim(),
-  goingTo: Joi.string().strict().trim(),
+  leavingFrom: Joi.number().strict(),
+  goingTo: Joi.number().strict(),
   travelDate: Joi.date(),
   returnDate: Joi.date().when('type', { is: 'return', then: Joi.required() }),
   rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value')).required(),

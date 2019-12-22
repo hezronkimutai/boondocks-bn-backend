@@ -218,7 +218,7 @@ router.post(
 router.patch(
   '/hotels/:hotelId/like',
   verifyUser,
-  checkHotel,
+  catchErrors(checkHotel),
   catchErrors(hotels.like)
 );
 /**
@@ -285,7 +285,7 @@ router.patch(
 router.patch(
   '/hotels/:hotelId/unlike',
   verifyUser,
-  checkHotel,
+  catchErrors(checkHotel),
   catchErrors(hotels.unLike)
 );
 
@@ -350,7 +350,7 @@ router.patch(
 router.get(
   '/hotel/:hotelId',
   verifyUser,
-  checkHotel,
+  catchErrors(checkHotel),
   catchErrors(hotels.getHotel)
 );
 

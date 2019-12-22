@@ -3,6 +3,7 @@ import Hash from '../../utils/hash';
 const request = {
   users: [
     {
+      id: 33,
       firstName: 'Test',
       lastName: 'case',
       email: 'testcase@email.co',
@@ -10,20 +11,23 @@ const request = {
       role: 'manager',
     },
     {
+      id: 34,
+      firstName: 'new',
+      lastName: 'test',
+      email: 'testnew@email.com',
+      password: Hash.generateSync('bttj6bt'),
+      lineManagerId: 33
+    },
+    {
+      id: 31,
       firstName: 'new',
       lastName: 'test',
       email: 'testnew@email.co',
       password: Hash.generateSync('bttj6bt'),
-      lineManagerId: 1
+      lineManagerId: 33
     },
     {
-      firstName: 'new',
-      lastName: 'test',
-      email: 'testnew@email.co',
-      password: Hash.generateSync('bttj6bt'),
-      lineManagerId: 2
-    },
-    {
+      id: 30,
       firstName: 'Test',
       lastName: 'case',
       email: 'testcase1@email.co',
@@ -31,6 +35,7 @@ const request = {
       role: 'manager'
     },
     {
+      id: 29,
       firstName: 'Test',
       lastName: 'case',
       email: 'testcase32@email.co',

@@ -1,7 +1,7 @@
 export default {
   users: [
     {
-      id: 1,
+      id: 10,
       firstName: 'John',
       lastName: 'Doe',
       password: '12345678',
@@ -22,7 +22,7 @@ export default {
       lastName: 'Doey',
       password: '12345678',
       email: 'jonny@barefoot.com',
-      lineManagerId: 1,
+      lineManagerId: 10,
       role: 'requester'
     },
     {
@@ -31,7 +31,6 @@ export default {
       lastName: 'Doejohn',
       password: '12345678',
       email: 'jondoe@barefoot.com',
-      lineManagerId: 1,
       role: 'travel_administrator'
     }],
   trips: [

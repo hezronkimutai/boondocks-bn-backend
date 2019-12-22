@@ -1,12 +1,16 @@
 import chaiHttp from 'chai-http';
 import { use, request, should } from 'chai';
 import app from '../app';
-import db from '../models';
 import tripsData from './mock-data/trips-data';
 import Hash from '../utils/hash';
 import tokenizer from '../utils/jwt';
-import { roomfactory, requestfactory, userfactory } from './scripts/factories';
+import {
+  roomfactory,
+  userfactory,
+  locationfactory,
+  hotelfactory } from './scripts/factories';
 import requestData from './mock-data/request';
+import truncate from './scripts/truncate';
 
 should();
 use(chaiHttp);
@@ -17,21 +21,18 @@ describe('/trips/{ oneway | return }', () => {
   let token = '';
   let manager = '';
   before(async () => {
-    await db.trip.destroy({ where: {}, force: true });
-    await db.room.destroy({ where: {}, force: true });
-    await db.hotel.destroy({ where: {}, force: true });
-    await db.user.destroy({ where: {}, force: true });
-    await db.request.destroy({ where: {}, force: true });
+    await truncate();
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
+    await hotelfactory(tripsData.hotels[0]);
     await roomfactory(tripsData.rooms[0]);
     await roomfactory(tripsData.rooms[1]);
     await roomfactory(tripsData.rooms[2]);
     await roomfactory(tripsData.rooms[3]);
-    await requestfactory(tripsData.requests[0]);
 
-    await db.trip.create(tripsData.trips[3]);
-    await db.hotel.create(tripsData.hotels[0]);
     manager = await userfactory(requestData.users[0]);
-    await db.user.create({
+    await userfactory({
+      id: 19,
       firstName: 'John',
       lastName: 'McCain',
       password: Hash.generateSync('1234567e'),
@@ -39,7 +40,7 @@ describe('/trips/{ oneway | return }', () => {
       lineManagerId: manager.id
     });
     token = await tokenizer.signToken({
-      id: 1,
+      id: 19,
       email: 'john@mccain.com',
       isVerified: 1
     });

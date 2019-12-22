@@ -4,7 +4,7 @@ import app from '../app';
 import tripsData from './mock-data/trips-data';
 import requestData from './mock-data/request';
 import tokenizer from '../utils/jwt';
-import { hotelfactory, roomfactory, userfactory } from './scripts/factories';
+import { hotelfactory, roomfactory, userfactory, locationfactory } from './scripts/factories';
 import db from '../models';
 import truncate from './scripts/truncate';
 
@@ -25,10 +25,10 @@ describe('Travel request comments', () => {
 
   before(async () => {
     await truncate();
-    await roomfactory(tripsData.rooms[0]);
-    await roomfactory(tripsData.rooms[1]);
-    await roomfactory(tripsData.rooms[2]);
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
     await hotelfactory(tripsData.hotels[0]);
+    await roomfactory(tripsData.rooms[0]);
     manager = await userfactory(requestData.users[0]);
     rightUser = await db.user.create({
       firstName: 'John',

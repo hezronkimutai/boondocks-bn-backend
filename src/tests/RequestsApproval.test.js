@@ -2,14 +2,13 @@ import chaiHttp from 'chai-http';
 import { use, request, should } from 'chai';
 import app from '../app';
 import {
-  userfactory, roomfactory
+  userfactory, roomfactory, locationfactory, hotelfactory
 } from './scripts/factories';
 import Hash from '../utils/hash';
 import requestData from './mock-data/request';
 import tripsData from './mock-data/trips-data';
 import tokenizer from '../utils/jwt';
 import truncate from './scripts/truncate';
-import db from '../models';
 
 should();
 use(chaiHttp);
@@ -20,9 +19,12 @@ describe('/Requests/manager', () => {
   let token = '';
   let userToken = '';
   before(async () => {
-    await db.like.destroy({ where: {}, force: true });
     await truncate();
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
+    await hotelfactory(tripsData.hotels[0]);
     await roomfactory(tripsData.rooms[0]);
+    await roomfactory(tripsData.rooms[1]);
     const manager = await userfactory(requestData.users[0]);
     const user = await userfactory({
       firstName: 'new',

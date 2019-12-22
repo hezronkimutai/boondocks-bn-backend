@@ -10,7 +10,9 @@
       "src/tests",
       "src/config",
       "src/services/files.service.js",
-      "src/utils/echo.util.js"
+      "src/utils/echo.util.js",
+      "src/routes/index.js",
+      "src/app.js"
     ]
   },
   "scripts": {

@@ -4,7 +4,7 @@ import app from '../app';
 import tripsData from './mock-data/trips-data';
 import requestData from './mock-data/request';
 import tokenizer from '../utils/jwt';
-import { hotelfactory, roomfactory, userfactory } from './scripts/factories';
+import { hotelfactory, roomfactory, userfactory, locationfactory } from './scripts/factories';
 import db from '../models';
 import truncate from './scripts/truncate';
 
@@ -20,6 +20,8 @@ describe('Hotels feedback', () => {
       force: true,
     });
     await truncate();
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
     hotel = await hotelfactory(tripsData.hotels[0]);
     room = await roomfactory({ ...tripsData.rooms[5], hotelId: hotel.id });
     const manager = await userfactory(requestData.users[0]);
@@ -57,7 +59,8 @@ describe('Hotels feedback', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ ...tripsData.trips[7], hotelId: hotel.id, rooms: [room.id] })
       .end((err, res) => {
-        res.status.should.be.eql(201);
+        expect(res.status)
+          .eql(201);
         done(err);
       });
   });

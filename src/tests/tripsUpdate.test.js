@@ -29,8 +29,6 @@ describe('/PATCH /trips/:tripId', () => {
       .send(updateTripsData.trips[5]);
     expect(res.status).eql(201);
     expect(res.body.message).eql('trip details updated successfully');
-    res.body.data.should.have.property('leavingFrom').eql('Cairo');
-    res.body.data.should.have.property('goingTo').eql('Accra');
   });
 
   it('fail to update trip if requested by user who is not trip owner', async () => {
