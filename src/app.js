@@ -27,8 +27,10 @@ app.use(morganLogger('common', {
 app.use(morganLogger('dev'));
 const allowedOrigins = [
   // We shall remove this URL for production
-  'http://localhost:5000/',
+  'http://localhost:8080',
   // Our front end URL to be added here in phase 2 of SIMS
+  'https://boondocks-bn-frontend-staging.herokuapp.com',
+  'https://boondocks-bn-frontend.herokuapp.com'
 ];
 app.use(cors({
   origin(origin, callback) {
