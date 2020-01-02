@@ -28,7 +28,7 @@ describe('Unit tests for check token verification middleware', () => {
       // eslint-disable-next-line no-underscore-dangle
       expect(await response._getJSONData()).to.deep.equal({
         status: 'error',
-        message: 'invalid token, Please try to regenerate another email'
+        message: 'not authourized, Please try to regenerate another email'
       });
       return done();
     });

@@ -3,25 +3,25 @@ const userData = {
     firstName: 'bonbon',
     lastName: 'vic',
     email: 'nyabuyabonvic@gmail.com',
-    password: 'bcjdfyhfgiutgast7687643'
+    password: 'bcjdfyhFgiutgast7687643'
   },
   user1: {
     firstName: 'bonbon',
     lastName: 'vic',
     email: 'nyabuyabonvic@gmail.com',
-    password: 'bcjdfyhfgiutgast7687643'
+    password: 'bcjdFyhfgiutgast7687643'
   },
   user2: {
     firstName: 'bonbon',
     lastName: 'vic',
     email: 'nyabuyabonvic@gmail.com',
-    password: 'bcjdfyhfgiutgast7687643',
+    password: 'bcjDfyhfgiutgast7687643',
   },
   user3: {
     firstName: 'bonbon',
     lastName: 'vic',
     email: 'nyabuyabonvic1@gmail.com',
-    password: 'bcjdfyhfgiutgast7687643',
+    password: 'bcJdfyhfgiutgast7687643',
     isVerified: true
   },
   user4: {

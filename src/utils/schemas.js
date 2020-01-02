@@ -5,7 +5,7 @@ const signupSchema = Joi.object().keys({
   lastName: Joi.string().strict().trim().required(),
   email: Joi.string().strict().trim().email()
     .required(),
-  password: Joi.string().alphanum().min(8).required()
+  password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/).min(8).required()
 }).options({
   abortEarly: false,
   language: {
@@ -25,7 +25,7 @@ const signinSchema = Joi.object().keys({
 });
 
 const resetPassword = Joi.object().keys({
-  password: Joi.string().alphanum().min(8).required()
+  password: Joi.string().regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/).min(8).required()
     .strict()
 });
 

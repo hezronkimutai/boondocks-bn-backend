@@ -53,7 +53,7 @@ export default class Mailer {
       data: {
         name: this.data.name,
         message: 'reset your password',
-        link: `${this.data.host}/api/v1/auth/resetPassword?token=${this.data.token}`
+        link: `${this.data.host}/auth/reset-password?token_reset=${this.data.token}`
       },
       htmlPath: 'resetPassword.pug'
     });
@@ -92,8 +92,8 @@ export default class Mailer {
       data: {
         name,
         message: 'token',
-        link: `${host}/api/v1/auth/verification?token=${token}`,
-        regenerateLink: `${host}/api/v1/auth/reverifyUser?email=${to}`
+        link: `${host}/auth/verification?token=${token}`,
+        regenerateLink: `${host}/auth/reverifyUser?email=${to}`
       },
       htmlPath: 'emailVerification.pug'
     });
