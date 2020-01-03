@@ -51,7 +51,6 @@ const router = express.Router();
 router.get(
   '/auth/users',
   verifyUser,
-  authorize(['super_administrator']),
   catchErrors(users.fetchAllUsers)
 );
 /**
