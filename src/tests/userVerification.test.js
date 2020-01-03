@@ -59,7 +59,7 @@ describe('verify users` emails', () => {
         .end((err, res) => {
           res.should.have.status(401);
           res.body.should.be.a('object');
-          res.body.message.should.equal('invalid token, Please try to regenerate another email');
+          res.body.message.should.equal('not authourized, Please try to regenerate another email');
           if (err) return done();
           done();
         });

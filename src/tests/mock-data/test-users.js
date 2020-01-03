@@ -2,13 +2,13 @@ export default [
   {
     firstName: 'John',
     lastName: 'Doe',
-    password: '12345678',
+    password: '123DRyt45678',
     email: 'john@barefoot.com'
   },
   {
     firstName: 'Eric',
     lastName: 'Doe',
-    password: '12345678',
+    password: '12Dytfg345678',
     email: 'eric1@barefoot.com'
   },
   {

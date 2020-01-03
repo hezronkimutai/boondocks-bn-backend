@@ -13,7 +13,7 @@ const decodeQueryToken = async (req, res, next) => {
   const { token } = req.query;
   const decoded = await JWThelper.decodeToken(token);
   if (Object.keys(decoded)[0] === 'error') {
-    return Responses.handleError(401, 'invalid token, Please try to regenerate another email', res);
+    return Responses.handleError(401, 'not authourized, Please try to regenerate another email', res);
   }
   const user = await db.user.findOne({
     where: { email: decoded.email }

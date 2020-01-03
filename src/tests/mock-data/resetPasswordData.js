@@ -12,13 +12,13 @@ const data = {
     lastName: 'vic',
     email: 'nyabuyabonvic@gmail.com',
   },
-  password: 'dnjkfahesg9wr68734',
+  password: 'Anjkfahesg9wr68734',
   password1: 'wrong',
   user2: {
     firstName: 'bonbon',
     lastName: 'vic',
     email: 'nyabuyabonvjkshdfic@gmail.com',
-    password: 'bcjdfyhfggast7687643'
+    password: 'Dcjdfyhfggast7687643'
   },
   mailObject: {
     toAddress: 'test@email.com',

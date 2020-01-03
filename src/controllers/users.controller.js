@@ -18,7 +18,7 @@ class UserController {
    */
   async createUser(req, res) {
     const passwordHash = hash.generateSync(req.body.password);
-    const host = `${req.protocol}://${req.get('host')}`;
+    const { host } = req.query;
     const userData = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -105,8 +105,7 @@ class UserController {
    * @returns {object} responses
    */
   async resendEmail(req, res) {
-    const { email } = req.query;
-    const host = `${req.protocol}://${req.get('host')}`;
+    const { email, host } = req.query;
     const user = await db.user.findOne({
       where: { email }
     });
@@ -139,7 +138,7 @@ class UserController {
    * @returns {*} responses
    */
   async forgotPassword(req, res) {
-    const host = `${req.protocol}://${req.get('host')}`;
+    const { host } = req.query;
     const user = await UserServices.findUserByEmail(req.body.email);
     if (!user) {
       return Responses.handleError(404, 'User with such email does not exist', res);
@@ -163,7 +162,6 @@ class UserController {
    */
   async resetPassword(req, res) {
     const { user } = res.locals;
-    const host = `${req.protocol}://${req.get('host')}`;
     if (!user) {
       return Responses.handleError(404, 'User does not exist, Please register', res);
     }
@@ -176,8 +174,7 @@ class UserController {
     );
     const resetPasswordMail = new Mailer({
       name: user.firstName,
-      to: user.email,
-      host
+      to: user.email
     });
     await resetPasswordMail.sendResetSuccess();
     return Responses.handleSuccess(
