@@ -182,7 +182,11 @@ const getSearchedRequests = async (userId, query) => {
   let searchRegex = [];
   let strQuery = `SELECT * FROM requests AS r
     JOIN trips AS t
-    ON r."id" = t."requestId" 
+    ON r."id" = t."requestId"
+    JOIN locations AS l
+    ON t."leavingFrom"=l."id"
+    JOIN locations AS b
+    ON t."goingTo"=b."id" 
     WHERE r."userId"=:userId
     AND t."travelDate" BETWEEN :tDate AND :rDate
     AND r."status" IN(:enumQueries)`;
@@ -197,8 +201,10 @@ const getSearchedRequests = async (userId, query) => {
 
     strQuery = `${strQuery}
     AND (
-      lower(t."leavingFrom") SIMILAR TO :searchRegex
-      OR lower(t."goingTo") SIMILAR TO :searchRegex
+      lower(l."city") SIMILAR TO :searchRegex
+      OR lower(l."country") SIMILAR TO :searchRegex
+      OR lower(b."city") SIMILAR TO :searchRegex
+      OR lower(b."country") SIMILAR TO :searchRegex
     )`;
   }
 

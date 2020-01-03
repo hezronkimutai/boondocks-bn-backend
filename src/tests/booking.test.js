@@ -5,7 +5,7 @@ import db from '../models';
 import tripsData from './mock-data/trips-data';
 import Hash from '../utils/hash';
 import tokenizer from '../utils/jwt';
-import { roomfactory, hotelfactory } from './scripts/factories';
+import { roomfactory, hotelfactory, locationfactory } from './scripts/factories';
 import truncate from './scripts/truncate';
 
 should();
@@ -14,9 +14,10 @@ use(chaiHttp);
 const prefix = '/api/v1';
 
 describe('/booking Accomodation booking', () => {
-  let token = '';
+  let token;
   before(async () => {
     await truncate();
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
     await hotelfactory(tripsData.hotels[0]);
     await roomfactory(tripsData.rooms[0]);
     await roomfactory(tripsData.rooms[3]);

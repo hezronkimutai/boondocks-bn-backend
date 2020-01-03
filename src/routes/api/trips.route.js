@@ -75,7 +75,7 @@ const router = express.Router();
  *         description: success
  */
 
-router.post('/trips/oneway', verifyUser, validation, checkForRooms, catchErrors(trips.createTrip));
+router.post('/trips/oneway', verifyUser, validation, catchErrors(checkForRooms), catchErrors(trips.createTrip));
 
 /**
  * @swagger

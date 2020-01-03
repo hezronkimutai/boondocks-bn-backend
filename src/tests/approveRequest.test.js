@@ -4,9 +4,9 @@ import app from '../app';
 import {
   userfactory,
   hotelfactory,
-  roomfactory
+  roomfactory,
+  locationfactory
 } from './scripts/factories';
-import Hash from '../utils/hash';
 import requestData from './mock-data/request';
 import tripsData from './mock-data/trips-data';
 import tokenizer from '../utils/jwt';
@@ -17,29 +17,21 @@ use(chaiHttp);
 
 const PREFIX = '/api/v1';
 
-describe('PATCH /Request/:ID appproved', () => {
+describe('PATCH /Request/:ID declined', () => {
   let token = '';
   let userToken = '';
   let requestId = '';
-  let manager = '';
   before(async () => {
     await truncate();
-    await roomfactory(tripsData.rooms[0]);
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
     await hotelfactory(tripsData.hotels[0]);
-    manager = await userfactory(requestData.users[0]);
-    const user = await userfactory({
-      firstName: 'new',
-      lastName: 'test',
-      email: 'testnew@email.co',
-      password: Hash.generateSync('bttj6bt'),
-      lineManagerId: manager.id
-    });
-    token = await tokenizer.signToken({
-      id: manager.id,
-      email: 'testcase@email.co',
-      role: 'manager'
-    });
-    userToken = await tokenizer.signToken(user);
+    await roomfactory(tripsData.rooms[0]);
+    await roomfactory(tripsData.rooms[1]);
+    await userfactory(requestData.users[0]);
+    await userfactory(requestData.users[1]);
+    token = await tokenizer.signToken(requestData.users[0]);
+    userToken = await tokenizer.signToken(requestData.users[1]);
   });
 
   before((done) => {
@@ -86,38 +78,13 @@ describe('PATCH /Request/:ID appproved', () => {
       });
   });
   describe('Manager should not be able to access Requests that do not belong to him', () => {
-    let manager1 = '';
     before(async () => {
       await truncate();
-      await roomfactory(tripsData.rooms[0]);
-      await hotelfactory(tripsData.hotels[0]);
-      manager = await userfactory(requestData.users[0]);
-      manager1 = await userfactory(requestData.users[3]);
-      const user = await userfactory({
-        firstName: 'new',
-        lastName: 'test',
-        email: 'testnew@email.co',
-        password: Hash.generateSync('bttj6bt'),
-        lineManagerId: manager.id
-      });
+      await userfactory(requestData.users[4]);
       token = await tokenizer.signToken({
-        id: manager1.id,
-        email: 'testcase@email.co',
+        email: 'testcase32@email.co',
         role: 'manager'
       });
-      userToken = await tokenizer.signToken(user);
-    });
-
-    before((done) => {
-      request(app)
-        .post(`${PREFIX}/trips/oneway`)
-        .set('Authorization', `Bearer ${userToken}`)
-        .send(tripsData.trips[0])
-        .end((err, res) => {
-          requestId = res.body.data.id;
-          res.status.should.be.eql(201);
-          done(err);
-        });
     });
     it('Patch /request/:id - user should not be able to update request status that doesn\'t belong to him', (done) => {
       request(app)

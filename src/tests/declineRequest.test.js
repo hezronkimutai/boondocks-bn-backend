@@ -4,7 +4,8 @@ import app from '../app';
 import {
   userfactory,
   hotelfactory,
-  roomfactory
+  roomfactory,
+  locationfactory
 } from './scripts/factories';
 import Hash from '../utils/hash';
 import requestData from './mock-data/request';
@@ -23,9 +24,11 @@ describe('PATCH /Request/:ID declined', () => {
   let requestId = '';
   before(async () => {
     await truncate();
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
+    await hotelfactory(tripsData.hotels[0]);
     await roomfactory(tripsData.rooms[0]);
     await roomfactory(tripsData.rooms[1]);
-    await hotelfactory(tripsData.hotels[0]);
     const manager = await userfactory(requestData.users[0]);
     const user = await userfactory({
       firstName: 'new',
@@ -85,19 +88,18 @@ describe('PATCH /Request/:ID declined', () => {
         done();
       });
   });
-  describe('No access to the', () => {
+  describe('No access to the request', () => {
     before(async () => {
       await truncate();
-      const manager = await userfactory(requestData.users[0]);
+      await userfactory(requestData.users[4]);
       token = await tokenizer.signToken({
-        id: manager.id,
-        email: 'testcase@email.co',
+        email: 'testcase32@email.co',
         role: 'manager'
       });
     });
-    it('Patch /request/:id - user should not be able to update request status that doesn\'t belong to him', (done) => {
+    it('Patch /request/:id - manager should not be able to update request status that doesn\'t belong to him', (done) => {
       request(app)
-        .patch(`${prefix}/request/1`)
+        .patch(`${prefix}/request/${requestId}`)
         .set('Authorization', `Bearer ${token}`)
         .send({ status: 'declined' })
         .end((err, res) => {

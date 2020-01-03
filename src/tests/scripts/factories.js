@@ -36,7 +36,12 @@ const requestfactory = async (data) => {
 };
 
 const likesfactory = async (data) => {
-  await db.like.create(data);
+  const like = await db.like.create(data);
+  return like;
+};
+const tripsfactory = async (data) => {
+  const trip = await db.trip.create(data);
+  return trip;
 };
 
 export {
@@ -47,5 +52,6 @@ export {
   requestfactory,
   locationfactory,
   messageFactory,
-  likesfactory
+  likesfactory,
+  tripsfactory
 };

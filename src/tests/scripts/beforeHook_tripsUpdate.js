@@ -6,10 +6,17 @@ import Bcrypt from '../../utils/hash';
 import updateTripsData from '../mock-data/update-trips-data';
 import requestData from '../mock-data/request';
 import truncate from './truncate';
+import { locationfactory } from './factories';
 
 const prepareForTest = async () => {
   let manager = '';
   await truncate();
+  await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+  await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
+  await locationfactory({ id: 3, city: 'Kampala', country: 'Uganda' });
+  await locationfactory({ id: 4, city: 'Lagos', country: 'Nigeria' });
+  await locationfactory({ id: 5, city: 'Cairo', country: 'Egypt' });
+  await locationfactory({ id: 6, city: 'Accra', country: 'Ghana' });
   const hotelExport = await db.hotel.create(updateTripsData.hotels[0]);
   await db.room.create(updateTripsData.rooms[0]);
   await db.room.create(updateTripsData.rooms[1]);

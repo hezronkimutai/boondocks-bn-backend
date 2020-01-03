@@ -4,7 +4,8 @@ import app from '../app';
 import {
   userfactory,
   hotelfactory,
-  roomfactory
+  roomfactory,
+  locationfactory
 } from './scripts/factories';
 import tripsData from './mock-data/trips-data';
 import Hash from '../utils/hash';
@@ -22,9 +23,11 @@ describe('/Requests', () => {
   let manager = '';
   before(async () => {
     await truncate();
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 2, city: 'Nairobi', country: 'Kenya' });
+    await hotelfactory(tripsData.hotels[0]);
     await roomfactory(tripsData.rooms[0]);
     await roomfactory(tripsData.rooms[1]);
-    await hotelfactory(tripsData.hotels[0]);
     manager = await userfactory(requestData.users[0]);
     await userfactory({
       firstName: 'John',

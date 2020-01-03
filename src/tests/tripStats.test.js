@@ -2,9 +2,8 @@ import { expect, request, use } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../app';
 import tripsData from './mock-data/trips-stats';
-
+import { userfactory, hotelfactory, roomfactory, locationfactory } from './scripts/factories';
 import tokenizer from '../utils/jwt';
-import db from '../models';
 import truncate from './scripts/truncate';
 
 use(chaiHttp);
@@ -22,18 +21,19 @@ describe('Trip Statistics', () => {
 
   before(async () => {
     await truncate();
-    const rightManager = await db.user.create(tripsData.users[0]);
-    const wrongManager = await db.user.create(tripsData.users[1]);
-    const user = await db.user.create(tripsData.users[2]);
-    const travelAdmin = await db.user.create(tripsData.users[3]);
+    await userfactory(tripsData.users[0]);
+    await userfactory(tripsData.users[1]);
+    await userfactory(tripsData.users[2]);
+    await userfactory(tripsData.users[3]);
 
-    await db.hotel.create(tripsData.hotels[0]);
-    await db.room.create(tripsData.rooms[0]);
+    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await hotelfactory(tripsData.hotels[0]);
+    await roomfactory(tripsData.rooms[0]);
 
-    userToken = await tokenizer.signToken(user);
-    rightManagerToken = await tokenizer.signToken(rightManager);
-    wrongManagerToken = await tokenizer.signToken(wrongManager);
-    travelAdminToken = await tokenizer.signToken(travelAdmin);
+    userToken = await tokenizer.signToken(tripsData.users[2]);
+    rightManagerToken = await tokenizer.signToken(tripsData.users[0]);
+    wrongManagerToken = await tokenizer.signToken(tripsData.users[1]);
+    travelAdminToken = await tokenizer.signToken(tripsData.users[3]);
 
     pastDate = new Date((new Date()).setDate((new Date()).getDate() - 30));
     futureDate = new Date((new Date()).setDate((new Date()).getDate() + 30));
@@ -44,8 +44,7 @@ describe('Trip Statistics', () => {
       .post(`${prefix}/trips/oneway`)
       .set('Authorization', `Bearer ${travelAdminToken}`)
       .send(tripsData.trips[0])
-      // eslint-disable-next-line no-unused-vars
-      .end((err, res) => {
+      .end((err) => {
         done(err);
       });
   });

@@ -14,7 +14,9 @@ module.exports = {
         },
         key: 'id'
       },
-      allowNull: false
+      allowNull: false,
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
     },
     hotelId: {
       type: Sequelize.INTEGER,
@@ -22,9 +24,11 @@ module.exports = {
         model: {
           tableName: 'hotels'
         },
-        key: 'id'
+        key: 'id',
       },
-      allowNull: false
+      allowNull: false,
+      onDelete: 'cascade',
+      onUpdate: 'cascade',
     },
     createdAt: {
       allowNull: false,
