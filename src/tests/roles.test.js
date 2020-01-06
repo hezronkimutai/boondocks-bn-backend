@@ -26,12 +26,12 @@ describe('/GET /auth/users', () => {
     expect(res.body.message).eql('successfully retrieved all users');
   });
 
-  it('fail to fetch users if requested by user with non-super_administrator role', async () => {
+  it('fetch users of specific role', async () => {
     const res = await request(app)
-      .get(`${prefix}/auth/users`)
+      .get(`${prefix}/auth/users?role=manager`)
       .set('Authorization', requesterToken);
-    expect(res.status).eql(403);
-    expect(res.body.message).eql('insufficient privileges');
+    expect(res.status).eql(200);
+    expect(res.body.message).eql('successfully retrieved all users');
   });
 
   it('fail to fetch users if requested by user with invalid token', async () => {

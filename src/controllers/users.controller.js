@@ -195,7 +195,6 @@ class UserController {
     const userData = { ...req.body };
     const { user } = res.locals;
 
-    userData.password = hash.generateSync(userData.password);
     const data = await UserServices.updateUserInfoByEmail({ ...userData }, user.email);
 
     if (data === 'own_manage') {
@@ -226,7 +225,11 @@ class UserController {
       if (userData) {
         const user = userData.dataValues;
 
-        user.lineManager = user.LineManager ? `${user.LineManager.firstName} ${user.LineManager.lastName}` : 'none';
+        user.lineManager = user.LineManager ? {
+          id: user.LineManager.id,
+          firstName: user.LineManager.firstName,
+          lastName: user.LineManager.lastName
+        } : 'none';
 
         delete user.LineManager;
 
@@ -247,9 +250,14 @@ class UserController {
    * @returns {object} responses
    */
   async fetchAllUsers(req, res) {
-    const allUsers = await db.user.findAll({
-      attributes: { exclude: ['password'] }
-    });
+    const { role } = req.query;
+
+    const options = {
+      attributes: { exclude: ['password', 'receiveNotification', 'lastLogin', 'isVerified'] },
+      ...role !== undefined && { where: { role } }
+    };
+
+    const allUsers = await db.user.findAll(options);
     return Responses.handleSuccess(200, 'successfully retrieved all users', res, allUsers);
   }
 }
