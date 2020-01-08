@@ -48,16 +48,36 @@ const getAllRequest = async (userId) => {
   return requests;
 };
 
-const getOneRequest = async (id) => {
+const getOneRequest = async (requestId) => {
   const request = await db.request.findOne({
     where: {
-      id
+      id: requestId
     },
     include: [{
-      model: db.trip
-    }, {
+      model: db.trip,
+      attributes: ['type', 'reason', 'travelDate', 'returnDate', 'createdAt', 'updatedAt'],
+      include: [{
+        model: db.hotel,
+        attributes: ['name'],
+      },
+      { model: db.location,
+        as: 'going',
+        attributes: ['country', 'city']
+      },
+      { model: db.location,
+        as: 'leaving',
+        attributes: ['country', 'city']
+      },
+      ]
+    },
+    {
       model: db.comment
-    }]
+    },
+    {
+      model: db.user,
+      attributes: ['lastName', 'firstName'],
+    }
+    ]
   });
 
   return request;
@@ -91,7 +111,6 @@ const checkUserBelongsToManager = async (lineManagerId, requestId) => {
 
 const getManagerRequest = async (userId) => {
   const userRequests = await db.user.findAll({
-    attributes: [],
     where: {
       lineManagerId: userId
     },
@@ -100,11 +119,15 @@ const getManagerRequest = async (userId) => {
       where: {
         status: 'open'
       },
-      include: [{
-        model: db.trip
-      }]
+      include: [
+        {
+          model: db.user,
+          attributes: ['lastName', 'firstName'],
+        }
+      ]
     }]
   });
+
 
   const requests = [];
   await userRequests.forEach(user => {
