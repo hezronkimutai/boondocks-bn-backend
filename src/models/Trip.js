@@ -31,6 +31,16 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'requestId',
       onDelete: 'CASCADE'
     });
+    Trip.belongsTo(models.location, {
+      foreignKey: 'goingTo',
+      as: 'going',
+      onDelete: 'CASCADE'
+    });
+    Trip.belongsTo(models.location, {
+      foreignKey: 'leavingFrom',
+      as: 'leaving',
+      onDelete: 'CASCADE'
+    });
   };
   return Trip;
 };
