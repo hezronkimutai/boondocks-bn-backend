@@ -5,10 +5,10 @@
 /* eslint-disable import/no-named-as-default */
 /* eslint-disable import/no-named-as-default-member */
 import { expect } from 'chai';
-import AuthController from '../../../controllers/auth.controller';
+import AuthController, { getTokenAfterSignIn } from '../../../controllers/auth.controller';
 import db from '../../../models';
 
-const { googleSignIn, facebookSignIn } = AuthController;
+const { googleSignIn, facebookSignin } = AuthController;
 
 const mocks = require('node-mocks-http');
 
@@ -42,8 +42,6 @@ const OAuthData = {
   }
 };
 
-const { facebook, google } = OAuthData;
-
 describe('Social Authentication', () => {
   beforeEach(async () => {
     await db.user.destroy({
@@ -52,21 +50,25 @@ describe('Social Authentication', () => {
     });
   });
 
+  it('should fail to give the Token when the response is not from OAuth', async () => {
+    const data = await getTokenAfterSignIn(response, OAuthData.facebook.request.user);
+    expect(data.statusCode)
+      .eql(500);
+  });
+
   it('should create a Facebook and save him in the db', async () => {
-    // eslint-disable-next-line no-shadow
-    const { request, response } = facebook;
-    const { email } = request.user._json;
-    await facebookSignIn(request, response);
+    const { email } = OAuthData.facebook.request.user._json;
+    await facebookSignin(OAuthData.facebook.request, OAuthData.facebook.response);
     const user = await db.user.findOne({ where: { email } });
-    expect(email).eql(user.dataValues.email);
+    expect(email)
+      .eql(user.dataValues.email);
   });
 
   it('should create a Google and save in in the db', async () => {
-    // eslint-disable-next-line no-shadow
-    const { request, response } = google;
-    const email = request.user.emails[0].value;
-    await googleSignIn(request, response);
+    const email = OAuthData.google.request.user.emails[0].value;
+    await googleSignIn(OAuthData.google.request, OAuthData.google.response);
     const user = await db.user.findOne({ where: { email } });
-    expect(email).eql(user.dataValues.email);
+    expect(email)
+      .eql(user.dataValues.email);
   });
 });
