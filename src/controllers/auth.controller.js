@@ -9,7 +9,7 @@ export const getTokenAfterSignIn = async (res, user) => {
   const userDetails = user.dataValues;
   const token = await JWTToken.signToken(userDetails);
   const cookieOptions = {
-    httpOnly: true,
+    httpOnly: false,
     maxAge: new Date(Date.now() + 86400),
   };
   return res.status(200)
@@ -58,7 +58,7 @@ class AuthController {
       defaults: {
         firstName: displayName.split(' ')[0],
         lastName: displayName.split(' ')[1],
-        email: emails.find(email => email.verified) || emails[0].value,
+        email: emails[0].value,
         isVerified: true,
       },
     }).spread((user, isCreated) => getTokenAfterSignIn(res, user));
