@@ -10,6 +10,7 @@ module.exports = {
       type: Sequelize.INTEGER
     },
     hotelId: {
+      allowNull: true,
       type: Sequelize.INTEGER
     },
     type: {

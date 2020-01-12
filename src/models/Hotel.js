@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Hotel.associate = (models) => {
     Hotel.hasMany(models.booking, {
+      allowNull: true,
       foreignKey: 'hotelId',
       onDelete: 'CASCADE',
     });
@@ -23,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
     Hotel.belongsTo(models.location, {
+      allowNull: true,
       foreignKey: 'locationId',
       onDelete: 'CASCADE',
     });

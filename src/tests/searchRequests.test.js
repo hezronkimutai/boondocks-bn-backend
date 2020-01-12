@@ -2,7 +2,7 @@ import chaiHttp from 'chai-http';
 // eslint-disable-next-line object-curly-newline
 import { use, request, expect, should } from 'chai';
 import app from '../app';
-import { prepareForTest } from './scripts/beforeHook_tripsUpdate';
+import { prepareForTest } from './scripts/beforeHook_searchRequests';
 
 should();
 use(chaiHttp);

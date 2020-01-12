@@ -1,3 +1,4 @@
+/* eslint-disable newline-per-chained-call */
 import Joi from '@hapi/joi';
 
 const signupSchema = Joi.object().keys({
@@ -30,13 +31,13 @@ const resetPassword = Joi.object().keys({
 });
 
 const oneWaySchema = Joi.object().keys({
-  hotelId: Joi.required(),
-  type: Joi.string().strict().trim().required(),
+  hotelId: Joi.number(),
+  type: Joi.string().strict().trim().valid('one way').required(),
   leavingFrom: Joi.number().strict().required(),
   goingTo: Joi.number().strict().required(),
   travelDate: Joi.date().required(),
   reason: Joi.string().strict().required(),
-  rooms: Joi.required()
+  rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value'))
 }).options({
   abortEarly: false,
   language: {
@@ -81,14 +82,14 @@ const updateUserInfoSchema = Joi.object().keys({
 });
 
 const twoWaySchema = Joi.object().keys({
-  hotelId: Joi.required(),
-  type: Joi.string().strict().trim().required(),
+  hotelId: Joi.number(),
+  type: Joi.string().strict().trim().valid('return').required(),
   leavingFrom: Joi.number().strict().required(),
   goingTo: Joi.number().strict().required(),
   travelDate: Joi.date().required(),
   returnDate: Joi.date().greater(Joi.ref('travelDate')).required(),
   reason: Joi.string().strict().required(),
-  rooms: Joi.required()
+  rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value')),
 }).options({
   abortEarly: false,
   language: {
@@ -111,17 +112,17 @@ const hotelSchema = Joi.object().keys({
 });
 
 const updateTripSchema = Joi.object().keys({
-  hotelId: Joi.number().required(),
-  type: Joi.string().required().strict().trim()
-    .valid(
-      'one way',
-      'return'
-    ),
+  hotelId: Joi.number(),
+  type: Joi.string().strict().trim().valid(
+    'one way',
+    'return'
+  )
+    .required(),
   leavingFrom: Joi.number().strict(),
   goingTo: Joi.number().strict(),
   travelDate: Joi.date(),
   returnDate: Joi.date().when('type', { is: 'return', then: Joi.required() }),
-  rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value')).required(),
+  rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value')),
   reason: Joi.string().strict()
 }).options({
   abortEarly: false,

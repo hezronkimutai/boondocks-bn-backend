@@ -214,6 +214,37 @@ class HotelService {
 
     return mostTravelled;
   }
+
+  /**
+   * Get locations with hotels
+   * @returns {Array} locations
+   */
+  async getLocationsWithHotels() {
+    const locations = await db.location.findAll({
+      include: [
+        {
+          model: db.hotel,
+          required: true,
+          include: [
+            {
+              model: db.room,
+              where: { status: 'available' }
+            }
+          ]
+        }
+      ],
+    });
+    return locations;
+  }
+
+  /**
+   * Get locations
+   * @returns {Array} locations
+   */
+  async getLocations() {
+    const locations = await db.location.findAll();
+    return locations;
+  }
 }
 
 export default new HotelService();

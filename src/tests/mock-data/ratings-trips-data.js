@@ -1,7 +1,7 @@
 export default {
   trips: [{
-    leavingFrom: 11,
-    goingTo: 22,
+    leavingFrom: 13,
+    goingTo: 23,
     travelDate: '2019-11-18',
     returnDate: '2019-11-18',
     reason: 'visit our agents',
@@ -10,8 +10,8 @@ export default {
     rooms: [1]
   },
   {
-    leavingFrom: 11,
-    goingTo: 22,
+    leavingFrom: 13,
+    goingTo: 23,
     travelDate: '2019-11-18',
     returnDate: '2019-11-18',
     reason: 'visit our agents',
@@ -19,8 +19,8 @@ export default {
     type: 'return',
     rooms: [1]
   }, {
-    leavingFrom: 11,
-    goingTo: 22,
+    leavingFrom: 13,
+    goingTo: 23,
     travelDate: '2019-11-18',
     returnDate: '2019-11-18',
     reason: 'visit our new country office',
@@ -29,16 +29,16 @@ export default {
     rooms: [2]
   },
   {
-    leavingFrom: 11,
-    goingTo: 22,
+    leavingFrom: 13,
+    goingTo: 23,
     travelDate: '2019-11-18',
     reason: 'visit our agents',
     hotelId: 5,
     type: 'one way',
     rooms: [1],
   }, {
-    leavingFrom: 11,
-    goingTo: 22,
+    leavingFrom: 13,
+    goingTo: 23,
     travelDate: '2019-11-18',
     returnDate: '2019-11-18',
     reason: 'visit our new country office',
@@ -47,8 +47,8 @@ export default {
     rooms: [2, 'play']
   },
   {
-    leavingFrom: 11,
-    goingTo: 22,
+    leavingFrom: 13,
+    goingTo: 23,
     travelDate: '2019-11-18',
     returnDate: '2019-11-18',
     reason: 'visit our new country office',
@@ -57,8 +57,8 @@ export default {
     rooms: [2]
   },
   {
-    leavingFrom: 11,
-    goingTo: 22,
+    leavingFrom: 13,
+    goingTo: 23,
     travelDate: '2019-11-18',
     reason: 'visit our agents',
     hotelId: 5,
@@ -97,7 +97,7 @@ export default {
   }],
   hotels: [{
     id: 5,
-    locationId: 11,
+    locationId: 13,
     name: 'Marriot',
     image: 'image.png',
     description: 'hello world',

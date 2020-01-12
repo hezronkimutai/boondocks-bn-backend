@@ -71,7 +71,6 @@ class Trip {
       userId: lineManager,
     });
 
-
     NotificationUtil.echoNotification(req, notification, 'new_request', lineManager);
     return Responses.handleSuccess(201, 'created', res, request);
   }

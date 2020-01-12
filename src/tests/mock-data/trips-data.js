@@ -9,7 +9,7 @@ export default {
     travelDate: '2019-11-18',
     reason: 'visit our agents',
     hotelId: 1,
-    type: 'return',
+    type: 'one way',
     rooms: [1]
   },
   {
@@ -76,7 +76,17 @@ export default {
     goingTo: 2,
     travelDate: '2019-11-18',
     reason: 'visit our agents',
+    type: 'one way',
+  },
+  {
+    leavingFrom: 1,
+    goingTo: 2,
+    travelDate: '2019-11-18',
+    returnDate: '2019-11-20',
+    reason: 'visit our agents',
+    hotelId: 1,
     type: 'return',
+    rooms: ['play']
   }],
   multiCityTrips: [{
     leavingFrom: 1,

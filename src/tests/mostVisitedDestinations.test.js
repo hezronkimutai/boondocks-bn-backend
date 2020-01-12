@@ -51,7 +51,7 @@ describe('Most travel destinations', () => {
           travelDate: '2019-11-18',
           reason: 'visit our agents',
           hotelId,
-          type: 'return',
+          type: 'one way',
           rooms: [roomId],
         })
         .end(async (err, res) => {
