@@ -78,16 +78,6 @@ describe('PATCH /Request/:ID declined', () => {
         done();
       });
   });
-  it('Patch /requests/manager - Manager should not be able to update status twice', (done) => {
-    request(app)
-      .patch(`${prefix}/request/${requestId}`)
-      .set('Authorization', `Bearer ${token}`)
-      .send({ status: 'approved' })
-      .end((err, res) => {
-        res.status.should.be.equal(409);
-        done();
-      });
-  });
   describe('No access to the request', () => {
     before(async () => {
       await truncate();

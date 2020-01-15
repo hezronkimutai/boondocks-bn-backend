@@ -67,6 +67,7 @@ module.exports = (sequelize, DataTypes) => {
       values: [
         'super_administrator',
         'travel_administrator',
+        'suppliers',
         'travel_team_member',
         'manager',
         'requester'

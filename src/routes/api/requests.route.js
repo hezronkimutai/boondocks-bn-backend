@@ -84,17 +84,18 @@ const router = express.Router();
 router.get(
   '/requests',
   verifyUser,
+  authorize(['requester']),
   catchErrors(getRequestByStatus),
-  catchErrors(requests.getAll)
+  catchErrors(requests.getAll),
 );
-
 
 /**
  * @swagger
  *
  * /request:
  *  get:
- *    summary: this gets all the requests from a specific user to the line manager
+ *    summary: this gets all the requests from a specific user to the Manager
+ *
  *    description: Takes the line manager token
  *    tags:
  *      - Requests
@@ -161,7 +162,13 @@ router.get(
  *      500:
  *        description: exception errors
  */
-router.get('/requests/manager', verifyUser, authorize(['manager']), catchErrors(requests.getLineManagerRequest));
+router.get(
+  '/requests/manager',
+  verifyUser,
+  authorize(['manager']),
+  catchErrors(getRequestByStatus),
+  catchErrors(requests.getLineManagerRequest),
+);
 
 /**
  * @swagger

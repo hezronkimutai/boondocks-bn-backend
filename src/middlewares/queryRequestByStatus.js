@@ -1,4 +1,7 @@
-import { getRequestbyStatus } from '../services/request.service';
+import {
+  getManagerRequestByStatus,
+  getRequestbyStatus,
+} from '../services/request.service';
 import Responses from '../utils/response';
 
 const queryRequestByStatus = async (req, res, next) => {
@@ -9,7 +12,13 @@ const queryRequestByStatus = async (req, res, next) => {
     const status = reqQuery[statusKey];
     const checkStatusExist = ['approved', 'declined', 'open'].includes(status);
     if (checkStatusExist) {
-      const requests = await getRequestbyStatus(status, currentUser.userId);
+      let requests = [];
+      if (currentUser.role === 'requester') {
+        requests = await getRequestbyStatus(status, currentUser.userId);
+      }
+      if (currentUser.role === 'manager') {
+        requests = await getManagerRequestByStatus(status, currentUser.userId);
+      }
       if (requests.length === 0) {
         return Responses.handleError(404, 'No Requests found', res);
       }

@@ -78,7 +78,7 @@ const router = express.Router();
 router.post(
   '/hotels',
   verifyUser,
-  authorize(['travel_administrator', 'super_administrator']),
+  authorize(['travel_administrator', 'suppliers', 'super_administrator']),
   fileService.upload('image'),
   validation,
   catchErrors(hotels.createHotel)
@@ -149,7 +149,7 @@ router.post(
 router.post(
   '/hotels/:hotelId/rooms',
   verifyUser,
-  authorize(['travel_administrator', 'super_administrator']),
+  authorize(['travel_administrator', 'suppliers', 'super_administrator']),
   fileService.upload('image'),
   validation,
   catchErrors(hotels.addRoom),
@@ -412,7 +412,6 @@ router.get(
  */
 router.get(
   '/hotels',
-  verifyUser,
   catchErrors(hotels.getAllHotels)
 );
 
