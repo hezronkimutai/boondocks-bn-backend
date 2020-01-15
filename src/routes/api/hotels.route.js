@@ -412,7 +412,6 @@ router.get(
  */
 router.get(
   '/hotels',
-  verifyUser,
   catchErrors(hotels.getAllHotels)
 );
 
