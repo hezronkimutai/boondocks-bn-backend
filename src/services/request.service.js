@@ -122,6 +122,10 @@ const getManagerRequest = async (userId) => {
             model: db.user,
             attributes: ['lastName', 'firstName'],
           },
+          {
+            model: db.trip,
+            attributes: ['reason'],
+          },
         ],
       }],
   });
@@ -151,6 +155,10 @@ const getManagerRequestByStatus = async (status, userId) => {
           {
             model: db.user,
             attributes: ['lastName', 'firstName'],
+          },
+          {
+            model: db.trip,
+            attributes: ['reason'],
           },
         ],
       }],
