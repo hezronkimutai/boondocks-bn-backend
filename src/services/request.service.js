@@ -117,20 +117,56 @@ const checkUserBelongsToManager = async (lineManagerId, requestId) => {
 const getManagerRequest = async (userId) => {
   const userRequests = await db.user.findAll({
     where: {
-      lineManagerId: userId
+      lineManagerId: userId,
     },
-    include: [{
-      model: db.request,
-      where: {
-        status: 'open'
-      },
-      include: [
-        {
-          model: db.user,
-          attributes: ['lastName', 'firstName'],
-        }
-      ]
-    }]
+    include: [
+      {
+        model: db.request,
+        include: [
+          {
+            model: db.user,
+            attributes: ['lastName', 'firstName'],
+          },
+          {
+            model: db.trip,
+            attributes: ['reason'],
+          },
+        ],
+      }],
+  });
+
+  const requests = [];
+  await userRequests.forEach(user => {
+    requests.push(...user.requests);
+  });
+  if (requests.length === 0) {
+    throw new ErrorHandler('No requests found for Approval', 404);
+  }
+  return requests;
+};
+
+const getManagerRequestByStatus = async (status, userId) => {
+  const userRequests = await db.user.findAll({
+    where: {
+      lineManagerId: userId,
+    },
+    include: [
+      {
+        model: db.request,
+        where: {
+          status,
+        },
+        include: [
+          {
+            model: db.user,
+            attributes: ['lastName', 'firstName'],
+          },
+          {
+            model: db.trip,
+            attributes: ['reason'],
+          },
+        ],
+      }],
   });
 
 
@@ -153,15 +189,9 @@ const updateRequestStatus = async (requestId, status) => {
   if (status === RequestStatuses.APPROVED || status === RequestStatuses.DECLINED) {
     const request = await db.request.update({ status }, {
       where: {
-        id: requestId,
-        status: 'open'
+        id: requestId
       },
     });
-
-    const updatedRequest = request[0] === 0;
-    if (updatedRequest) {
-      throw new ErrorHandler('Request already updated', 409);
-    }
     return request;
   }
 
@@ -345,9 +375,10 @@ export {
   getOneRequest,
   getRequestById,
   getManagerRequest,
+  getManagerRequestByStatus,
   updateRequestStatus,
   checkUserBelongsToManager,
   getSearchedRequests,
   getUserTripsStats,
-  getAllRequestsHotels
+  getAllRequestsHotels,
 };
