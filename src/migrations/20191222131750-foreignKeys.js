@@ -33,6 +33,7 @@ module.exports = {
     queryInterface.addConstraint('trips', ['hotelId'], {
       type: 'FOREIGN KEY',
       name: 'trips_hotelId_fkey',
+      allowNull: true,
       references: {
         table: 'hotels',
         field: 'id',
@@ -63,6 +64,7 @@ module.exports = {
     queryInterface.addConstraint('bookings', ['userId'], {
       type: 'FOREIGN KEY',
       name: 'bookings_userId_fkey',
+      allowNull: true,
       references: {
         table: 'users',
         field: 'id',
@@ -73,6 +75,7 @@ module.exports = {
     queryInterface.addConstraint('bookings', ['hotelId'], {
       type: 'FOREIGN KEY',
       name: 'bookings_hotelId_fkey',
+      allowNull: true,
       references: {
         table: 'hotels',
         field: 'id',
@@ -83,6 +86,7 @@ module.exports = {
     queryInterface.addConstraint('bookings', ['roomId'], {
       type: 'FOREIGN KEY',
       name: 'bookings_roomId_fkey',
+      allowNull: true,
       references: {
         table: 'rooms',
         field: 'id',
@@ -93,6 +97,7 @@ module.exports = {
     queryInterface.addConstraint('bookings', ['tripId'], {
       type: 'FOREIGN KEY',
       name: 'bookings_tripId_fkey',
+      allowNull: true,
       references: {
         table: 'trips',
         field: 'id',

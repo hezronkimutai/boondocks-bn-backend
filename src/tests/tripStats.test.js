@@ -26,7 +26,8 @@ describe('Trip Statistics', () => {
     await userfactory(tripsData.users[2]);
     await userfactory(tripsData.users[3]);
 
-    await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 12, city: 'Kigali', country: 'Rwanda' });
+    await locationfactory({ id: 15, city: 'new city', country: 'country' });
     await hotelfactory(tripsData.hotels[0]);
     await roomfactory(tripsData.rooms[0]);
 

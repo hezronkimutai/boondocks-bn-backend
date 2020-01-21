@@ -1,7 +1,7 @@
 module.exports = {
   up: (queryInterface) => queryInterface.bulkInsert('locations', [{
     country: 'Kenya',
-    city: 'Narobi',
+    city: 'Nairobi',
     createdAt: new Date(),
     updatedAt: new Date()
   },

@@ -12,6 +12,7 @@ class Trip {
    * @returns {object} returns nothing
    */
   async create(data) {
+    let trip;
     const {
       userId,
       hotelId,
@@ -25,29 +26,46 @@ class Trip {
       requestId
     } = data;
 
-    const trip = await db.trip.create({
+    const objWithHotel = {
       userId,
       hotelId,
       type,
       leavingFrom,
       goingTo,
-      requestId,
       travelDate,
       returnDate,
       reason,
-    });
-    rooms.forEach(async (room) => {
-      await bookingService.create({
-        hotelId,
-        userId,
-        room,
-        arrivalDate: travelDate,
-        leavingDate: returnDate,
-        tripId: trip.id
-      });
-      await roomService.changeStatus(room, 'reserved');
-    });
+      rooms,
+      requestId
+    };
 
+    const objNoHotel = {
+      userId,
+      type,
+      leavingFrom,
+      goingTo,
+      travelDate,
+      returnDate,
+      reason,
+      requestId
+    };
+
+    if (!hotelId) {
+      trip = await db.trip.create(objNoHotel);
+    } else {
+      trip = await db.trip.create(objWithHotel);
+      rooms.forEach(async (room) => {
+        await bookingService.create({
+          hotelId,
+          userId,
+          room,
+          arrivalDate: travelDate,
+          leavingDate: returnDate,
+          tripId: trip.id
+        });
+        await roomService.changeStatus(room, 'reserved');
+      });
+    }
     return trip;
   }
 

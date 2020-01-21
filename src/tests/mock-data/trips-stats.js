@@ -35,19 +35,19 @@ export default {
     }],
   trips: [
     {
-      leavingFrom: 'Kigali',
-      goingTo: 'Nairobi',
-      travelDate: '2019-11-18',
+      leavingFrom: 12,
+      goingTo: 15,
+      travelDate: '2020-01-01',
       reason: 'visit our agents',
       hotelId: 1,
-      type: 'return',
+      type: 'one way',
       rooms: [91],
     },
   ],
   hotels: [
     {
       id: 1,
-      locationId: 1,
+      locationId: 12,
       name: 'Marriot',
       image: 'image.png',
       description: 'hello world',

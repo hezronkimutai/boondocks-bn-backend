@@ -55,18 +55,23 @@ const getOneRequest = async (requestId) => {
     },
     include: [{
       model: db.trip,
-      attributes: ['type', 'reason', 'travelDate', 'returnDate', 'createdAt', 'updatedAt'],
+      attributes: ['type', 'reason', 'travelDate', 'returnDate', 'createdAt', 'updatedAt', 'id'],
       include: [{
         model: db.hotel,
-        attributes: ['name'],
+        attributes: ['name', 'id'],
+        include: [
+          { model: db.room,
+            attributes: ['id']
+          }
+        ]
       },
       { model: db.location,
         as: 'going',
-        attributes: ['country', 'city']
+        attributes: ['country', 'city', 'id']
       },
       { model: db.location,
         as: 'leaving',
-        attributes: ['country', 'city']
+        attributes: ['country', 'city', 'id']
       },
       ]
     },

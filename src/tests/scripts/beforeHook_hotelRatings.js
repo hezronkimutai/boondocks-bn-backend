@@ -3,7 +3,7 @@ import { request } from 'chai';
 import app from '../../app';
 import db from '../../models';
 import Bcrypt from '../../utils/hash';
-import updateTripsData from '../mock-data/update-trips-data';
+import updateTripsData from '../mock-data/ratings-trips-data';
 import requestData from '../mock-data/request';
 import truncate from './truncate';
 import { locationfactory } from './factories';
@@ -12,22 +12,21 @@ import tokenizer from '../../utils/jwt';
 const prepareForTest = async () => {
   let manager = '';
   await truncate();
-  await locationfactory({ id: 11, city: 'Kigali', country: 'Rwanda' });
-  await locationfactory({ id: 22, city: 'Nairobi', country: 'Kenya' });
-  await locationfactory({ id: 33, city: 'Kampala', country: 'Uganda' });
-  await locationfactory({ id: 44, city: 'Lagos', country: 'Nigeria' });
-  await locationfactory({ id: 55, city: 'Cairo', country: 'Egypt' });
-  await locationfactory({ id: 66, city: 'Accra', country: 'Ghana' });
+  await locationfactory({ id: 13, city: 'Kigali', country: 'Rwanda' });
+  await locationfactory({ id: 23, city: 'Nairobi', country: 'Kenya' });
+  await locationfactory({ id: 34, city: 'Kampala', country: 'Uganda' });
+  await locationfactory({ id: 43, city: 'Lagos', country: 'Nigeria' });
+  await locationfactory({ id: 53, city: 'Cairo', country: 'Egypt' });
+  await locationfactory({ id: 63, city: 'Accra', country: 'Ghana' });
   const hotelExport = await db.hotel.create(updateTripsData.hotels[0]);
   await db.room.create(updateTripsData.rooms[0]);
   await db.room.create(updateTripsData.rooms[1]);
-  await db.room.create(updateTripsData.rooms[2]);
   manager = await db.user.create(requestData.users[0]);
   const user1 = await db.user.create({
     firstName: 'Trip',
     lastName: 'Owner',
     password: Bcrypt.generateSync('1234567e'),
-    email: 'trip@owner1.com',
+    email: 'trip@owner13.com',
     role: 'requester',
     isVerified: true,
     lineManagerId: manager.id
@@ -39,7 +38,7 @@ const prepareForTest = async () => {
     firstName: 'Random',
     lastName: 'Requester',
     password: Bcrypt.generateSync('1234567e'),
-    email: 'random@requester1.com',
+    email: 'random@requester13.com',
     role: 'requester',
     isVerified: true,
     lineManagerId: manager.id
@@ -47,8 +46,8 @@ const prepareForTest = async () => {
 
   const randomRequesterTokenExport = `Bearer ${await tokenizer.signToken(user2.dataValues)}`;
   const trips3 = { ...updateTripsData.trips[3], hotelId: hotelExport.id };
-
   const prefix = '/api/v1';
+
   let res = await request(app)
     .post(`${prefix}/trips/oneway`)
     .set('Authorization', tripOwnerTokenExport)
@@ -61,7 +60,6 @@ const prepareForTest = async () => {
   };
 
   const tripExport = await db.trip.create(trips2);
-
   const trips6 = { ...updateTripsData.trips[6], hotelId: hotelExport.id };
 
   res = await request(app)
@@ -80,12 +78,24 @@ const prepareForTest = async () => {
     firstName: 'Another',
     lastName: 'User',
     password: Bcrypt.generateSync('1234567e'),
-    email: 'another@user1.com',
+    email: 'another@user13.com',
     role: 'requester',
     lineManagerId: manager.id
   });
 
   const unVerifiedUserTokenExport = `Bearer ${await tokenizer.signToken(user3.dataValues)}`;
+
+  const user4 = await db.user.create({
+    firstName: 'Another2',
+    lastName: 'User2',
+    password: Bcrypt.generateSync('1234567e'),
+    email: 'another2@user13.com',
+    role: 'requester',
+    isVerified: true,
+    lineManagerId: manager.id
+  });
+
+  const nonResidentUserTokenExport = `Bearer ${await tokenizer.signToken(user4.dataValues)}`;
 
   return {
     tripOwnerTokenExport,
@@ -93,7 +103,8 @@ const prepareForTest = async () => {
     tripExport,
     tripExport2,
     hotelExport,
-    unVerifiedUserTokenExport
+    unVerifiedUserTokenExport,
+    nonResidentUserTokenExport
   };
 };
 

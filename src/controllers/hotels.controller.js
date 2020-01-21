@@ -279,6 +279,23 @@ class Hotel {
     const addedFeedback = await addFeeback({ userId, hotelId, feedback });
     return Responses.handleSuccess(201, 'Feedback posted successfully', res, addedFeedback);
   }
+
+  /**
+   * Gets all locations
+   * @param {object} req request
+   * @param {object} res response
+   * @returns {object} response object
+   */
+  async getAllLocations(req, res) {
+    let locations;
+    const withHotels = req.query.with_hotels;
+    if (withHotels && withHotels === 'true') {
+      locations = await hotelService.getLocationsWithHotels();
+    } else {
+      locations = await hotelService.getLocations();
+    }
+    return Responses.handleSuccess(200, 'Locations fetched successfully', res, locations);
+  }
 }
 
 export default new Hotel();

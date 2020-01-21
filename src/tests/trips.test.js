@@ -123,4 +123,29 @@ describe('/trips/{ oneway | return }', () => {
         done();
       });
   });
+
+  it('POST /trips/oneway - should be able to create a new one way trip request without hotel and rooms', (done) => {
+    request(app)
+      .post(`${prefix}/trips/oneway`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(tripsData.trips[7])
+      .end((err, res) => {
+        res.status.should.be.eql(201);
+        const { data } = res.body;
+        data.should.be.an('object');
+        data.should.have.property('type').eql('single');
+        done();
+      });
+  });
+
+  it('POST /trips/oneway - fail to create rooms if rooms is not integer', (done) => {
+    request(app)
+      .post(`${prefix}/trips/oneway`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(tripsData.trips[8])
+      .end((err, res) => {
+        res.status.should.be.eql(400);
+        done();
+      });
+  });
 });

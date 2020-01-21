@@ -57,7 +57,7 @@ export default {
       travelDate: '2019-11-18',
       reason: 'visit our agents',
       hotelId: 1,
-      type: 'return',
+      type: 'one way',
       rooms: [1],
     }
   ]

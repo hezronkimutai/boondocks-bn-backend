@@ -624,4 +624,50 @@ router.get(
   catchErrors(ratings.fetchHotelRating)
 );
 
+
+/**
+ * @swagger
+ *
+ * /location:
+ *  get:
+ *    summary: Gets all locations
+ *    description: Retrieves locations with their hotels and the available rooms
+ *    tags:
+ *      - Accommodation
+ *    produces:
+ *      application/json:
+ *        properties:
+ *          status:
+ *            type: string
+ *          message:
+ *            type: string
+ *          data:
+ *            type: array
+ *            items:
+ *              type: object
+ *              properties:
+ *                id:
+ *                  type: integer
+ *                country:
+ *                  type: string
+ *                city:
+ *                  type: integer
+ *                hotels:
+ *                   type: string
+ *                rooms:
+ *                   type: string
+ *    responses:
+ *      200:
+ *        description: success
+ *      401:
+ *        description: unauthorized
+ *      500:
+ *        description: exception errors
+ */
+router.get(
+  '/location',
+  verifyUser,
+  catchErrors(hotels.getAllLocations)
+);
+
 export default router;
