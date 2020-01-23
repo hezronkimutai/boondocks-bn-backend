@@ -95,6 +95,7 @@ class Trip {
         leavingFrom,
         goingTo,
         travelDate,
+        returnDate,
         reason,
         rooms
       } = travel;
@@ -105,6 +106,7 @@ class Trip {
         leavingFrom,
         goingTo,
         travelDate,
+        returnDate,
         reason,
         rooms,
         requestId,

@@ -112,7 +112,7 @@ const hotelSchema = Joi.object().keys({
 });
 
 const updateTripSchema = Joi.object().keys({
-  hotelId: Joi.number(),
+  hotelId: Joi.number().allow(null, ''),
   type: Joi.string().strict().trim().valid(
     'one way',
     'return'
@@ -121,7 +121,7 @@ const updateTripSchema = Joi.object().keys({
   leavingFrom: Joi.number().strict(),
   goingTo: Joi.number().strict(),
   travelDate: Joi.date(),
-  returnDate: Joi.date().when('type', { is: 'return', then: Joi.required() }),
+  returnDate: Joi.date().when('type', { is: 'return', then: Joi.required() }).allow(null, ''),
   rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value')),
   reason: Joi.string().strict()
 }).options({

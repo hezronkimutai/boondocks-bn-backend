@@ -76,7 +76,12 @@ const getOneRequest = async (requestId) => {
       ]
     },
     {
-      model: db.comment
+      model: db.comment,
+      include: [{
+        model: db.user,
+        as: 'author',
+        attributes: ['firstName', 'lastName']
+      }]
     },
     {
       model: db.user,
