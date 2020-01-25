@@ -28,7 +28,7 @@ describe('Unit tests for user opt-out of email notification', () => {
         type: 'single'
       });
       await db.notification.create({
-        id: 1,
+        id: 39,
         type: 'request_approved_or_rejected',
         isRead: false,
         userId: user.id,
@@ -75,12 +75,41 @@ describe('Unit tests for user opt-out of email notification', () => {
       });
       notificationContoller.cancelNotification(request, response);
     });
+    it('mark one notifications as read', (done) => {
+      const buildResponse = () => httpMocks.createResponse({ eventEmitter: EventEmitter });
+      const response = buildResponse();
+      const request = httpMocks.createRequest({
+        method: 'PATCH',
+        url: '/api/v1/markAsRead/39',
+        params: { id: 39 }
+      });
+      response.locals.user = {
+        userId: user.id,
+        lastName: 'Mastel',
+        firstName: 'Pierrette',
+        email: 'mastel56@gmail.com',
+        password: '123456789876543',
+        isVerified: true,
+        lineManagerId: lineManager.id,
+        receiveNotification: false,
+      };
+      response.on('end', async () => {
+        process.on('unhandledRejection', error => assert.fail('expected', 'actual', error.stack));
+        // eslint-disable-next-line no-underscore-dangle
+        expect(await response._getJSONData()).to.deep.equal({
+          status: 'success',
+          message: 'Notifications marked as read'
+        });
+        return done();
+      });
+      notificationContoller.markOneAsRead(request, response);
+    });
     it('mark all notifications as read', (done) => {
       const buildResponse = () => httpMocks.createResponse({ eventEmitter: EventEmitter });
       const response = buildResponse();
       const request = httpMocks.createRequest({
         method: 'PATCH',
-        url: '/api/v1/markAsReadn',
+        url: '/api/v1/markAsRead',
       });
       response.locals.user = {
         userId: user.id,

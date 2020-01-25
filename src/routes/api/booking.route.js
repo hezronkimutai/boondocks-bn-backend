@@ -76,7 +76,7 @@ router.post(
 router.get(
   '/booking',
   verifyUser,
-  authorize(['travel_administrator', 'requester']),
+  authorize(['travel_administrator', 'requester', 'suppliers']),
   catchErrors(bookings.getBooking)
 );
 

@@ -16,6 +16,7 @@ const prefix = '/api/v1';
 describe('/booking Accomodation booking', () => {
   let token;
   let travelAdmin;
+  let supplierToken;
   before(async () => {
     await truncate();
     await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
@@ -62,6 +63,13 @@ describe('/booking Accomodation booking', () => {
       email: 'john@mccain2.com',
       isVerified: 1,
       role: 'travel_administrator'
+    });
+
+    supplierToken = await tokenizer.signToken({
+      id: 1,
+      email: 'john@mccain2.com',
+      isVerified: 1,
+      role: 'suppliers'
     });
   });
 
@@ -127,7 +135,7 @@ describe('/booking Accomodation booking', () => {
       .get(`${prefix}/booking`)
       .set('Authorization', `Bearer ${travelAdmin}`)
       .end((err, res) => {
-        res.status.should.be.eql(201);
+        res.status.should.be.eql(200);
         done();
       });
   });
@@ -137,7 +145,17 @@ describe('/booking Accomodation booking', () => {
       .get(`${prefix}/booking`)
       .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
-        res.status.should.be.eql(201);
+        res.status.should.be.eql(200);
+        done();
+      });
+  });
+
+  it('GET /booking - Should get all booking for supplier', (done) => {
+    request(app)
+      .get(`${prefix}/booking`)
+      .set('Authorization', `Bearer ${supplierToken}`)
+      .end((err, res) => {
+        res.status.should.be.eql(200);
         done();
       });
   });

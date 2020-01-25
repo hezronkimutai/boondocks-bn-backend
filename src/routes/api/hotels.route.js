@@ -451,6 +451,34 @@ router.post(
   catchErrors(hotels.addedFeedback)
 );
 
+
+/**
+ * @swagger
+ *
+ * /hotels/:hotelId/feedback:
+ *   get:
+ *     tags:
+ *       - Feedback
+ *     summary: Get all feedback
+ *     description: Allows a user to view feedback on accommodation
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - in: params
+ *         name: hotelId
+ *     responses:
+ *       '201':
+ *         description: Feedback retrieved successfully
+ *       '404':
+ *         description: Hotel doesn't exist
+ */
+router.get(
+  '/hotels/:hotelId/feedback',
+  verifyUser,
+  authorize(['requester', 'travel_administrator', 'suppliers']),
+  catchErrors(hotels.getFeedback)
+);
+
 /**
  * @swagger
  *

@@ -40,6 +40,7 @@ class HotelService {
         'street',
         'average_rating',
         'services',
+        'userId',
         'createdAt',
         [Sequelize.literal(`(
             SELECT COUNT(*) FROM likes 
@@ -244,6 +245,34 @@ class HotelService {
   async getLocations() {
     const locations = await db.location.findAll();
     return locations;
+  }
+
+  /**
+   * Get Feedback
+   * @returns {Array} locations
+   */
+  async getFeedback({ userId, travelAdminId, hotelId }) {
+    const whereOptions = userId ? 'WHERE f."userId"=:id' : 'WHERE h."userId"=:id';
+
+    const query = `SELECT u."firstName", u."lastName", f.feedback, f.id
+    FROM feedbacks AS f
+    JOIN hotels as h
+    ON f."hotelId" = h.id 
+    JOIN users as u
+    ON f."userId" = u.id 
+    ${whereOptions}
+    AND f."hotelId"=:hotelId
+    ORDER BY f."createdAt" DESC`;
+
+    return db.sequelize.query(
+      query, {
+        replacements: {
+          id: userId || travelAdminId,
+          hotelId,
+        },
+        type: db.sequelize.QueryTypes.SELECT
+      }
+    );
   }
 }
 

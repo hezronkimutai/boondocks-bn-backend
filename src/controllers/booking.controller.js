@@ -66,7 +66,7 @@ class Bookings {
       ...role === 'travel_administrator' && { travelAdminId: userId },
       ...role === 'suppliers' && { travelAdminId: userId },
     });
-    return Responses.handleSuccess(201, 'Bookings retrieved successfully', res, bookings);
+    return Responses.handleSuccess(200, 'Bookings retrieved successfully', res, bookings);
   }
 }
 
