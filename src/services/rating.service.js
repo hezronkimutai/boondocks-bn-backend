@@ -81,8 +81,22 @@ const getHotelRating = async (params) => {
   return rating;
 };
 
+const getAllHotelRatingsByUser = async (userId) => {
+  const ratings = await db.rating.findAll({
+    where: { userId }
+  });
+  return ratings;
+};
+
+const getAllHotelRatings = async () => {
+  const ratings = await db.rating.findAll();
+  return ratings;
+};
+
 export {
   createRating,
   updateRating,
-  getHotelRating
+  getHotelRating,
+  getAllHotelRatingsByUser,
+  getAllHotelRatings
 };

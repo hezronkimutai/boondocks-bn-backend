@@ -99,4 +99,20 @@ describe(('Hotels rating testing'), () => {
     expect(res.status).eql(200);
     expect(res.body.message).eql('Hotel rating fetched successfully');
   });
+
+  it(('fetches all hotel ratings'), async () => {
+    const res = await request(app)
+      .get(`${prefix}/rating`)
+      .set('Authorization', requesterToken);
+    expect(res.status).eql(200);
+    expect(res.body.message).eql('Hotel ratings fetched successfully');
+  });
+
+  it(('fetches all hotel ratings by a user'), async () => {
+    const res = await request(app)
+      .get(`${prefix}/rating?userId=52`)
+      .set('Authorization', requesterToken);
+    expect(res.status).eql(200);
+    expect(res.body.message).eql('Hotel ratings fetched successfully');
+  });
 });
