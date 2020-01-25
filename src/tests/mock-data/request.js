@@ -9,6 +9,7 @@ const request = {
       email: 'testcase@email.co',
       password: Hash.generateSync('fghtttfht55'),
       role: 'manager',
+      isVerified: true,
     },
     {
       id: 34,

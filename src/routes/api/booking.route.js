@@ -4,6 +4,7 @@ import catchErrors from '../../utils/helper';
 import { verifyUser } from '../../middlewares/checkToken';
 import { validation } from '../../validation/validation';
 import { checkForRooms } from '../../middlewares/roomsAvailability';
+import authorize from '../../middlewares/roleAuthorization';
 
 const router = express.Router();
 
@@ -66,9 +67,17 @@ const router = express.Router();
 router.post(
   '/booking',
   verifyUser,
+  authorize(['requester']),
   validation,
   catchErrors(checkForRooms),
   catchErrors(bookings.book)
+);
+
+router.get(
+  '/booking',
+  verifyUser,
+  authorize(['travel_administrator', 'requester']),
+  catchErrors(bookings.getBooking)
 );
 
 export default router;

@@ -49,7 +49,24 @@ class Bookings {
     const bookedRooms = await Promise.all(bookings);
 
     book.bookedRooms = bookedRooms;
-    return Responses.handleSuccess(201, 'Accomodation successfully booked', res, book);
+    return Responses.handleSuccess(201, 'Accommodation successfully booked', res, book);
+  }
+
+  /**
+     * Retrieves all Bookings
+     *
+     * @param {Object} req request
+     * @param {Object} res response
+     * @returns {Object} response
+     */
+  async getBooking(req, res) {
+    const { userId, role } = res.locals.user;
+    const bookings = await bookingService.getAllBookings({
+      ...role === 'requester' && { userId },
+      ...role === 'travel_administrator' && { travelAdminId: userId },
+      ...role === 'suppliers' && { travelAdminId: userId },
+    });
+    return Responses.handleSuccess(201, 'Bookings retrieved successfully', res, bookings);
   }
 }
 

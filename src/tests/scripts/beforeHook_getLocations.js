@@ -23,6 +23,7 @@ const prepareForTest = async () => {
   await db.room.create(updateTripsData.rooms[1]);
   manager = await db.user.create(requestData.users[0]);
   const user1 = await db.user.create({
+    id: 48,
     firstName: 'Trip',
     lastName: 'Owner',
     password: Bcrypt.generateSync('1234567e'),
@@ -35,6 +36,7 @@ const prepareForTest = async () => {
   const tripOwnerTokenExport = `Bearer ${await tokenizer.signToken(user1.dataValues)}`;
 
   const user2 = await db.user.create({
+    id: 49,
     firstName: 'Random',
     lastName: 'Requester',
     password: Bcrypt.generateSync('1234567e'),
@@ -75,6 +77,7 @@ const prepareForTest = async () => {
   const tripExport2 = await db.trip.create(trips33);
 
   const user3 = await db.user.create({
+    id: 50,
     firstName: 'Another',
     lastName: 'User',
     password: Bcrypt.generateSync('1234567e'),
@@ -86,6 +89,7 @@ const prepareForTest = async () => {
   const unVerifiedUserTokenExport = `Bearer ${await tokenizer.signToken(user3.dataValues)}`;
 
   const user4 = await db.user.create({
+    id: 51,
     firstName: 'Another2',
     lastName: 'User2',
     password: Bcrypt.generateSync('1234567e'),

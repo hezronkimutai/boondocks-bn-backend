@@ -274,15 +274,120 @@ const getSearchedRequests = async (userId, query) => {
   const requests = await db.sequelize.query(
     strQuery, {
       replacements: {
-        tDate: travelDate, rDate: returnDate, userId, enumQueries, searchRegex
+        tDate: travelDate,
+        rDate: returnDate,
+        userId,
+        enumQueries,
+        searchRegex,
       },
-      type: db.sequelize.QueryTypes.SELECT
-    }
+      type: db.sequelize.QueryTypes.SELECT,
+    },
   );
   if (requests.length === 0) {
     throw new ErrorHandler('no matching records found', 404);
   }
+
   return requests;
+};
+
+const getSearchedManagerRequests = async (lineManagerId, query) => {
+  let { searchString } = query;
+  let travelDate, returnDate;
+
+  if (Object.prototype.hasOwnProperty.call(query, 'travelDate') === false) {
+    travelDate = new Date('1970-01-01');
+  } else {
+    travelDate = query.travelDate;
+    ({ travelDate } = query);
+  }
+  if (Object.prototype.hasOwnProperty.call(query, 'returnDate') === false) {
+    returnDate = new Date('9999-12-31');
+  } else {
+    returnDate = query.returnDate;
+    ({ returnDate } = query);
+  }
+
+  searchString = searchString.toLowerCase();
+  const searchArray = searchString.split(' ');
+  const statusEnums = ['open', 'approved', 'declined'];
+  let enumQueries = [];
+
+  searchArray.forEach((string) => {
+    if (statusEnums.includes(string)) {
+      enumQueries.push(string);
+    }
+  });
+
+  const otherSearchParams = [];
+  searchArray.forEach((string) => {
+    if (statusEnums.includes(string) === false) {
+      otherSearchParams.push(string);
+    }
+  });
+
+  if (enumQueries.length === 0) {
+    enumQueries = ['open', 'approved', 'declined'];
+  }
+
+  let searchRegex = [];
+  let strQuery = `SELECT * FROM requests AS r
+    JOIN trips AS t
+    ON r."id" = t."requestId"
+    JOIN locations AS l
+    ON t."leavingFrom"=l."id"
+    JOIN locations AS b
+    ON t."goingTo"=b."id"
+    LEFT JOIN users AS u
+    ON r."userId"=u."id"
+    WHERE u."lineManagerId"=:lineManagerId
+    AND t."travelDate" BETWEEN :tDate AND :rDate
+    AND r."status" IN(:enumQueries)`;
+
+  if (otherSearchParams.length > 0) {
+    otherSearchParams.forEach((searchItem) => {
+      searchRegex.push(searchItem);
+    });
+
+    searchRegex = searchRegex.join('|');
+    searchRegex = `%(${searchRegex})%`;
+
+    strQuery = `${strQuery}
+    AND (
+      lower(l."city") SIMILAR TO :searchRegex
+      OR lower(l."country") SIMILAR TO :searchRegex
+      OR lower(b."city") SIMILAR TO :searchRegex
+      OR lower(b."country") SIMILAR TO :searchRegex
+      OR lower(u."firstName") SIMILAR TO :searchRegex
+      OR lower(u."lastName") SIMILAR TO :searchRegex
+    )`;
+  }
+
+  const requests = await db.sequelize.query(strQuery, {
+    replacements: {
+      tDate: travelDate,
+      rDate: returnDate,
+      lineManagerId,
+      enumQueries,
+      searchRegex,
+    },
+    type: db.sequelize.QueryTypes.SELECT,
+  });
+  if (requests.length === 0) {
+    throw new ErrorHandler('no matching records found', 404);
+  }
+
+  return requests.map(({
+    id, status, type, createdAt, updatedAt, reason, firstName, lastName,
+  }) => ({
+    id,
+    status,
+    type,
+    createdAt,
+    updatedAt,
+    reason,
+    firstName,
+    lastName,
+  }));
 };
 
 const getUserTripsStats = async ({ user, fromDate, req }) => {
@@ -386,4 +491,5 @@ export {
   getSearchedRequests,
   getUserTripsStats,
   getAllRequestsHotels,
+  getSearchedManagerRequests,
 };

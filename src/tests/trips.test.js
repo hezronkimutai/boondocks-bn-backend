@@ -29,6 +29,7 @@ describe('/trips/{ oneway | return }', () => {
     await roomfactory(tripsData.rooms[1]);
     await roomfactory(tripsData.rooms[2]);
     await roomfactory(tripsData.rooms[3]);
+    await roomfactory(tripsData.rooms[4]);
 
     manager = await userfactory(requestData.users[0]);
     await userfactory({

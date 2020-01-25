@@ -31,7 +31,8 @@ const checkHasStayedAtHotel = async (req, res, next) => {
   const { hotelId } = req.params;
   const { userId } = res.locals.user;
 
-  const hasStayedAtHotel = await db.trip.findAll({
+  const hasStayedAtHotel = await db.booking.findAll({
+
     where: { hotelId, userId }
   });
 
