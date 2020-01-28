@@ -20,7 +20,8 @@ const createRating = async (params) => {
   const rates = await db.rating.findAll({
     attributes: ['hotelId', [db.sequelize.fn('AVG', db.sequelize.col('rating')), 'ratingAVG']],
     group: 'hotelId',
-    order: [[db.sequelize.fn('AVG', db.sequelize.col('rating')), 'DESC']]
+    order: [[db.sequelize.fn('AVG', db.sequelize.col('rating')), 'DESC']],
+    where: { hotelId }
   });
 
   await db.hotel.update(
@@ -53,10 +54,13 @@ const updateRating = async (params) => {
     }
   );
 
+  const { hotelId } = userRating[1][0].dataValues;
+
   const rates = await db.rating.findAll({
     attributes: ['hotelId', [db.sequelize.fn('AVG', db.sequelize.col('rating')), 'ratingAVG']],
     group: 'hotelId',
-    order: [[db.sequelize.fn('AVG', db.sequelize.col('rating')), 'DESC']]
+    order: [[db.sequelize.fn('AVG', db.sequelize.col('rating')), 'DESC']],
+    where: { hotelId }
   });
 
   await db.hotel.update(
