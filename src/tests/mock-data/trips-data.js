@@ -172,7 +172,7 @@ export default {
     name: 'Marriot',
     image: 'image.png',
     description: 'hello world',
-    services: 'Catering'
+    services: 'Catering',
   },
   {
     locationId: 1,

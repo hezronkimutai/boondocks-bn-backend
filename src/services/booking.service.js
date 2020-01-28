@@ -37,6 +37,35 @@ class BookingService {
 
     return booking;
   }
+
+  // eslint-disable-next-line require-jsdoc
+  async getAllBookings({ userId, travelAdminId }) {
+    const whereOptions = userId ? 'WHERE b."userId"=:id' : 'WHERE h."userId"=:id';
+
+    const query = `SELECT b.id, r.id as "roomId", 
+    r.status as "roomStatus", u."firstName", u."lastName", 
+    b."arrivalDate", b."leavingDate", b."createdAt", 
+    h.name as hotel, r.name as room, h.id as "hotelId"
+    FROM bookings AS b
+    JOIN  users AS u
+    ON u."id" = b."userId"
+    JOIN rooms AS r
+    ON r."id"=b."roomId"
+    JOIN hotels AS h
+    ON h."id" = r."hotelId" 
+    ${whereOptions}
+    ORDER BY b."createdAt" DESC
+    `;
+
+    return db.sequelize.query(
+      query, {
+        replacements: {
+          id: userId || travelAdminId
+        },
+        type: db.sequelize.QueryTypes.SELECT
+      }
+    );
+  }
 }
 
 export default new BookingService();

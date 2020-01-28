@@ -15,6 +15,7 @@ const prefix = '/api/v1';
 
 describe('/booking Accomodation booking', () => {
   let token;
+  let travelAdmin;
   before(async () => {
     await truncate();
     await locationfactory({ id: 1, city: 'Kigali', country: 'Rwanda' });
@@ -22,16 +23,45 @@ describe('/booking Accomodation booking', () => {
     await roomfactory(tripsData.rooms[0]);
     await roomfactory(tripsData.rooms[3]);
     await roomfactory(tripsData.rooms[2]);
+
     await db.user.create({
+      id: 1,
       firstName: 'John',
       lastName: 'McCain',
       password: Hash.generateSync('1234567e'),
       email: 'john@mccain.com'
     });
+
+    await hotelfactory({
+      id: 10,
+      locationId: 1,
+      name: 'Marriot',
+      image: 'image.png',
+      description: 'hello world',
+      services: 'Catering',
+      userId: 1,
+    });
+
     token = await tokenizer.signToken({
       id: 1,
       email: 'john@mccain.com',
       isVerified: 1
+    });
+
+    await db.user.create({
+      id: 65,
+      firstName: 'John',
+      lastName: 'McCain',
+      password: Hash.generateSync('1234567e'),
+      email: 'john@mccain2.com',
+      role: 'travel_administrator'
+    });
+
+    travelAdmin = await tokenizer.signToken({
+      id: 1,
+      email: 'john@mccain2.com',
+      isVerified: 1,
+      role: 'travel_administrator'
     });
   });
 
@@ -88,6 +118,26 @@ describe('/booking Accomodation booking', () => {
       .send(tripsData.booking[4])
       .end((err, res) => {
         res.status.should.be.eql(409);
+        done();
+      });
+  });
+
+  it('GET /booking - Should get all booking for travel admin', (done) => {
+    request(app)
+      .get(`${prefix}/booking`)
+      .set('Authorization', `Bearer ${travelAdmin}`)
+      .end((err, res) => {
+        res.status.should.be.eql(201);
+        done();
+      });
+  });
+
+  it('GET /booking - Should get all booking for user', (done) => {
+    request(app)
+      .get(`${prefix}/booking`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        res.status.should.be.eql(201);
         done();
       });
   });

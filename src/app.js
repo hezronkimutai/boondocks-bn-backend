@@ -69,7 +69,7 @@ app.use((err, req, res, next) => {
   logger.error(`${err.statusCode || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${
     req.ip
   } - Stack: ${err.stack}`);
-  return Responses.handleError(err.statusCode || 500, `${err.message} - check logs for more info`, res);
+  return Responses.handleError(err.statusCode || 500, `${err.message}.`, res);
 });
 
 // Production and testing error handler middleware

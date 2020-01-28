@@ -8,6 +8,7 @@ import truncate from './truncate';
 const prepareForTest = async () => {
   await truncate();
   await db.user.create({
+    id: 56,
     firstName: 'Super',
     lastName: 'Administrator',
     password: Bcrypt.generateSync('1234567e'),
@@ -22,6 +23,7 @@ const prepareForTest = async () => {
     });
   const superAdministratorTokenExport = `Bearer ${res.body.data.token}`;
   await db.user.create({
+    id: 57,
     firstName: 'Random',
     lastName: 'Requester',
     password: Bcrypt.generateSync('1234567e'),

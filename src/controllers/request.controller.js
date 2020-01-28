@@ -1,10 +1,11 @@
 import Responses from '../utils/response';
 import {
   getAllRequest,
-  getOneRequest,
-  updateRequestStatus,
   getManagerRequest,
-  getSearchedRequests
+  getOneRequest,
+  getSearchedManagerRequests,
+  getSearchedRequests,
+  updateRequestStatus,
 } from '../services/request.service';
 import NotificationService from '../services/notification.service';
 import NotificationUtil from '../utils/notification.util';
@@ -85,8 +86,15 @@ class Requests {
    * @returns {object} successful fetched the requests
    */
   async searchRequests(req, res) {
+    let requests;
     const currentUser = res.locals.user;
-    const requests = await getSearchedRequests(currentUser.userId, req.query);
+    const { byLineManager } = req.query;
+    if (byLineManager && byLineManager === 'true') {
+      requests = await getSearchedManagerRequests(currentUser.userId, req.query);
+    } else {
+      requests = await getSearchedRequests(currentUser.userId, req.query);
+    }
+
     return Responses.handleSuccess(200, 'successfully retrieved search results', res, requests);
   }
 }

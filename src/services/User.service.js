@@ -42,6 +42,7 @@ class UserServices {
           'lastLogin',
           'role',
           'phoneNumber',
+          'remember'
         ],
         include: ['LineManager'],
       },
@@ -59,8 +60,9 @@ class UserServices {
   async updateUserInfoByEmail(attributes, email$) {
     const {
       firstName, lastName, email, birthDate, preferredLanguage, preferredCurrency, residenceAddress,
-      gender, department, lineManagerId, phoneNumber
+      gender, department, lineManagerId, phoneNumber, remember,
     } = attributes;
+
 
     const currentUserId = (await db.user.findOne({
       where: { email: email$ },
@@ -93,6 +95,7 @@ class UserServices {
           lineManagerId,
           department,
           phoneNumber,
+          remember,
         },
         {
           where: { email: email$ },

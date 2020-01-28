@@ -52,7 +52,7 @@ const bookingSchema = Joi.object().keys({
   hotelId: Joi.required(),
   arrivalDate: Joi.date().iso().min(date.toISOString()),
   leavingDate: Joi.date().iso().greater(Joi.ref('arrivalDate')).required(),
-  rooms: Joi.required()
+  rooms: Joi.required(),
 }).options({
   abortEarly: false,
   language: {
@@ -73,7 +73,8 @@ const updateUserInfoSchema = Joi.object().keys({
   gender: Joi.string().strict().trim(),
   department: Joi.string().strict().trim(),
   lineManagerId: Joi.number().min(1),
-  phoneNumber: Joi.string().regex(/^[().+\d -]{1,15}$/)
+  phoneNumber: Joi.string().regex(/^[().+\d -]{1,15}$/),
+  remember: Joi.bool(),
 }).options({
   abortEarly: false,
   language: {
@@ -115,15 +116,20 @@ const updateTripSchema = Joi.object().keys({
   hotelId: Joi.number().allow(null, ''),
   type: Joi.string().strict().trim().valid(
     'one way',
-    'return'
+    'return',
   )
     .required(),
   leavingFrom: Joi.number().strict(),
   goingTo: Joi.number().strict(),
   travelDate: Joi.date(),
-  returnDate: Joi.date().when('type', { is: 'return', then: Joi.required() }).allow(null, ''),
-  rooms: Joi.array().items(Joi.number().error(() => 'rooms must be an integer value')),
-  reason: Joi.string().strict()
+  returnDate: Joi.date()
+    .when('type', {
+      is: 'return',
+      then: Joi.required(),
+    }).allow(null, ''),
+  rooms: Joi.array()
+    .items(Joi.number().error(() => 'rooms must be an integer value')),
+  reason: Joi.string().strict(),
 }).options({
   abortEarly: false,
   language: {
@@ -153,7 +159,8 @@ const roleSchema = Joi.object().keys({
     'travel_administrator',
     'travel_team_member',
     'manager',
-    'requester'
+    'requester',
+    'suppliers',
   )
     .required(),
 }).options({
@@ -193,6 +200,7 @@ const searchRequestsSchema = Joi.object().keys({
   travelDate: Joi.date(),
   returnDate: Joi.date(),
   searchString: Joi.string().strict().trim().required(),
+  byLineManager: Joi.string().strict().trim(),
 }).options({
   abortEarly: false,
   language: {

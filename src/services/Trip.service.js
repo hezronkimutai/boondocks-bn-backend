@@ -54,16 +54,16 @@ class Trip {
       trip = await db.trip.create(objNoHotel);
     } else {
       trip = await db.trip.create(objWithHotel);
-      rooms.forEach(async (room) => {
+      rooms.forEach(async (roomId) => {
         await bookingService.create({
           hotelId,
           userId,
-          room,
+          roomId,
           arrivalDate: travelDate,
           leavingDate: returnDate,
           tripId: trip.id
         });
-        await roomService.changeStatus(room, 'reserved');
+        await roomService.changeStatus(roomId, 'reserved');
       });
     }
     return trip;
