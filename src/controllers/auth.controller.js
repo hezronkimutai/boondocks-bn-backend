@@ -9,10 +9,11 @@ export const getTokenAfterSignIn = async (res, user) => {
   const userDetails = user.dataValues;
   const token = await JWTToken.signToken(userDetails);
   const cookieOptions = {
+    expires: new Date(Date.now() + 86400),
+    secure: false,
     httpOnly: false,
-    maxAge: new Date(Date.now() + 86400),
   };
-  return res.status(200)
+  return res.status(201)
     .cookie('bn_auth_token', token, cookieOptions)
     .redirect(`${process.env.FRONTEND_URL}/profile`);
 };
