@@ -18,6 +18,7 @@ describe('/hotels', () => {
   let token = '';
   let requesterToken = '';
   let notOwnerToken = '';
+  let supplierToken = '';
 
   before(async () => {
     await truncate();
@@ -45,6 +46,15 @@ describe('/hotels', () => {
       password: Hash.generateSync('1234567e'),
       email: 'john@mccain00.com',
       role: 'travel_administrator'
+    });
+
+    await db.user.create({
+      id: 4,
+      firstName: 'John',
+      lastName: 'McCain',
+      password: Hash.generateSync('1234567e'),
+      email: 'john@mccain000.com',
+      role: 'suppliers'
     });
 
     await locationfactory({
@@ -82,6 +92,17 @@ describe('/hotels', () => {
       userId: 1
     });
 
+    await hotelfactory({
+      id: 84,
+      locationId: 80,
+      name: 'Test hotel1',
+      image: '',
+      street: 'kk 127',
+      description: 'best ever hotel',
+      services: 'service 1, service 2',
+      userId: 4
+    });
+
     await likesfactory({ userId: 1, hotelId: 83, liked: 1 });
 
     token = await tokenizer.signToken({
@@ -102,6 +123,13 @@ describe('/hotels', () => {
       email: 'john@mccain00.com',
       isVerified: 1,
       role: 'travel_administrator'
+    });
+
+    supplierToken = await tokenizer.signToken({
+      id: 4,
+      email: 'john@mccain000.com',
+      isVerified: 1,
+      role: 'suppliers'
     });
   });
 
@@ -285,7 +313,7 @@ describe('/hotels', () => {
 
   it('PATCH hotels/:hotelId/like - user should not be able to like a hotel which doesn\'t exist', (done) => {
     request(app)
-      .patch(`${prefix}/hotels/84/like`)
+      .patch(`${prefix}/hotels/85/like`)
       .set('Authorization', `Bearer ${token}`)
       .end((err, res) => {
         res.status.should.be.eql(400);
@@ -313,6 +341,36 @@ describe('/hotels', () => {
         res.status.should.be.eql(200);
         const { data } = res.body;
         expect(data.unLikesCount).to.eql('0');
+        done();
+      });
+  });
+
+  it('GET /hotels/:hotelId/feedback - Should get all hotel feedback for travel admin', (done) => {
+    request(app)
+      .get(`${prefix}/hotels/82/feedback`)
+      .set('Authorization', `Bearer ${token}`)
+      .end((err, res) => {
+        res.status.should.be.eql(200);
+        done();
+      });
+  });
+
+  it('GET /hotels/:hotelId/feedback - Should get all hotel feedback for requester', (done) => {
+    request(app)
+      .get(`${prefix}/hotels/82/feedback`)
+      .set('Authorization', `Bearer ${requesterToken}`)
+      .end((err, res) => {
+        res.status.should.be.eql(200);
+        done();
+      });
+  });
+
+  it('GET /hotels/:hotelId/feedback - Should get all hotel feedback for supplier', (done) => {
+    request(app)
+      .get(`${prefix}/hotels/82/feedback`)
+      .set('Authorization', `Bearer ${supplierToken}`)
+      .end((err, res) => {
+        res.status.should.be.eql(200);
         done();
       });
   });

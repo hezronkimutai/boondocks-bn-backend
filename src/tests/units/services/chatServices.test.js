@@ -78,7 +78,7 @@ describe('Chat testing', () => {
 
     it('should emmit connected user', (done) => {
       socket.once('connected_user', (message) => {
-        expect(message).equal(`${user.firstName} ${user.lastName}`);
+        expect(message).equal(`${user.firstName}`);
         done();
       });
     });
@@ -89,16 +89,6 @@ describe('Chat testing', () => {
       });
       socket.once('getting', (data) => {
         expect(data.messages).to.be.an('array');
-        done();
-      });
-    });
-
-    it('online clients should be able to view typing users', (done) => {
-      socket.once('connection', () => {
-        socket.emit('typing');
-      });
-      socket1.once('typing', (data) => {
-        expect(data.username).equal(`${user.firstName} ${user.lastName}`);
         done();
       });
     });

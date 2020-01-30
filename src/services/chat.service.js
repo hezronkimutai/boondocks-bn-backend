@@ -35,7 +35,7 @@ const createNewMessage = async (io, socket, data, user) => {
       message: data.message,
       userId: user.id
     });
-    io.sockets.emit('new_message', { message: data.message, username: socket.username, timestamp: message.createdAt });
+    io.sockets.emit('new_message', { id: message.id, message: data.message, userId: user.id, username: socket.username, timestamp: message.createdAt });
   } catch (error) {
     socket.emit('custom_error', 'Try to resend your message again');
   }
@@ -48,7 +48,7 @@ const chat = async (io) => {
 
 
     if (user) {
-      socket.username = `${user.firstName} ${user.lastName}`;
+      socket.username = `${user.firstName}`;
       socket.emit('connected_user', socket.username);
 
       socket.on('get_messages', async () => {
@@ -57,10 +57,6 @@ const chat = async (io) => {
 
       socket.on('new_message', async (data) => {
         await createNewMessage(io, socket, data, user);
-      });
-
-      socket.on('typing', () => {
-        socket.broadcast.emit('typing', { username: socket.username });
       });
     } else {
       socket.emit('authentication_error', 'please login again');

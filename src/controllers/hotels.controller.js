@@ -280,6 +280,27 @@ class Hotel {
     return Responses.handleSuccess(201, 'Feedback posted successfully', res, addedFeedback);
   }
 
+
+  /**
+   * Get all feedback
+   * @param {object} req request
+   * @param {object} res response
+   * @returns {object} response object
+   */
+  async getFeedback(req, res) {
+    const { hotelId } = req.params;
+    const { userId, role } = res.locals.user;
+
+    const feedback = await hotelService.getFeedback({
+      ...role === 'requester' && { userId },
+      ...role === 'travel_administrator' && { travelAdminId: userId },
+      ...role === 'suppliers' && { travelAdminId: userId },
+      hotelId,
+    });
+
+    return Responses.handleSuccess(200, 'Feedback retrieved successfully', res, feedback);
+  }
+
   /**
    * Gets all locations
    * @param {object} req request

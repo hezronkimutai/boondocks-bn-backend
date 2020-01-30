@@ -105,5 +105,34 @@ route.get('/notification', verifyUser, catchErrors(notification.userNotification
  *        description: all notification marked as read
  */
 route.patch('/markAsRead', verifyUser, catchErrors(notification.markAllAsRead));
+/**
+ * @swagger
+ *
+ * /auth/markAsRead:
+ *  patch:
+ *    tags:
+ *      - Notifications
+ *    summary: User should be able to mark one notifications as read
+ *    produces:
+ *      application/json:
+ *        schema:
+ *          type: object
+ *          properties:
+ *            status:
+ *              type: string
+ *            message:
+ *              type: string
+ *    parameters:
+ *      - in: query
+ *        name: token
+ *        description: user's token for verification
+ *        type: string
+ *    responses:
+ *      '403':
+ *        description: invalid token
+ *      '200':
+ *        description: all notification marked as read
+ */
+route.patch('/markAsRead/:id', verifyUser, catchErrors(notification.markOneAsRead));
 
 export default route;
