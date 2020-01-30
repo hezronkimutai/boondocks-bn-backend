@@ -1,5 +1,11 @@
 import Responses from '../utils/response';
-import { createRating, updateRating, getHotelRating } from '../services/rating.service';
+import {
+  createRating,
+  updateRating,
+  getHotelRating,
+  getAllHotelRatingsByUser,
+  getAllHotelRatings
+} from '../services/rating.service';
 
 /**
  * Class Ratings
@@ -50,6 +56,22 @@ class Ratings {
     };
     const rating = await getHotelRating(params);
     return Responses.handleSuccess(200, 'Hotel rating fetched successfully', res, rating);
+  }
+
+  /**
+   * @param {*} req
+   * @param {*} res
+   * @returns {object} successfully update a hotel rating
+   */
+  async fetchAllHotelRatings(req, res) {
+    let ratings;
+    const userId = Number(req.query.userId);
+    if (userId && userId > 0) {
+      ratings = await getAllHotelRatingsByUser(userId);
+    } else {
+      ratings = await getAllHotelRatings();
+    }
+    return Responses.handleSuccess(200, 'Hotel ratings fetched successfully', res, ratings);
   }
 }
 

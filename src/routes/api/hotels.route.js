@@ -656,6 +656,49 @@ router.get(
 /**
  * @swagger
  *
+ * /rating/:ratingId:
+ *   get:
+ *     summary: Get all hotel ratings
+ *     description: This allows us to fetch all hotel ratings posted by users
+ *     tags:
+ *       - Accommodation
+ *     produces:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *               message:
+ *                 type: string
+ *               data:
+ *                 type: array
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   hotelId:
+ *                     type: string
+ *                   userId:
+ *                     type: string
+ *                   rating:
+ *                     type: string
+ *                   createdAt:
+ *                     type: string
+ *                   updatedAt:
+ *                     type: string
+ *     responses:
+ *       200:
+ *         description: Hotel ratings fetched successfully
+ */
+router.get(
+  '/rating',
+  verifyUser,
+  catchErrors(ratings.fetchAllHotelRatings)
+);
+
+/**
+ * @swagger
+ *
  * /location:
  *  get:
  *    summary: Gets all locations

@@ -16,8 +16,8 @@
     ]
   },
   "scripts": {
-    "test": "NODE_ENV=test nyc mocha -r dotenv/config  --require @babel/register \"./src/tests/**/*.js\"   --timeout 150000 --exit",
-    "pretest-travis": "NODE_ENV=test npm run migrate:undo && NODE_ENV=test  npm run migrate",
+    "test": "NODE_ENV=test nyc mocha -r dotenv/config --require @babel/register \"./src/tests/**/*.js\" --timeout 150000 --exit",
+    "pretest-travis": "NODE_ENV=test npm run migrate:undo && NODE_ENV=test npm run migrate",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "start": "node -r dotenv/config dist/app.js",
     "migrate": "babel-node ./src/scripts/migrate",
