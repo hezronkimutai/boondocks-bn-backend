@@ -37,9 +37,25 @@ const prepareForTest = async () => {
       password: '1234567e'
     });
   const requesterTokenExport = `Bearer ${res2.body.data.token}`;
+  await db.user.create({
+    id: 673,
+    firstName: 'Lin',
+    lastName: 'Managr',
+    password: Bcrypt.generateSync('1234567e'),
+    email: 'line@manager123.com',
+    role: 'manager'
+  });
+  const res3 = await request(app)
+    .post('/api/v1/auth/signin')
+    .send({
+      email: 'line@manager123.com',
+      password: '1234567e'
+    });
+  const managerTokenExport = `Bearer ${res3.body.data.token}`;
   return {
     superAdministratorTokenExport,
-    requesterTokenExport
+    requesterTokenExport,
+    managerTokenExport
   };
 };
 export default prepareForTest;

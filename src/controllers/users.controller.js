@@ -260,6 +260,25 @@ class UserController {
     const allUsers = await db.user.findAll(options);
     return Responses.handleSuccess(200, 'successfully retrieved all users', res, allUsers);
   }
+
+  /**
+   *function get users for the line manager
+   * @param {object} req
+   * @param {object} res
+   * @param {function} next
+   * @returns {object} responses
+   */
+  async fetchAllManagerUsers(req, res) {
+    const { userId } = res.locals.user;
+
+    const options = {
+      attributes: { exclude: ['password', 'receiveNotification', 'lastLogin', 'isVerified'] },
+      where: { lineManagerId: userId }
+    };
+
+    const allUsers = await db.user.findAll(options);
+    return Responses.handleSuccess(200, 'successfully retrieved all users', res, allUsers);
+  }
 }
 
 export default new UserController();

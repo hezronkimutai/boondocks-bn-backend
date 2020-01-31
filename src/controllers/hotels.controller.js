@@ -220,7 +220,11 @@ class Hotel {
     const requestsTrips = await getAllRequestsHotels();
 
     if (!requestsTrips.length) {
-      return Responses.handleError(404, 'There is no past travel yet.', res);
+      return Responses.handleSuccess(
+        200,
+        'Most travelled destinations listed successfully',
+        res, { results: [] },
+      );
     }
 
     const counter = {};
@@ -231,6 +235,10 @@ class Hotel {
     }
 
     for (let i = 0; i < trips.length; i += 1) {
+      if (!trips[i].hotel) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
       const el = trips[i].hotel.id;
 
       if (counter[el] === undefined) {

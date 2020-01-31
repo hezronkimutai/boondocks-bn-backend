@@ -34,7 +34,7 @@ describe('Most travel destinations', () => {
           .get(`${prefix}/hotels/most-travelled`)
           .set('Authorization', `Bearer ${userToken}`)
           .end((err, res) => {
-            expect(res.status).to.eq(404);
+            expect(res.status).to.eq(200);
             done(err);
           });
       },

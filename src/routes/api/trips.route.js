@@ -1,6 +1,6 @@
 import express from 'express';
 import trips from '../../controllers/trips.controller';
-import { validateMultiCity, validation } from '../../validation/validation';
+import { validateMultiCity, validation, validateSearch } from '../../validation/validation';
 import {
   checkForMultiCityRooms,
   checkForRooms,
@@ -390,10 +390,10 @@ router.patch(
  *       401:
  *         description: Not authorized
  */
-router.post(
+router.get(
   '/trips/stats',
   verifyUser,
-  validation,
+  validateSearch,
   catchErrors(trips.statistics)
 );
 

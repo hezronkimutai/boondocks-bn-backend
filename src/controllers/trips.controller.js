@@ -207,7 +207,7 @@ class Trip {
    */
   async statistics(req, res) {
     const { user } = res.locals;
-    const { fromDate } = req.body;
+    const { fromDate } = req.query;
     const params = {
       user,
       fromDate,
@@ -217,7 +217,7 @@ class Trip {
     const trips = data.map(d => d.trips).flat();
     return Responses
       .handleSuccess(200, 'Trip Statistics Successfully retrieved', res, {
-        total: data.length,
+        total: trips.length,
         trips,
       });
   }

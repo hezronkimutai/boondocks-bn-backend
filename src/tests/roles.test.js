@@ -10,18 +10,27 @@ use(chaiHttp);
 const prefix = '/api/v1';
 const invalidToken = 'invalidToken';
 let superAdministratorToken;
-let requesterToken;
+let requesterToken, managerToken;
 
 describe('/GET /auth/users', () => {
   before(async () => {
     const tokens = await prepareForTest();
     superAdministratorToken = tokens.superAdministratorTokenExport;
     requesterToken = tokens.requesterTokenExport;
+    managerToken = tokens.managerTokenExport;
   });
   it('successfully returns all users if requested by super_administrator', async () => {
     const res = await request(app)
       .get(`${prefix}/auth/users`)
       .set('Authorization', superAdministratorToken);
+    expect(res.status).eql(200);
+    expect(res.body.message).eql('successfully retrieved all users');
+  });
+
+  it('successfully returns all users if requested by manager', async () => {
+    const res = await request(app)
+      .get(`${prefix}/auth/manager/users`)
+      .set('Authorization', managerToken);
     expect(res.status).eql(200);
     expect(res.body.message).eql('successfully retrieved all users');
   });

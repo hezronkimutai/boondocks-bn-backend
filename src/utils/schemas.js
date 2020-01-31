@@ -210,8 +210,8 @@ const searchRequestsSchema = Joi.object().keys({
 
 const tripsStatsSchema = Joi.object()
   .keys({
-    fromDate: Joi.date().required(),
-    userId: Joi.number().optional()
+    fromDate: Joi.date().optional().allow(null, ''),
+    userId: Joi.number().optional().allow(null, ''),
   })
   .options({
     abortEarly: false,
