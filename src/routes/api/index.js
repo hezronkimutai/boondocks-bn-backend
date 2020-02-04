@@ -13,23 +13,22 @@ import notificationRouter from './notifications.route';
 import bookingRouter from './booking.route';
 
 const specs = swaggerJsdoc(swaggerDefinition);
-
 const router = express.Router();
 const prefix = '/api/v1';
-
-router.use('/api/docs', serve);
-router.use('/api/docs', setup(specs, {
+const apiDocs = '/api/docs';
+const specsConfig = setup(specs, {
   explorer: false,
   customeSiteTitle: 'Barefoot Nomad API'
-}));
+});
 
+router.use(apiDocs, serve);
+router.use(apiDocs, specsConfig);
 router.use(prefix, usersRouter);
 router.use(prefix, rolesRouter);
 router.use(prefix, authRouter);
 router.use(prefix, tripsRouter);
 router.use(prefix, requestRouter);
 router.use(prefix, commentsRouter);
-
 router.use(prefix, hotelsRouter);
 router.use(prefix, notificationRouter);
 router.use(prefix, bookingRouter);

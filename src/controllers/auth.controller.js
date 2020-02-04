@@ -2,21 +2,14 @@
 /* eslint-disable camelcase */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-unused-vars */
-import db from '../models';
-import JWTToken from '../utils/jwt';
+import db from '../models'
+import JWTToken from '../utils/jwt'
 
 export const getTokenAfterSignIn = async (res, user) => {
-  const userDetails = user.dataValues;
-  const token = await JWTToken.signToken(userDetails);
-  const cookieOptions = {
-    expires: new Date(Date.now() + 86400),
-    secure: false,
-    httpOnly: false,
-  };
-  return res.status(201)
-    .cookie('bn_auth_token', token, cookieOptions)
-    .redirect(`${process.env.FRONTEND_URL}/profile`);
-};
+  const userDetails = user.dataValues
+  const token = await JWTToken.signToken(userDetails)
+  return res.redirect(`${process.env.FRONTEND_URL}/profile?token=${token}`);
+}
 
 /** Auth Class */
 class AuthController {

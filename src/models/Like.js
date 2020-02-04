@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Like.associate = (models) => {
     Like.belongsTo(models.hotel, {
-      foreignkey: 'hotelId',
+      foreignKey: 'hotelId',
       onDelete: 'CASCADE'
     });
 
     Like.belongsTo(models.user, {
-      foreignkey: 'userId',
+      foreignKey: 'userId',
       onDelete: 'CASCADE'
     });
   };

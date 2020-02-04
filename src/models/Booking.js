@@ -10,22 +10,22 @@ module.exports = (sequelize, DataTypes) => {
   Booking.associate = (models) => {
     Booking.belongsTo(models.user, {
       allowNull: true,
-      foreignkey: 'userId',
+      foreignKey: 'userId',
       onDelete: 'CASCADE'
     });
     Booking.belongsTo(models.hotel, {
       allowNull: true,
-      foreignkey: 'hotelId',
+      foreignKey: 'hotelId',
       onDelete: 'CASCADE'
     });
     Booking.belongsTo(models.room, {
       allowNull: true,
-      foreignkey: 'roomId',
+      foreignKey: 'roomId',
       onDelete: 'CASCADE'
     });
     Booking.belongsTo(models.trip, {
       allowNull: true,
-      foreignkey: 'tripId',
+      foreignKey: 'tripId',
       onDelete: 'CASCADE'
     });
   };
