@@ -217,9 +217,9 @@ class Hotel {
    */
   async getMostVisitedDestination(req, res) {
     const results = [];
-    const requestsTrips = await getAllRequestsHotels();
+    const bookings = await getAllRequestsHotels();
 
-    if (!requestsTrips.length) {
+    if (!bookings.length) {
       return Responses.handleSuccess(
         200,
         'Most travelled destinations listed successfully',
@@ -228,18 +228,13 @@ class Hotel {
     }
 
     const counter = {};
-    let trips = [];
 
-    for (let i = 0; i < requestsTrips.length; i += 1) {
-      trips = trips.concat(requestsTrips[i].trips);
-    }
-
-    for (let i = 0; i < trips.length; i += 1) {
-      if (!trips[i].hotel) {
+    for (let i = 0; i < bookings.length; i += 1) {
+      if (!bookings[i].hotel) {
         // eslint-disable-next-line no-continue
         continue;
       }
-      const el = trips[i].hotel.id;
+      const el = bookings[i].hotel.id;
 
       if (counter[el] === undefined) {
         counter[el] = 0;
@@ -247,21 +242,21 @@ class Hotel {
       counter[el] += 1;
     }
 
-    const sortedTrips = [];
+    const sortedBookings = [];
 
     // eslint-disable-next-line guard-for-in,no-restricted-syntax
     for (const element in counter) {
-      sortedTrips.push([element, counter[element]]);
+      sortedBookings.push([element, counter[element]]);
     }
-    sortedTrips.sort((a, b) => a[1] - b[1]);
-    const keys = sortedTrips.map(sortableItem => sortableItem[0]);
+    sortedBookings.sort((a, b) => a[1] - b[1]);
+    const keys = sortedBookings.map(sortableItem => sortableItem[0]);
 
     const hotels = await hotelService.mostTravelled(keys);
 
-    for (let i = 0; i < sortedTrips.length; i += 1) {
-      const hotel = hotels.find(item => `${item.id}` === sortedTrips[i][0]);
+    for (let i = 0; i < sortedBookings.length; i += 1) {
+      const hotel = hotels.find(item => `${item.id}` === sortedBookings[i][0]);
       results.unshift({
-        count: sortedTrips[i][1],
+        count: sortedBookings[i][1],
         hotel,
       });
     }

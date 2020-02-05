@@ -481,33 +481,23 @@ const getUserTripsStats = async ({ user, fromDate, req }) => {
 };
 
 const getAllRequestsHotels = async () => {
-  const { trip, hotel, request, } = db;
+  const { hotel, booking, } = db;
 
-  const requests = await request.findAll({
+  const bookings = await booking.findAll({
     where: {
-      status: 'approved',
+      arrivalDate: {
+        [Op.lt]: (new Date()).toISOString().split('T')[0],
+      },
     },
     include: [
       {
-        model: trip,
-        as: 'trips',
-        where: {
-          travelDate: {
-            [Op.lt]: (new Date()).toISOString().split('T')[0],
-          },
-        },
-        include: [
-          {
-            model: hotel,
-            as: 'hotel',
-          },
-        ],
+        model: hotel,
+        as: 'hotel',
       },
     ],
-    attributes: [],
   });
 
-  return requests;
+  return bookings;
 };
 
 export {
