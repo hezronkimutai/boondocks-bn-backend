@@ -392,9 +392,15 @@ const getSearchedManagerRequests = async (lineManagerId, query) => {
 
 const getUserTripsStats = async ({ user, fromDate, req }) => {
   const { userId, role } = user;
+  const nowDate = new Date();
+  const pastDate = '01-01-1900';
 
   if (['manager', 'requester'].indexOf(role) === -1) {
     throw new ErrorHandler(`User with role "${role}" cannot access this service!`, 400);
+  }
+
+  if (new Date(fromDate).getTime() > nowDate.getTime()) {
+    throw new ErrorHandler('\'fromDate\' has to be in the past', 422);
   }
 
   let statsUserId = userId;
@@ -403,7 +409,37 @@ const getUserTripsStats = async ({ user, fromDate, req }) => {
     statsUserId = req.body.userId;
 
     if (!statsUserId) {
-      throw new ErrorHandler('\'userId\' field is required', 422);
+      const userRequests = await db.user.findAll({
+        where: {
+          lineManagerId: userId,
+        },
+        include: [
+          {
+            model: db.request,
+            attributes: ['id'],
+            where: {
+              status: 'approved',
+            },
+            include: [
+              {
+                model: db.trip,
+                where: fromDate ? {
+                  travelDate: {
+                    [Op.between]: [fromDate, nowDate],
+                  },
+                } : { travelDate: {
+                  [Op.between]: [pastDate, nowDate],
+                }
+                },
+              },
+            ],
+          }],
+      }, { raw: true });
+      const requests = [];
+      await userRequests.forEach(userRequest => {
+        requests.push(...userRequest.requests);
+      });
+      return requests;
     }
 
     const statsUser = await db.user.findByPk(statsUserId);
@@ -421,12 +457,6 @@ const getUserTripsStats = async ({ user, fromDate, req }) => {
     }
   }
 
-  const nowDate = new Date();
-
-  if (fromDate.getTime() > nowDate.getTime()) {
-    throw new ErrorHandler('\'fromDate\' has to be in the past', 422);
-  }
-
   const requests = await db.request.findAll({
     where: {
       status: 'approved',
@@ -435,11 +465,13 @@ const getUserTripsStats = async ({ user, fromDate, req }) => {
     include: [
       {
         model: db.trip,
-        where: {
+        where: fromDate ? {
           travelDate: {
             [Op.between]: [fromDate, nowDate],
           },
-        },
+        } : { travelDate: {
+          [Op.between]: [pastDate, nowDate],
+        } },
       },
     ],
     attributes: []

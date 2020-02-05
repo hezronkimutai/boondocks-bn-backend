@@ -104,4 +104,52 @@ router.patch(
   catchErrors(roles.changeRole)
 );
 
+/**
+ * @swagger
+ *
+ * /auth/manager/users:
+ *   get:
+ *     summary: List users
+ *     description: Fetches all users registered on the application for line manager
+ *     tags:
+ *       - Line mnager
+ *     produces:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *               message:
+ *                 type: string
+ *               data:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   firstName:
+ *                     type: string
+ *                   lastName:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *                   isVerified:
+ *                     type: boolean
+ *                   role:
+ *                     type: string
+ *                   createdAt:
+ *                     type: date
+ *                   updatedAt:
+ *                     type: date
+ *     responses:
+ *       200:
+ *         description: success
+ */
+router.get(
+  '/auth/manager/users',
+  verifyUser,
+  authorize(['manager']),
+  catchErrors(users.fetchAllManagerUsers)
+);
+
 export default router;

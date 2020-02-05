@@ -53,12 +53,8 @@ describe('Trip Statistics', () => {
     'should refuse to roles other than \'manager\' and \'requester\' from access the service',
     (done) => {
       request(app)
-        .post(`${prefix}/trips/stats`)
+        .get(`${prefix}/trips/stats?userId=3&fromDate=${pastDate}`)
         .set('Authorization', `Bearer ${travelAdminToken}`)
-        .send({
-          userId: 3,
-          fromDate: pastDate,
-        })
         .end((err, res) => {
           if (err) {
             done(err);
@@ -68,27 +64,34 @@ describe('Trip Statistics', () => {
         });
     },
   );
-  it('should require the \'lineManager\' to provide the \'userId\'', (done) => {
+  it('should require the \'lineManager\' can fetch all his users trips', (done) => {
     request(app)
-      .post('/api/v1/trips/stats')
+      .get(`/api/v1/trips/stats?fromDate=${pastDate}`)
       .set('Authorization', `Bearer ${rightManagerToken}`)
-      .send({ fromDate: pastDate })
       .end((err, res) => {
         if (err) {
           done(err);
         }
-        expect(res.status).eql(422);
+        expect(res.status).eql(200);
+        done();
+      });
+  });
+  it('should require the \'lineManager\' can fetch all his users trips over time', (done) => {
+    request(app)
+      .get('/api/v1/trips/stats')
+      .set('Authorization', `Bearer ${rightManagerToken}`)
+      .end((err, res) => {
+        if (err) {
+          done(err);
+        }
+        expect(res.status).eql(200);
         done();
       });
   });
   it('should throw the error if the user does not exist', (done) => {
     request(app)
-      .post('/api/v1/trips/stats')
+      .get(`/api/v1/trips/stats?userId=3000&fromDate=${pastDate}`)
       .set('Authorization', `Bearer ${rightManagerToken}`)
-      .send({
-        userId: 3000,
-        fromDate: pastDate,
-      })
       .end((err, res) => {
         if (err) {
           done(err);
@@ -101,12 +104,8 @@ describe('Trip Statistics', () => {
     'should not show the trip for a role other than \'requester\' user',
     (done) => {
       request(app)
-        .post('/api/v1/trips/stats')
+        .get(`/api/v1/trips/stats?userId=2&fromDate=${pastDate}`)
         .set('Authorization', `Bearer ${rightManagerToken}`)
-        .send({
-          userId: 2,
-          fromDate: pastDate,
-        })
         .end((err, res) => {
           if (err) {
             done(err);
@@ -120,12 +119,8 @@ describe('Trip Statistics', () => {
     'should not show you the trips statistics for users you don\'t manage',
     (done) => {
       request(app)
-        .post('/api/v1/trips/stats')
+        .get(`/api/v1/trips/stats?userId=3&fromDate=${pastDate}`)
         .set('Authorization', `Bearer ${wrongManagerToken}`)
-        .send({
-          userId: 3,
-          fromDate: pastDate,
-        })
         .end((err, res) => {
           if (err) {
             done(err);
@@ -137,12 +132,8 @@ describe('Trip Statistics', () => {
   );
   it('should fromDate be in the past', (done) => {
     request(app)
-      .post('/api/v1/trips/stats')
+      .get(`/api/v1/trips/stats?userId=3&fromDate=${futureDate}`)
       .set('Authorization', `Bearer ${rightManagerToken}`)
-      .send({
-        userId: 3,
-        fromDate: futureDate,
-      })
       .end((err, res) => {
         if (err) {
           done(err);
@@ -155,12 +146,8 @@ describe('Trip Statistics', () => {
     'should retrieve trips and their counts successfully for the lineManager to his users',
     (done) => {
       request(app)
-        .post('/api/v1/trips/stats')
+        .get(`/api/v1/trips/stats?userId=3&fromDate=${pastDate}`)
         .set('Authorization', `Bearer ${rightManagerToken}`)
-        .send({
-          userId: 3,
-          fromDate: pastDate,
-        })
         .end((err, res) => {
           if (err) {
             done(err);
@@ -174,9 +161,23 @@ describe('Trip Statistics', () => {
     'should retrieve trips and their counts successfully for the owner of the trips',
     (done) => {
       request(app)
-        .post('/api/v1/trips/stats')
+        .get(`/api/v1/trips/stats?fromDate=${pastDate}`)
         .set('Authorization', `Bearer ${userToken}`)
-        .send({ fromDate: pastDate })
+        .end((err, res) => {
+          if (err) {
+            done(err);
+          }
+          expect(res.status).eql(200);
+          done();
+        });
+    },
+  );
+  it(
+    'should retrieve trips and their counts successfully for the owner of the trips',
+    (done) => {
+      request(app)
+        .get('/api/v1/trips/stats')
+        .set('Authorization', `Bearer ${userToken}`)
         .end((err, res) => {
           if (err) {
             done(err);
