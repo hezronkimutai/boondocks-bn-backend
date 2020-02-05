@@ -65,10 +65,9 @@ export default {
     leavingFrom: 1,
     goingTo: 2,
     travelDate: '2019-11-18',
-    returnDate: '2019-11-20',
     reason: 'visit our agents',
     hotelId: 1,
-    type: 'return',
+    type: 'one way',
     rooms: [2]
   },
   {
@@ -92,10 +91,9 @@ export default {
     leavingFrom: 1,
     goingTo: 2,
     travelDate: '2019-11-18',
-    returnDate: '2019-11-19',
     reason: 'visit our agents',
     hotelId: 1,
-    type: 'return',
+    type: 'one way',
     rooms: [5]
   }],
   requests: [{
