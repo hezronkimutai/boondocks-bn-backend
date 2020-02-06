@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Location.associate = (models) => {
     Location.hasMany(models.hotel, {
-      foreignkey: 'locationId',
+      foreignKey: 'locationId',
       onDelete: 'CASCADE'
     });
   };

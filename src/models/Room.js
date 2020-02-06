@@ -10,12 +10,12 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   Room.associate = (models) => {
     Room.hasOne(models.booking, {
-      foreignkey: 'roomId',
+      foreignKey: 'roomId',
       onDelete: 'CASCADE'
     });
 
     Room.belongsTo(models.hotel, {
-      foreignkey: 'hotelId',
+      foreignKey: 'hotelId',
       onDelete: 'CASCADE'
     });
   };

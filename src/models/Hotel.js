@@ -34,17 +34,17 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Hotel.hasMany(models.like, {
-      foreignkey: 'hotelId',
+      foreignKey: 'hotelId',
       onDelete: 'CASCADE'
     });
 
     Hotel.hasMany(models.room, {
-      foreignkey: 'hotelId',
+      foreignKey: 'hotelId',
       onDelete: 'CASCADE'
     });
 
     Hotel.hasMany(models.rating, {
-      foreignkey: 'hotelId',
+      foreignKey: 'hotelId',
       onDelete: 'CASCADE'
     });
   };

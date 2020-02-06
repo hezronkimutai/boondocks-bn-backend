@@ -11,12 +11,13 @@ const config = {
   googleConfig: {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/api/v1/auth/google/callback'
+    callbackURL: `${process.env.SERVER_API_URL}/api/v1/auth/google/callback`
   },
   facebookConfig: {
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
-    callbackURL: '/api/v1/auth/facebook/callback'
+    callbackURL: `${process.env.SERVER_API_URL}/api/v1/auth/facebook/callback`,
+    profileFields: ['id', 'emails', 'name'],
   },
   s3Config: {
     S3_ACCESS_KEY_ID: process.env.S3_ACCESS_KEY_ID,

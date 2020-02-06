@@ -8,13 +8,7 @@ import JWTToken from '../utils/jwt';
 export const getTokenAfterSignIn = async (res, user) => {
   const userDetails = user.dataValues;
   const token = await JWTToken.signToken(userDetails);
-  const cookieOptions = {
-    httpOnly: false,
-    maxAge: new Date(Date.now() + 86400),
-  };
-  return res.status(200)
-    .cookie('bn_auth_token', token, cookieOptions)
-    .redirect(`${process.env.FRONTEND_URL}/profile`);
+  return res.redirect(`${process.env.FRONTEND_URL}/profile?token=${token}`);
 };
 
 /** Auth Class */
