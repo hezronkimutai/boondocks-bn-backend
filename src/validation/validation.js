@@ -45,7 +45,7 @@ const validateMultiCity = (req, res, next) => {
   if (methodsSupported.includes(method)) {
     const trips = req.body;
     const errors = trips.map((item) => {
-      const path = item.type === 'return' ? '/trips/return' : '/trips/oneway';
+      const path = '/trips/oneway';
       const schema = Schemas[path];
       let err;
       Joi.validate(item, schema, (error) => {

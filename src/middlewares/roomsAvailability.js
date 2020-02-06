@@ -69,9 +69,13 @@ const checkForMultiCityRooms = async (req, res, next) => {
   const { Op } = db.Sequelize;
 
   const trips = req.body;
-  if (trips[0].hotelId) {
-    const rooms = trips.map((item) => item.rooms).flat();
-    const unavailableRooms = await db.room.findAndCountAll({
+  let rooms = trips.map((item) => item.rooms).flat();
+  rooms = rooms.filter(Number);
+
+  let unavailableRooms = { count: 0 };
+
+  if (rooms.length > 0) {
+    unavailableRooms = await db.room.findAndCountAll({
       where: {
         id: {
           [Op.or]: rooms
@@ -82,15 +86,15 @@ const checkForMultiCityRooms = async (req, res, next) => {
       },
       attributes: ['id']
     });
-
-    if (unavailableRooms.count > 0) {
-      const bookedRooms = unavailableRooms.rows.map(room => room.id);
-      return Responses.handleSuccess(409, 'rooms already booked', res, { unAvailableRooms: bookedRooms });
-    }
   }
+
+  if (unavailableRooms.count > 0) {
+    const bookedRooms = unavailableRooms.rows.map(room => room.id);
+    return Responses.handleSuccess(409, 'rooms already booked', res, { unAvailableRooms: bookedRooms });
+  }
+
   next();
 };
-
 
 /**
  * Checks if the room is reserved or booked by another requester
