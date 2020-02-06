@@ -27,6 +27,7 @@ const config = {
   HASH_SALT_ROUNDS: 10,
   debug: false,
   SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
+  FRONTEND_URL: process.env.FRONTEND_URL,
   env: process.env.NODE_ENV || 'development'
 };
 

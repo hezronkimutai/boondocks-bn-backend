@@ -4,12 +4,14 @@ import {
   getRequestById,
   getUserTripsStats,
 } from '../services/request.service';
+// import getUserById from '../services/User.service';
 import tripService from '../services/Trip.service';
 import db from '../models';
 import Mailer from '../services/Mailer.services';
 import JWTHelper from '../utils/jwt';
 import NotificationService from '../services/notification.service';
 import NotificationUtil from '../utils/notification.util';
+import UserService from '../services/User.service';
 
 /**
  * Class for Trips
@@ -61,6 +63,15 @@ class Trip {
       });
       await mail.newTravelNotification();
     }
+    const { firstName, email } = await UserService.getUserById(currentUser.lineManager);
+    const mail = new Mailer({
+      name: firstName,
+      username: currentUser.name,
+      to: email,
+      requestId,
+      token
+    });
+    await mail.lineManagerNotification();
 
     const { lineManager } = currentUser;
 
@@ -125,6 +136,17 @@ class Trip {
       });
       await mail.newTravelNotification();
     }
+
+    const { firstName, email } = await UserService.getUserById(currentUser.lineManager);
+    const mail = new Mailer({
+      name: firstName,
+      username: currentUser.name,
+      to: email,
+      host,
+      token
+    });
+    await mail.lineManagerNotification();
+
     const { lineManager } = currentUser;
     const notification = await NotificationService.createNotification({
       requestId,

@@ -28,7 +28,7 @@ const data = {
       message: 'reset your password',
       link: 'wghkw5set876u3gikdzhtjyugyduqefwgdqjz83cxjdugrctfjyg'
     },
-    htmlPath: 'resetPassword.pug'
+    htmlPath: 'resetPassword.ejs'
   }
 };
 

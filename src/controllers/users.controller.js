@@ -18,7 +18,7 @@ class UserController {
    */
   async createUser(req, res) {
     const passwordHash = hash.generateSync(req.body.password);
-    const { host } = req.query;
+    const host = `${req.protocol}://${req.get('host')}`;
     const userData = {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
@@ -77,25 +77,13 @@ class UserController {
    */
   async verifyAccount(req, res) {
     const { user } = res.locals;
-    if (!user.isVerified) {
-      await db.user.update(
-        {
-          isVerified: true
-        },
-        { where: { email: user.email } }
-      );
-      return Responses.handleSuccess(
-        200,
-        'Email has been verified successfully, please proceed to log in',
-        res
-      );
-    }
-
-    return Responses.handleError(
-      409,
-      'you are already verified, please login to proceed',
-      res
+    await db.user.update(
+      {
+        isVerified: true
+      },
+      { where: { email: user.email } }
     );
+    return res.status(200).redirect(`${process.env.FRONTEND_URL}/login`);
   }
 
   /**
@@ -118,11 +106,7 @@ class UserController {
         host
       });
       await mail.sendVerificationEmail();
-      return Responses.handleSuccess(
-        200,
-        'Email has been resent successfully, please check your mail',
-        res
-      );
+      return res.status(200).redirect(`${process.env.FRONTEND_URL}/login`);
     }
     return Responses.handleError(
       404,

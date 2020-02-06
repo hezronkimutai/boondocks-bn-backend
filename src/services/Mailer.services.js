@@ -1,6 +1,7 @@
-import pug from 'pug';
+import ejs from 'ejs';
 import sgMail from '@sendgrid/mail';
 import config from '../config';
+import logger from '../utils/winston';
 
 sgMail.setApiKey(config.SENDGRID_API_KEY);
 
@@ -22,22 +23,24 @@ export default class Mailer {
    * @return {object} status - it has sent of the sent email
    */
   async sendEmail(mailOptionsObject) {
-    const html = pug.renderFile(
-      `${__dirname}/../../public/templates/emails/${mailOptionsObject.htmlPath}`,
-      mailOptionsObject.data
-    );
-
-    const msg = {
-      to: mailOptionsObject.toAddress,
-      from: 'no-reply@barefoot.com',
-      subject: mailOptionsObject.subject,
-      html,
-      mail_settings: {
-        sandbox_mode: {
-          enable: config.env !== 'production',
-        },
+    let msg;
+    ejs.renderFile(`${__dirname}/../../public/templates/emails/${mailOptionsObject.htmlPath}`, mailOptionsObject.data, {}, (err, html) => {
+      if (err) {
+        logger.error(err);
+      } else {
+        msg = {
+          to: mailOptionsObject.toAddress,
+          from: 'no-reply@barefoot.com',
+          subject: mailOptionsObject.subject,
+          html,
+          mail_settings: {
+            sandbox_mode: {
+              enable: config.env !== 'production',
+            },
+          }
+        };
       }
-    };
+    });
     const status = await sgMail.send(msg);
     return status;
   }
@@ -55,7 +58,7 @@ export default class Mailer {
         message: 'reset your password',
         link: `${this.data.host}/auth/reset-password?token_reset=${this.data.token}`
       },
-      htmlPath: 'resetPassword.pug'
+      htmlPath: 'resetPassword.ejs'
     });
   }
 
@@ -70,7 +73,7 @@ export default class Mailer {
       data: {
         name: this.data.name,
       },
-      htmlPath: 'resetPasswordSuccess.pug'
+      htmlPath: 'resetPasswordSuccess.ejs'
     });
   }
 
@@ -92,10 +95,10 @@ export default class Mailer {
       data: {
         name,
         message: 'token',
-        link: `${host}/auth/verification?token=${token}`,
-        regenerateLink: `${host}/auth/reverifyUser?email=${to}`
+        link: `${host}/api/v1/auth/verification?token=${token}`,
+        regenerateLink: `${host}/api/v1/auth/reverifyUser?email=${to}`
       },
-      htmlPath: 'emailVerification.pug'
+      htmlPath: 'emailVerification.ejs'
     });
   }
 
@@ -118,7 +121,29 @@ export default class Mailer {
         link: `${host}/api/v1/notification/stopNotification?token=${token}`
 
       },
-      htmlPath: 'newTravelNotification.pug'
+      htmlPath: 'newTravelNotification.ejs'
+    });
+  }
+
+  /**
+   * Sends th notification email after creation of trip request
+   * @param {string} name - the name of the person.
+   * @param {string} to - the email sending to
+   * @return {null} nothing.
+   */
+  async lineManagerNotification() {
+    const {
+      to, name, requestId, username
+    } = this.data;
+    await this.sendEmail({
+      toAddress: to,
+      subject: 'BareFoot Nomad Trip Request',
+      data: {
+        name,
+        username,
+        link: `${config.FRONTEND_URL}/request/${requestId}`
+      },
+      htmlPath: 'linemanagerNotification.ejs'
     });
   }
 }

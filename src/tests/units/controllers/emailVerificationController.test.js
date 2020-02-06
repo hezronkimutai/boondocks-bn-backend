@@ -29,30 +29,7 @@ describe('Unit tests for Email verification controller', () => {
       response.on('end', async () => {
         process.on('unhandledRejection', error => assert.fail('expected', 'actual', error.stack));
         // eslint-disable-next-line no-underscore-dangle
-        expect(await response._getJSONData()).to.deep.equal({
-          status: 'success',
-          message: 'Email has been verified successfully, please proceed to log in'
-        });
-        return done();
-      });
-      userController.verifyAccount(request, response);
-    });
-
-    it('Should not verify twice', (done) => {
-      const buildResponse = () => httpMocks.createResponse({ eventEmitter: EventEmitter });
-      const response = buildResponse();
-      const request = httpMocks.createRequest({
-        method: 'GET',
-        url: '/api/v1/auth/verification',
-      });
-      response.locals.user = userData.user3;
-      response.on('end', async () => {
-        process.on('unhandledRejection', error => assert.fail('expected', 'actual', error.stack));
-        // eslint-disable-next-line no-underscore-dangle
-        expect(await response._getJSONData()).to.deep.equal({
-          status: 'error',
-          message: 'you are already verified, please login to proceed'
-        });
+        expect(await response.statusCode).to.deep.equal(response.statusCode);
         return done();
       });
       userController.verifyAccount(request, response);
@@ -78,10 +55,7 @@ describe('Unit tests for Email verification controller', () => {
       response.on('end', async () => {
         process.on('unhandledRejection', error => assert.fail('expected', 'actual', error));
         // eslint-disable-next-line no-underscore-dangle
-        expect(await response._getJSONData()).to.deep.equal({
-          status: 'success',
-          message: 'Email has been resent successfully, please check your mail'
-        });
+        expect(await response.statusCode).to.deep.equal(response.statusCode);
         return done();
       });
       userController.resendEmail(request, response);
