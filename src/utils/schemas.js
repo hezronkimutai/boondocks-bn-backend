@@ -246,6 +246,37 @@ const updateRatingSchema = Joi.object()
     }
   });
 
+const updateTripBookingSchema = Joi.object().keys({
+  isPaid: Joi.bool().required(),
+  paymentType: Joi.string().strict().trim().required().valid(
+    'paypal',
+    'debit/credit_card',
+    'cash',
+    'unpaid',
+  )
+}).options({
+  abortEarly: false,
+  language: {
+    key: '{{key}} '
+  }
+});
+
+const updateDirectBookingSchema = Joi.object().keys({
+  isPaid: Joi.bool().required(),
+  paymentType: Joi.string().strict().trim().required().valid(
+    'paypal',
+    'debit/credit_card',
+    'cash',
+    'unpaid',
+  ),
+  bookingIds: Joi.array().items(Joi.number().error(() => 'bookingIds must all be an integers')).required()
+}).options({
+  abortEarly: false,
+  language: {
+    key: '{{key}} '
+  }
+});
+
 export default {
   '/auth/resetPassword': resetPassword,
   '/auth/signup': signupSchema,
@@ -263,5 +294,7 @@ export default {
   '/trips/stats': tripsStatsSchema,
   '/hotels/:hotelId/feedback': feedbackSchema,
   '/hotels/:hotelId/rating': rateSchema,
-  '/rating/:ratingId': updateRatingSchema
+  '/rating/:ratingId': updateRatingSchema,
+  '/booking/request/:requestId': updateTripBookingSchema,
+  '/booking/payment': updateDirectBookingSchema
 };
