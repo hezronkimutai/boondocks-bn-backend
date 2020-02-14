@@ -8,6 +8,7 @@ import {
 import tripService from '../services/Trip.service';
 import db from '../models';
 import Mailer from '../services/Mailer.services';
+import messenger from '../services/sms.service';
 import JWTHelper from '../utils/jwt';
 import NotificationService from '../services/notification.service';
 import NotificationUtil from '../utils/notification.util';
@@ -63,7 +64,11 @@ class Trip {
       });
       await mail.newTravelNotification();
     }
-    const { firstName, email } = await UserService.getUserById(currentUser.lineManager);
+    const {
+      firstName,
+      email,
+      phoneNumber
+    } = await UserService.getUserById(currentUser.lineManager);
     const mail = new Mailer({
       name: firstName,
       username: currentUser.name,
@@ -72,6 +77,8 @@ class Trip {
       token
     });
     await mail.lineManagerNotification();
+
+    await messenger(phoneNumber, `New request initiated by ${currentUser.name}. Kindly review`);
 
     const { lineManager } = currentUser;
 
@@ -137,7 +144,11 @@ class Trip {
       await mail.newTravelNotification();
     }
 
-    const { firstName, email } = await UserService.getUserById(currentUser.lineManager);
+    const {
+      firstName,
+      email,
+      phoneNumber
+    } = await UserService.getUserById(currentUser.lineManager);
     const mail = new Mailer({
       name: firstName,
       username: currentUser.name,
@@ -146,6 +157,9 @@ class Trip {
       token
     });
     await mail.lineManagerNotification();
+
+    await messenger(phoneNumber, `New request initiated by ${currentUser.name}. Kindly review`);
+
 
     const { lineManager } = currentUser;
     const notification = await NotificationService.createNotification({
