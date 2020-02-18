@@ -28,9 +28,20 @@ class fileService {
       },
       onError: (err, next) => next(err)
     });
+
+    const fileFilter = (req, file, cb) => {
+      if (file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg') {
+        cb(null, true);
+      } else {
+        cb(null, false);
+        return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+      }
+    };
+
     return multer({
       limits: { fieldSize: 5 * 1024 * 1024 },
-      storage
+      storage,
+      fileFilter
     }).single(field);
   }
 

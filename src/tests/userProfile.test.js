@@ -1,6 +1,7 @@
 /* eslint-disable object-curly-newline */
 import chaiHttp from 'chai-http';
 import { expect, request, should, use } from 'chai';
+import { resolve } from 'path';
 import app from '../app';
 import tokenizer from '../utils/jwt';
 import db from '../models';
@@ -107,7 +108,19 @@ describe('User profile', () => {
       request(app)
         .patch(`${prefix}/user/update-profile`)
         .set('Authorization', token)
-        .send(userDetails)
+        .field('firstName', 'Johnny')
+        .field('lastName', 'Doey')
+        .field('password', 'newPassword8')
+        .field('email', 'john@barefoot.com')
+        .field('phoneNumber', '000-000-0012')
+        .field('lineManagerId', managerId)
+        .field('gender', 'male')
+        .field('preferredLanguage', 'english')
+        .field('preferredCurrency', '$')
+        .field('department', 'IT')
+        .field('birthDate', '1950-01-01T00:00:00.000Z')
+        .field('residenceAddress', 'Kigali, Rwanda')
+        .attach('profilePicture', resolve(__dirname, 'mock-data/images/search.png'))
         .end((_err, res) => {
           expect(res.status)
             .eql(201);
@@ -172,6 +185,30 @@ describe('User profile', () => {
         .end((err, res) => {
           expect(res.status)
             .eql(401);
+          done();
+        });
+    });
+
+    it('it should fail to update a profile if uploaded file is not an image', (done) => {
+      request(app)
+        .patch(`${prefix}/user/update-profile`)
+        .set('Authorization', token)
+        .field('firstName', 'Johnny')
+        .field('lastName', 'Doey')
+        .field('password', 'newPassword8')
+        .field('email', 'john@barefoot.com')
+        .field('phoneNumber', '000-000-0012')
+        .field('lineManagerId', managerId)
+        .field('gender', 'male')
+        .field('preferredLanguage', 'english')
+        .field('preferredCurrency', '$')
+        .field('department', 'IT')
+        .field('birthDate', '1950-01-01T00:00:00.000Z')
+        .field('residenceAddress', 'Kigali, Rwanda')
+        .attach('profilePicture', resolve(__dirname, 'mock-data/images/not_an_image.txt'))
+        .end((_err, res) => {
+          expect(res.status)
+            .eql(500);
           done();
         });
     });

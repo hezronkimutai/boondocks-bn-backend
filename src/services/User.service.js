@@ -60,7 +60,7 @@ class UserServices {
   async updateUserInfoByEmail(attributes, email$) {
     const {
       firstName, lastName, email, birthDate, preferredLanguage, preferredCurrency, residenceAddress,
-      gender, department, lineManagerId, phoneNumber, remember,
+      gender, department, lineManagerId, phoneNumber, remember, profilePicture
     } = attributes;
 
 
@@ -96,6 +96,7 @@ class UserServices {
           department,
           phoneNumber,
           remember,
+          profilePicture
         },
         {
           where: { email: email$ },
